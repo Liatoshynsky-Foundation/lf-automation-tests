@@ -1,5 +1,5 @@
 ---
-type: "Test case"
+type: "Test Case"
 name: "Test Case"
 about: "ISTQB-aligned template for test case creation"
 title: "[Test Case]: "
