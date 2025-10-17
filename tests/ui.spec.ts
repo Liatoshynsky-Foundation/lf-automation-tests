@@ -8,8 +8,7 @@ test.describe('UI - Home page', () => {
     expect(title).toEqual('Фундація Лятошинського');
   });
   test("test", async ({ aboutUsPage,  archiveCabinetPage}) => {
-    // await aboutUsPage.goto('/about');
-    await archiveCabinetPage.goto('/archive-cabinet');
+    await archiveCabinetPage.visit();
     const title2 = await archiveCabinetPage.getTitleText();
     expect(title2).toEqual('Create Next App');
     const btnText = await archiveCabinetPage.getTextReturnToHomeBtn();
