@@ -1,13 +1,34 @@
-import { Page } from '@playwright/test';
+import { type Locator, type Page } from '@playwright/test';
 import { BasePage } from './BasePage';
+import { ContactsInfoComponent } from '../../component/client/ContactsInfoComponent';
+import { ContactFormC } from '../../component/client/ContactFormC';
+
+const CONTACTS_PAGE_PATH = '/uk/contacts';
 
 export class ContactsPage extends BasePage {
+    public readonly pageHeading: Locator;
+    private readonly contactsInfoComponent: ContactsInfoComponent;
+    private readonly contactFormC: ContactFormC;
+
   constructor(page: Page) {
     super(page);
+    this.pageHeading = page.locator('h2').filter({ hasText: 'Контакти' });
+    this.contactsInfoComponent = new ContactsInfoComponent(page);
+    this.contactFormC = new ContactFormC(page);
   }
 
-  async visit(): Promise<void> {
-    await this.goto('/contacts');
-  }
+  async getHeadingText(): Promise<string> {
+        return this.pageHeading.textContent() ?? '';
+    }
+
+        getContactsInfoComponent(): ContactsInfoComponent {
+        return this.contactsInfoComponent;
+    }
+
+        getContactFormC(): ContactFormC {
+        return this.contactFormC;
+    }
+
+  
 }
 
