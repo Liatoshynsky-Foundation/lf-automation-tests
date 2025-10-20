@@ -6,11 +6,11 @@ export class PageItemComponent {
   
 
   constructor(parent: Locator) {
-    this.name = parent.locator('a li');
-    this.link = parent.locator('a');
+    this.name = parent;
+    this.link = parent.locator('..');
   }
 
-  async getName(): Promise<string> {
+  async get_Name(): Promise<string> {
     return await this.name.innerText() || '';
   }
 
@@ -19,10 +19,7 @@ export class PageItemComponent {
     return href ;
   }
 
-  async visitPage(page: Page): Promise<void> {
-    const href = await this.getLink();
-    if (!href) throw new Error('Page not found!');
-    await page.goto(href);
+  async click(): Promise<void> {
+    await this.link.click();
   }
-  
 }
