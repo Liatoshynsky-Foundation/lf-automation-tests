@@ -35,7 +35,7 @@ export class PageMenuItemComponent {
 
   async getSubMenu(): Promise<void> {
     if (!(await this.subMenuIsVisible())) {
-      await this.clickDropdownButton();
+      await this.clickDropdown();
       await expect(this.menuLocator).toBeVisible({ timeout: 5000 });
     }
   }
