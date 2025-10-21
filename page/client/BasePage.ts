@@ -4,8 +4,8 @@ import { FooterComponent } from '../../component/client/FooterComponent';
 
 export class BasePage {
   protected page: Page;
-  readonly header: HeaderComponent;
-  readonly footer: FooterComponent;
+  header: HeaderComponent;
+  footer: FooterComponent;
   private  title: Locator;
 
   constructor(page: Page) {
@@ -15,13 +15,8 @@ export class BasePage {
     this.title = page.locator('//title');
   }
 
-  async goto(path = ''): Promise<void> {
-    // allow either full url or relative path
-    if (path.startsWith('http')) {
-      await this.page.goto(path);
-    } else {
-      await this.page.goto(path || '/');
-    }
+  async goto(path: string): Promise<void> {
+      await this.page.goto(path, { waitUntil: 'domcontentloaded' });
   }
 
   async getTitleText(): Promise<string> {
