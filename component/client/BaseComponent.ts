@@ -16,7 +16,10 @@ export class BaseComponent {
     }
 
     async waitIsVisible(locator: Locator, timeout = 5000): Promise<void> {
-        await locator.waitFor({state: 'visible', timeout});
+        await test.step(`Wait for locator to be visible`, async () => {
+            // let elemet = await locator.waitFor({state: 'visible', timeout});
+            await expect(locator, {message: ("Locator is not visible")}).toBeVisible({timeout});
+        });
     }
 
 }

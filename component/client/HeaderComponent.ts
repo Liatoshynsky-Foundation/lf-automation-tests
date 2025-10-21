@@ -14,7 +14,7 @@ export class HeaderComponent extends BaseComponent {
 
     constructor(page: Page, items: PageMenuItemComponent[] = []) {
         super(page, page.locator('header'));
-        this.parent = page.locator('header');
+        // this.parent = page.locator('header');
         this.logo = this.parent.locator('a svg[title="Company logo"]').first();
         this.playerBtn = page.locator('button[aria-label="Toggle audio player"]');
         this.changeLangBtn = new HeaderChangeLangBtn(this.page, this.parent);
@@ -23,6 +23,7 @@ export class HeaderComponent extends BaseComponent {
     }
 
     async getMenuItems(): Promise<PageMenuItemComponent[]> {
+        await this.waitIsVisible(this.pageMenu,50000);
         const buttons = await this.pageMenu.locator('button').all();
         return buttons.map(button => new PageMenuItemComponent(button));
     }

@@ -12,7 +12,7 @@ test.describe('UI - Home page', () => {
 
     test('check page menu', async ({aboutUsPage}) => {
         await aboutUsPage.goto('/');
-        var items = await aboutUsPage.header.getMenuItems();
+        let items = await aboutUsPage.header.getMenuItems();
 
         const itemNames: string[] = [];
         for (let i = 0; i < 4; i++) {
