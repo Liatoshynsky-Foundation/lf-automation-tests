@@ -14,7 +14,6 @@ export class HeaderComponent extends BaseComponent {
 
     constructor(page: Page, items: PageMenuItemComponent[] = []) {
         super(page, page.locator('header'));
-        // this.parent = page.locator('header');
         this.logo = this.parent.locator('a svg[title="Company logo"]').first();
         this.playerBtn = page.locator('button[aria-label="Toggle audio player"]');
         this.changeLangBtn = new HeaderChangeLangBtn(this.page, this.parent);
