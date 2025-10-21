@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 
-export class SupportFundationBtn {
+export class SupportFoundationBtn {
   link: Locator;
   button: Locator;
 
