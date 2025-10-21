@@ -1,7 +1,7 @@
 import {expect, Locator, Page, test} from '@playwright/test';
 import {PageMenuItemComponent} from './PageMenuItemComponent';
 import {HeaderChangeLangBtn} from './HeaderChangeLangBtn';
-import {SupportFundationBtn} from './SupportFundationBtn';
+import {SupportFoundationBtn} from './SupportFundationBtn';
 import {BaseComponent} from "./BaseComponent";
 
 export class HeaderComponent extends BaseComponent {
@@ -9,7 +9,7 @@ export class HeaderComponent extends BaseComponent {
     pageMenu: Locator;
     playerBtn: Locator;
     changeLangBtn: HeaderChangeLangBtn;
-    supportFundBtn: SupportFundationBtn;
+    supportFundBtn: SupportFoundationBtn;
 
 
     constructor(page: Page, items: PageMenuItemComponent[] = []) {
@@ -17,7 +17,7 @@ export class HeaderComponent extends BaseComponent {
         this.logo = this.parent.locator('a svg[title="Company logo"]').first();
         this.playerBtn = page.locator('button[aria-label="Toggle audio player"]');
         this.changeLangBtn = new HeaderChangeLangBtn(this.page, this.parent);
-        this.supportFundBtn = new SupportFundationBtn(this.parent);
+        this.supportFundBtn = new SupportFoundationBtn(this.parent);
         this.pageMenu = this.parent.locator('div[aria-label="Button Group"]:has(button)');
     }
 
