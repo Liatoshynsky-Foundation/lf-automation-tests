@@ -31,9 +31,9 @@ export class FooterChangeLangBtn extends BaseComponent {
         return await this.image.getAttribute('src') || "";
     }
 
-    async getSelectedLanguage(): Promise<string> {
+    async getText(): Promise<string> {
         const button = this.page.locator('button:has(img[alt="switch language"])');
-        await this.button.waitFor({ state: 'visible' });
+        await button.waitFor({ state: 'visible' });
         return (await this.button.innerText());
     }
 }

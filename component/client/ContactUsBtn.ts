@@ -7,7 +7,7 @@ export class ContactUsBtn {
 
   constructor(parent: Locator){
     this.button = parent.locator('a[href*="/contacts"] > button')
-    this.link = parent.locator('a[href*="/contacts"]');
+    this.link = parent.locator('a[href*="/contacts"]:has(button)');
     this.image = parent.locator('img[alt="Contact Us Button"]');
   }
 
@@ -16,6 +16,7 @@ export class ContactUsBtn {
   }
 
   async getText(): Promise<string> {
+    
     return (await this.button.innerText()).trim();
   }
 
