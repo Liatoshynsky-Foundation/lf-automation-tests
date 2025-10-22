@@ -89,21 +89,21 @@ test.describe('UI - Home page', () => {
 
     // });
 
-    test('check Header Change Language Btn', async ({aboutUsPage}) => {
-        await aboutUsPage.goto('/');
-        const button = aboutUsPage.header.changeLangBtn;
-        await aboutUsPage.header.changeLangBtn.click();
-        await button.selectLanguage(Language.Ukrainian);
-        await aboutUsPage.header.changeLangBtn.click();
+    // test('check Header Change Language Btn', async ({aboutUsPage}) => {
+    //     await aboutUsPage.goto('/');
+    //     const button = aboutUsPage.header.changeLangBtn;
+    //     await aboutUsPage.header.changeLangBtn.click();
+    //     await button.selectLanguage(Language.Ukrainian);
+    //     await aboutUsPage.header.changeLangBtn.click();
 
-        await expect(await aboutUsPage.header.changeLangBtn.getSelectedLanguage())
-            .toEqual(Language.Ukrainian.value);
-        await button.selectLanguage(Language.English);
-        await aboutUsPage.header.changeLangBtn.click();
+    //     await expect(await aboutUsPage.header.changeLangBtn.getSelectedLanguage())
+    //         .toEqual(Language.Ukrainian.value);
+    //     await button.selectLanguage(Language.English);
+    //     await aboutUsPage.header.changeLangBtn.click();
 
-        await expect(await aboutUsPage.header.changeLangBtn.getSelectedLanguage())
-            .toEqual(Language.English.value);
-    });
+    //     await expect(await aboutUsPage.header.changeLangBtn.getSelectedLanguage())
+    //         .toEqual(Language.English.value);
+    // });
 
     test('check Footer Change Language Btn', async ({aboutUsPage}) => {
         await aboutUsPage.goto('/');

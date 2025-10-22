@@ -1,6 +1,5 @@
 import {expect, Locator, Page} from "@playwright/test";
 import {BaseComponent} from "./BaseComponent";
-import {LanguageDetails} from "../../data/enums";
 
 
 export class FooterChangeLangBtn extends BaseComponent {
@@ -15,11 +14,16 @@ export class FooterChangeLangBtn extends BaseComponent {
     }
 
     async click(): Promise<void> {
+        await this.button.waitFor({ state: 'visible' });
+        await this.button.scrollIntoViewIfNeeded();
+        await this.page.waitForTimeout(500); 
+
         const currentText = (await this.button.innerText());
         await Promise.all([
             this.page.waitForLoadState('networkidle'), 
             this.button.click(),
         ]);
+        this.button = this.page.locator('button:has(img[alt="switch language"])');
         await expect(this.button).not.toHaveText(currentText, { timeout: 50000 });
     }
 
@@ -28,6 +32,8 @@ export class FooterChangeLangBtn extends BaseComponent {
     }
 
     async getSelectedLanguage(): Promise<string> {
+        const button = this.page.locator('button:has(img[alt="switch language"])');
+        await this.button.waitFor({ state: 'visible' });
         return (await this.button.innerText());
     }
 }
