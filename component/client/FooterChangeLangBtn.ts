@@ -16,7 +16,7 @@ export class FooterChangeLangBtn extends BaseComponent {
     async click(): Promise<void> {
         await this.button.waitFor({ state: 'visible' });
         await this.button.scrollIntoViewIfNeeded();
-        await this.page.waitForTimeout(500); 
+        await expect(this.button).toBeEnabled();
 
         const currentText = (await this.button.innerText());
         await Promise.all([
