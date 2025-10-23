@@ -38,7 +38,7 @@ export class FooterComponent extends BaseComponent{
     this.pageMenu = this.page.locator('//footer/div[2]/div[6]/div');
     this.menuItems = this.parent.locator('div:has(> ul) ul');
     this.mediaMenu = new MediaMenuBtn(this.parent.locator('div[2]/div[5]/div'));
-    this.developedBy = this.parent.locator('img[alt="OpenTech Academy logo');
+    this.developedBy = this.parent.locator('img[alt="OpenTech Academy logo"]');
     this.bigFooterImage = this.parent.locator('img[alt="Lyatoshynsky Foundation"]');
     
   }
