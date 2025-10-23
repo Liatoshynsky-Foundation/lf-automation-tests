@@ -1,7 +1,7 @@
 import {PageItemComponent} from '../component/client/PageItemComponent';
 import {expect, test} from '../fixtures/fixturePage';
 import {Language, FooterLanguage} from "../data/enums";
-import { SupportUsPage } from '../page/client/SupportUsPage';
+
 
 test.describe('UI - Home page', () => {
     test('Home page shows expected heading (using POM)', async ({aboutUsPage, baseClientURL}) => {
@@ -12,7 +12,7 @@ test.describe('UI - Home page', () => {
 
     test('check page menu', async ({aboutUsPage}) => {
         await aboutUsPage.goto('/');
-        let items = await aboutUsPage.header.getMenuItems();
+        const items = await aboutUsPage.header.getMenuItems();
 
         const itemNames: string[] = [];
         for (let i = 0; i < 4; i++) {
@@ -53,7 +53,7 @@ test.describe('UI - Home page', () => {
             }
         }
         if (!artistry) throw new Error('Artistry page not found');
-        let link = await artistry.getLink();
+        const link = await artistry.getLink();
         const currentUrl = page.url();
         const langPrefixMatch = currentUrl.match(/\/(en|ua)(\/|$)/);
         const langPrefix = langPrefixMatch ? `/${langPrefixMatch[1]}` : '';
@@ -74,7 +74,7 @@ test.describe('UI - Home page', () => {
 
     test('check goto Artistry page', async ({aboutUsPage, artistryPage, page}) => {
         await aboutUsPage.goto('/');
-        let menuItem = await aboutUsPage.header.getMenuByName("Borys Liatoshynskyi");
+        const menuItem = await aboutUsPage.header.getMenuByName("Borys Liatoshynskyi");
         await aboutUsPage.header.clickMenuByName("Borys Liatoshynskyi");
         await menuItem.subMenuIsVisible();
         await menuItem.clickSubPageByName("Artistry");
@@ -161,7 +161,7 @@ test.describe('UI - Home page', () => {
         const btnUaText = await aboutUsPage.footer.contactUsBtn.getText();
         expect(btnUaText).toEqual('Напишіть нам');
 
-        let link = await aboutUsPage.footer.contactUsBtn.click();
+        await aboutUsPage.footer.contactUsBtn.click();
 
         await expect(page).toHaveURL(/contacts/);
         const title = await contactsPage.getTitleText();
@@ -171,7 +171,7 @@ test.describe('UI - Home page', () => {
     test('check footer page menu', async ({aboutUsPage, artistryPage, page}) => {
         await aboutUsPage.goto('/');
 
-        let items = await aboutUsPage.footer.getPageMenuHeaders();
+        const items = await aboutUsPage.footer.getPageMenuHeaders();
         expect(items).toEqual([
             'BORYS LIATOSHYNSKYI',
             'FOUNDATION',

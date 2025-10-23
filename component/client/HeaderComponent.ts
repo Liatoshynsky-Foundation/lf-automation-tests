@@ -12,7 +12,7 @@ export class HeaderComponent extends BaseComponent {
     supportFundBtn: SupportFoundationBtn;
 
 
-    constructor(page: Page, items: PageMenuItemComponent[] = []) {
+    constructor(page: Page) {
         super(page, page.locator('header'));
         this.logo = this.parent.locator('a svg[title="Company logo"]').first();
         this.playerBtn = page.locator('button[aria-label="Toggle audio player"]');
@@ -31,9 +31,9 @@ export class HeaderComponent extends BaseComponent {
     async getMenuByName(str: string): Promise<PageMenuItemComponent> {
         let elementFound: PageMenuItemComponent;
         await test.step(`Check if component is visible`, async () => {
-            let elements = await this.getMenuItems()
+            const elements = await this.getMenuItems()
 
-            for (let element of elements) {
+            for (const element of elements) {
                 const itemName: string =  (await element.getName()).trim();
                 if (itemName === str.trim()) {
                     elementFound = element;
