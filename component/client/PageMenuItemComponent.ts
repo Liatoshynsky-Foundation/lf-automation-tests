@@ -62,7 +62,7 @@ export class PageMenuItemComponent {
     for (const page of subPages) {
       const pageName = (await page.get_Name()).trim(); 
       if (pageName === str.trim()) {
-        await page.click();
+        await page.headerclick();
         return;
       }
     }

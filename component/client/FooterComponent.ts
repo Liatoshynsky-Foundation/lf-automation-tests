@@ -93,7 +93,7 @@ export class FooterComponent extends BaseComponent{
     const menuItem = await this.getPageItemByName(name);
     if (menuItem){
       await test.step(`Click on page item: ${name}`, async () => {
-        await menuItem.click();
+        await menuItem.footerclick();
       });
     }
   }

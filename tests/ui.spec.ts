@@ -22,7 +22,7 @@ test.describe('UI - Home page', () => {
         expect(itemNames).toEqual([
             'Borys Liatoshynskyi',
             'Foundation',
-            'Cabinet-Archive',
+            'Archive',
             'Cooperation'
         ]);
     });
@@ -62,7 +62,7 @@ test.describe('UI - Home page', () => {
             ? link
             : `${langPrefix}${link}`;
 
-        await artistry.click();
+        await artistry.headerclick();
 
         await expect(page).toHaveURL(new RegExp(`${linkWithLang}$`));
 
