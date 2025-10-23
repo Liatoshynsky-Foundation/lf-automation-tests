@@ -12,7 +12,7 @@ export class BasePage {
     this.page = page;
     this.header = new HeaderComponent(page);
     this.footer = new FooterComponent(page);
-    this.title = page.locator('//title');
+    this.title = page.locator('//head/title');
   }
 
   async goto(path: string): Promise<void> {

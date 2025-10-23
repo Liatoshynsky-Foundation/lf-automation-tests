@@ -22,7 +22,7 @@ test.describe('UI - Home page', () => {
         expect(itemNames).toEqual([
             'Borys Liatoshynskyi',
             'Foundation',
-            'Archive',
+            'Archive Cabinet',
             'Cooperation'
         ]);
     });
