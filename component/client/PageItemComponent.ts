@@ -19,7 +19,14 @@ export class PageItemComponent {
     return href ;
   }
 
-  async click(): Promise<void> {
+  async headerclick(): Promise<void> {
     await this.link.click();
+  }
+
+  async footerclick(): Promise<void> {
+    await Promise.all([
+      this.name.click(),
+      this.name.page().waitForLoadState('networkidle'),
+    ]);
   }
 }

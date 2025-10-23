@@ -20,7 +20,7 @@ export const test = baseTest.extend<Fixtures>({
   page: async ({ page }, use) => {
     //before each test
 
-    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.setViewportSize({ width: 1280, height: 720 });
     await use(page);
   }
 });

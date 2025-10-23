@@ -1,12 +1,12 @@
 import {PageItemComponent} from '../component/client/PageItemComponent';
 import {expect, test} from '../fixtures/fixturePage';
-import Language from "../data/enums";
+import {Language, FooterLanguage} from "../data/enums";
+import { SupportUsPage } from '../page/client/SupportUsPage';
 
 test.describe('UI - Home page', () => {
     test('Home page shows expected heading (using POM)', async ({aboutUsPage, baseClientURL}) => {
         await aboutUsPage.goto(baseClientURL);
         const title = await aboutUsPage.getTitleText();
-        // If tests point at example.com assert the known Example Domain heading.
         expect(title).toEqual('Фундація Лятошинського');
     });
 
@@ -22,7 +22,7 @@ test.describe('UI - Home page', () => {
         expect(itemNames).toEqual([
             'Borys Liatoshynskyi',
             'Foundation',
-            'Archive Cabinet',
+            'Archive',
             'Cooperation'
         ]);
     });
@@ -62,7 +62,7 @@ test.describe('UI - Home page', () => {
             ? link
             : `${langPrefix}${link}`;
 
-        await artistry.click();
+        await artistry.headerclick();
 
         await expect(page).toHaveURL(new RegExp(`${linkWithLang}$`));
 
@@ -71,6 +71,7 @@ test.describe('UI - Home page', () => {
         const title = await aboutUsPage.getTitleText();
         expect(title).toEqual('Фундація Лятошинського');
     });
+
     test('check goto Artistry page', async ({aboutUsPage, artistryPage, page}) => {
         await aboutUsPage.goto('/');
         let menuItem = await aboutUsPage.header.getMenuByName("Borys Liatoshynskyi");
@@ -82,13 +83,41 @@ test.describe('UI - Home page', () => {
         expect(title).toEqual('Творчість - Фундація Лятошинського');
     });
 
-    test('check Support Btn link', async ({aboutUsPage}) => {
+    test('check Header Support Btn link', async ({aboutUsPage, supportUsPage, page}) => {
         await aboutUsPage.goto('/');
+
+        const btnEnText = await aboutUsPage.header.supportFundBtn.getText();
+        expect(btnEnText).toEqual('Support');
+
+        await aboutUsPage.header.changeLangBtn.click();
+        await aboutUsPage.header.changeLangBtn.selectLanguage(Language.Ukrainian);
+        await page.waitForTimeout(5000);
+        const btnUaText = await aboutUsPage.header.supportFundBtn.getText();
+        expect(btnUaText).toEqual('Підтримати');
+
         await aboutUsPage.header.supportFundBtn.click();
+        await expect(page).toHaveURL(/support-us/);
+        const title = await supportUsPage.getTitleText();
+        expect(title).toEqual('Create Next App');
 
     });
 
-    test('check Change Language Btn', async ({aboutUsPage}) => {
+    test('check Footer Support Btn link', async ({aboutUsPage, supportUsPage, page}) => {
+        await aboutUsPage.goto('/');
+        const btnEnText = await aboutUsPage.footer.supportFundBtn.getText();
+        expect(btnEnText).toEqual('Support the Foundation');
+
+        await aboutUsPage.footer.changeLangBtn.click();
+        const btnUaText = await aboutUsPage.footer.supportFundBtn.getText();
+        expect(btnUaText).toEqual('Підтримати діяльність фундації');
+        await aboutUsPage.footer.supportFundBtn.getLink();
+        await aboutUsPage.footer.supportFundBtn.click();
+        await expect(page).toHaveURL(/support-us/);
+        const title = await supportUsPage.getTitleText();
+        expect(title).toEqual('Create Next App');
+    });
+
+    test('check Header Change Language Btn', async ({aboutUsPage}) => {
         await aboutUsPage.goto('/');
         const button = aboutUsPage.header.changeLangBtn;
         await aboutUsPage.header.changeLangBtn.click();
@@ -102,5 +131,57 @@ test.describe('UI - Home page', () => {
 
         await expect(await aboutUsPage.header.changeLangBtn.getSelectedLanguage())
             .toEqual(Language.English.value);
+    });
+
+    test('check Footer Change Language Btn', async ({aboutUsPage}) => {
+        await aboutUsPage.goto('/');
+        await expect(await aboutUsPage.footer.changeLangBtn.getText())
+            .toEqual(FooterLanguage.Ukrainian.value);
+
+        await aboutUsPage.footer.changeLangBtn.click();
+        await expect(await aboutUsPage.footer.changeLangBtn.getText())
+            .toEqual(FooterLanguage.English.value);
+
+        await aboutUsPage.footer.changeLangBtn.click();
+        await expect(await aboutUsPage.footer.changeLangBtn.getText())
+            .toEqual(FooterLanguage.Ukrainian.value);
+
+        await aboutUsPage.footer.changeLangBtn.click();
+        await expect(await aboutUsPage.footer.changeLangBtn.getText())
+            .toEqual(FooterLanguage.English.value);
+    });
+
+    test('check Footer ContactUs Btn', async ({aboutUsPage, contactsPage, page}) => {
+        await aboutUsPage.goto('/');
+
+        const btnEnText = await aboutUsPage.footer.contactUsBtn.getText();
+        expect(btnEnText).toEqual('Contact us');
+
+        await aboutUsPage.footer.changeLangBtn.click();
+        const btnUaText = await aboutUsPage.footer.contactUsBtn.getText();
+        expect(btnUaText).toEqual('Напишіть нам');
+
+        let link = await aboutUsPage.footer.contactUsBtn.click();
+
+        await expect(page).toHaveURL(/contacts/);
+        const title = await contactsPage.getTitleText();
+        expect(title).toEqual('Контакти');
+    });
+
+    test('check footer page menu', async ({aboutUsPage, artistryPage, page}) => {
+        await aboutUsPage.goto('/');
+
+        let items = await aboutUsPage.footer.getPageMenuHeaders();
+        expect(items).toEqual([
+            'BORYS LIATOSHYNSKYI',
+            'FOUNDATION',
+            'MUSEUM',
+            'PARTNERSHIP'
+        ]);
+        await aboutUsPage.footer.clickPageItemByName("Artistry");
+        expect(page).toHaveURL(/artistry/);
+        await page.waitForTimeout(500); 
+        const title = await artistryPage.getTitleText();
+        expect(title).toEqual('Творчість - Фундація Лятошинського');
     });
 });
