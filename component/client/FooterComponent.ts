@@ -75,9 +75,9 @@ export class FooterComponent extends BaseComponent{
   async getPageItemByName(str: string): Promise<PageItemComponent> {
     let elementFound: PageItemComponent;
     await test.step(`Check if pageItem is visible`, async () => {
-      let elements = await this.getMenuItems()
+      const elements = await this.getMenuItems()
   
-      for (let element of elements) {
+      for (const element of elements) {
         const itemName: string =  (await element.get_Name()).trim();
           if (itemName === str.trim()) {
             elementFound = element;

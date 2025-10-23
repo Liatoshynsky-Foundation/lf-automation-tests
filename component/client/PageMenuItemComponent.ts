@@ -57,7 +57,7 @@ export class PageMenuItemComponent {
   }
 
   async clickSubPageByName(str: string): Promise<void> {
-    let subPages = await this.getSubPages();
+    const subPages = await this.getSubPages();
     
     for (const page of subPages) {
       const pageName = (await page.get_Name()).trim(); 
