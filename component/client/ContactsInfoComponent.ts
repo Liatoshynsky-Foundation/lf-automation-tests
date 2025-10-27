@@ -20,7 +20,11 @@ export class ContactsInfoComponent {
     }
 
     async getPhoneNumber(): Promise<string> {
+<<<<<<< HEAD
       return(await this.phoneNumberLink.textContent()) ?? '';
+=======
+        return (await this.phoneNumberLink.textContent()) ?? '';
+>>>>>>> 3baf5a6cc4eec28b78b5916a589dfa42c5eaf27e
     }
 
     async clickEmail(): Promise<void> {
