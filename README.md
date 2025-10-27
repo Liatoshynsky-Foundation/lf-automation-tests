@@ -69,6 +69,35 @@ Project scripts (from package.json)
 - `typecheck` — run `tsc` to type-check sources
 - `show` — show Playwright HTML report (`npx playwright show-report` or `npm run show`)
 - `lint` / `lint:fix` — ESLint commands
+- `allure:generate` — generate Allure report from test results
+- `allure:open` — open the generated Allure report
+- `allure:serve` — generate and serve Allure report (opens in browser)
+
+Allure Reporting
+----------------
+This project includes Allure reporting for enhanced test result visualization.
+
+After running tests, you can view the Allure report in two ways:
+
+1. Generate and open the report:
+    ```cmd
+    npm run allure:generate
+    npm run allure:open
+    ```
+
+2. Generate and serve the report in one command:
+    ```cmd
+    npm run allure:serve
+    ```
+
+The Allure report provides:
+- Detailed test execution results with steps
+- Historical trends and statistics
+- Failed test analysis
+- Screenshots and attachments (if configured)
+- Test categorization and filtering
+
+**Note:** The `allure-results/` folder is generated during test execution and is used to create the report. Both `allure-results/` and `allure-report/` are excluded from version control via `.gitignore`.
 
 Environment variables (`.env`)
 ------------------------------
