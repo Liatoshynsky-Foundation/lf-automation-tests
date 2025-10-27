@@ -132,6 +132,16 @@ Download the `allure-report` artifact from the Actions tab to view results.
 
 ## Troubleshooting
 
+### Java dependency required
+Allure commandline requires Java Runtime Environment (JRE) 8 or higher to be installed:
+- **Check if Java is installed:** `java -version`
+- **Install Java:**
+  - **Ubuntu/Debian:** `sudo apt-get install default-jre`
+  - **macOS:** `brew install openjdk`
+  - **Windows:** Download from [Oracle](https://www.oracle.com/java/technologies/downloads/) or use [OpenJDK](https://adoptium.net/)
+
+If Java is not installed, the `allure:generate` and `allure:serve` commands will fail.
+
 ### Report not generating
 - Ensure tests have run at least once to create `allure-results/` folder
 - Check that `allure-results/` contains JSON files

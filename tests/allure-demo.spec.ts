@@ -34,7 +34,7 @@ test.describe('Allure Reporting Demo', () => {
     await allure.step('Send GET request to JSONPlaceholder', async () => {
       const response = await request.get('https://jsonplaceholder.typicode.com/posts/1');
       expect(response.status()).toBe(200);
-      
+
       const data = await response.json();
       await allure.attachment('Response Data', JSON.stringify(data, null, 2), 'application/json');
       
