@@ -6,9 +6,9 @@ import { ContactFormC } from '../../component/client/ContactFormC';
 const CONTACTS_PAGE_PATH = '/uk/contacts';
 
 export class ContactsPage extends BasePage {
-    public readonly pageHeading: Locator;
-    private readonly contactsInfoComponent: ContactsInfoComponent;
-    private readonly contactFormC: ContactFormC;
+    public  pageHeading: Locator;
+    private  contactsInfoComponent: ContactsInfoComponent;
+    private  contactFormC: ContactFormC;
 
   constructor(page: Page) {
     super(page);
@@ -18,7 +18,7 @@ export class ContactsPage extends BasePage {
   }
 
   async getHeadingText(): Promise<string> {
-        return this.pageHeading.textContent() ?? '';
+        return (await this.pageHeading.textContent()) ?? '';
     }
 
         getContactsInfoComponent(): ContactsInfoComponent {
