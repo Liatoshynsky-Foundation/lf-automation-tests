@@ -99,6 +99,8 @@ The Allure report provides:
 
 **Note:** The `allure-results/` folder is generated during test execution and is used to create the report. Both `allure-results/` and `allure-report/` are excluded from version control via `.gitignore`.
 
+For detailed information on using Allure annotations, creating test steps, and customizing reports, see [docs/ALLURE_GUIDE.md](docs/ALLURE_GUIDE.md).
+
 Environment variables (`.env`)
 ------------------------------
 This project supports a small set of environment variables loaded via `dotenv` from the repository root. See `config/env.ts` for the implementation.
