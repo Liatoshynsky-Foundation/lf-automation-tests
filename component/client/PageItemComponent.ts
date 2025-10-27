@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test";
+import { Locator } from "@playwright/test";
 
 export class PageItemComponent {
   private name: Locator;
@@ -19,7 +19,14 @@ export class PageItemComponent {
     return href ;
   }
 
-  async click(): Promise<void> {
+  async headerclick(): Promise<void> {
     await this.link.click();
+  }
+
+  async footerclick(): Promise<void> {
+    await Promise.all([
+      this.name.click(),
+      this.name.page().waitForLoadState('networkidle'),
+    ]);
   }
 }

@@ -1,14 +1,14 @@
 import { Locator } from "@playwright/test";
 
-export class SupportFoundationBtn {
-  link: Locator;
+export class ContactUsBtn {
   button: Locator;
+  link: Locator;
   image: Locator;
 
   constructor(parent: Locator){
-    this.link = parent.locator('a[href*="/support-us"]');
-    this.button = parent.locator('a[href*="/support-us"] > button')
-    this.image = parent.locator('img[alt="Donation Button"]');
+    this.button = parent.locator('a[href*="/contacts"] > button')
+    this.link = parent.locator('a[href*="/contacts"]:has(button)');
+    this.image = parent.locator('img[alt="Contact Us Button"]');
   }
 
   async click(): Promise<void>{
@@ -16,6 +16,7 @@ export class SupportFoundationBtn {
   }
 
   async getText(): Promise<string> {
+    
     return (await this.button.innerText()).trim();
   }
 
