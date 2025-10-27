@@ -1,11 +1,13 @@
 import { type Locator, type Page } from '@playwright/test';
 
+export type Platform = 'instagram' | 'facebook' | 'youtube';
+
 export class ContactsInfoComponent {
-    private readonly page: Page;
-    public readonly mainContainer: Locator;
-    public readonly phoneNumberLink: Locator;
-    public readonly emailLink: Locator;
-    private readonly socialMediaBlock: Locator;
+    private  page: Page;
+    public  mainContainer: Locator;
+    public  phoneNumberLink: Locator;
+    public  emailLink: Locator;
+    private socialMediaBlock: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -18,22 +20,22 @@ export class ContactsInfoComponent {
     }
 
     async getPhoneNumber(): Promise<string> {
-        return this.phoneNumberLink.textContent() ?? '';
+      return(await this.phoneNumberLink.textContent()) ?? '';
     }
 
     async clickEmail(): Promise<void> {
-        await this.emailLink.click();
+      await this.emailLink.click();
     }
 
     /**
      * @param platform ('instagram', 'facebook', 'youtube').
      */
-    async clickSocialLink(platform: 'instagram' | 'facebook' | 'youtube'): Promise<void> {
-        const linkLocator = this.socialMediaBlock.locator(`a[href*="${platform}"]`);
-        await linkLocator.click();
+    async clickSocialLink(platform: Platform): Promise<void> {
+      const linkLocator = this.socialMediaBlock.locator(`a[href*="${platform}"]`);
+      await linkLocator.click();
     }
 
-    getSocialLink(platform: 'instagram' | 'facebook' | 'youtube'): Locator {
-        return this.socialMediaBlock.locator(`a[href*="${platform}"]`);
+    getSocialLink(platform: Platform): Locator {
+      return this.socialMediaBlock.locator(`a[href*="${platform}"]`);
     }
 }
