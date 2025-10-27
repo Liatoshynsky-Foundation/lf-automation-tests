@@ -15,7 +15,7 @@ export class BasePage {
     this.header = new HeaderComponent(page);
     this.footer = new FooterComponent(page);
     this.title = page.locator('//head/title');
-    this.cookiesModal = new CookiesModal(page)
+    this.cookiesModal = new CookiesModal(page);
   }
 
   async goto(path: string): Promise<void> {
