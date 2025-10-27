@@ -21,13 +21,13 @@ export class ContactsPage extends BasePage {
         return (await this.pageHeading.textContent()) ?? '';
     }
 
-        getContactsInfoComponent(): ContactsInfoComponent {
-        return this.contactsInfoComponent;
-    }
+  getContactsInfoComponent(): ContactsInfoComponent {
+    return this.contactsInfoComponent;
+  }
 
-        getContactFormC(): ContactFormC {
-        return this.contactFormC;
-    }
+  getContactFormC(): ContactFormC {
+    return this.contactFormC;
+  }
 
   
 }
