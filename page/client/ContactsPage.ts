@@ -6,9 +6,9 @@ import { ContactFormC } from '../../component/client/ContactFormC';
 const CONTACTS_PAGE_PATH = '/uk/contacts';
 
 export class ContactsPage extends BasePage {
-    public  pageHeading: Locator;
-    private  contactsInfoComponent: ContactsInfoComponent;
-    private  contactFormC: ContactFormC;
+    public pageHeading: Locator;
+    private contactsInfoComponent: ContactsInfoComponent;
+    private contactFormC: ContactFormC;
 
   constructor(page: Page) {
     super(page);
