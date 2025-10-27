@@ -8,7 +8,7 @@ export class BasePage {
   header: HeaderComponent;
   footer: FooterComponent;
   private  title: Locator;
-  protected cookiesModal : CookiesModal;
+  protected cookiesModal: CookiesModal;
 
   constructor(page: Page) {
     this.page = page;
