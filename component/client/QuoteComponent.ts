@@ -17,7 +17,7 @@ export class QuoteComponent extends BaseComponent {
 
     async getIconSource(): Promise<string | null> {
         await this.quoteIcon.scrollIntoViewIfNeeded();
-        return await this.quoteIcon.getAttribute('src');
+        return await this.quoteIcon.getAttribute('xmlns') || '';
     }
 
     async getQuoteText(): Promise<string> {
