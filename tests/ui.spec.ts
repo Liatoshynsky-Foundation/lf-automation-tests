@@ -184,4 +184,36 @@ test.describe('UI - Home page', () => {
         const title = await artistryPage.getTitleText();
         expect(title).toEqual('Творчість - Фундація Лятошинського');
     });
+
+    test('check Org Info in footer', async({aboutUsPage}) => {
+        await aboutUsPage.goto('/');
+        await aboutUsPage.footer.checkInfoName("PUBLIC ORGANIZATION 'LYATOSHINSKY FOUNDATION'");
+        await aboutUsPage.footer.checkInfoAddress("68 Bohdana Khmelnytskoho St, apt. 63, Kyiv, 1054");
+        await aboutUsPage.footer.checkInfoPhone("067 963 8366");
+        await aboutUsPage.footer.checkInfoEmail("liatoshynsky@gmail.com");
+        await aboutUsPage.footer.checkCopyrightText("© 2025 Liatoshynsky Foundation. All rights reserved.");
+    });
+
+    test('clicking Phone in footer shows alert', async ({ aboutUsPage, page }) => {
+        await aboutUsPage.goto('/');
+        await page.waitForLoadState('domcontentloaded');
+
+        const [dialog] = await Promise.all([
+            page.waitForEvent('dialog', { timeout: 70000 }),
+            aboutUsPage.footer.clickInfoPhone()
+        ]);
+
+        console.log('Dialog message:', dialog.message());
+        expect(dialog.message()).toBe('Phone number copied to clipboard');
+        await dialog.accept();
+    });
+
+    test('clicking Email in footer has mailto', async ({ aboutUsPage, page }) => {
+        await aboutUsPage.goto('/');
+        await aboutUsPage.footer.clickInfoEmail();
+
+        const href = await aboutUsPage.footer.infoEmail.locator('a').getAttribute('href');
+        expect(href).toBe('mailto:liatoshynsky@gmail.com');
+    });
+
 });
