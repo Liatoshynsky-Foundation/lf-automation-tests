@@ -1,9 +1,9 @@
-import {Locator, Page} from '@playwright/test';
-import { BasePage } from './BasePage';
-import {AboutUsPage} from "./AboutUsPage";
+import { Locator, Page } from '@playwright/test';
+import { ClientBasePage } from './ClientBasePage';
+import { AboutUsPage } from "./AboutUsPage";
 
-export class ArchiveCabinetPage extends BasePage {
-  readonly returnToHomeBtn: Locator;
+export class ArchiveCabinetPage extends ClientBasePage {
+  returnToHomeBtn: Locator;
   constructor(page: Page) {
     super(page);
     this.returnToHomeBtn = page.locator('xpath=/html/body/div[2]/div/div/a/button');

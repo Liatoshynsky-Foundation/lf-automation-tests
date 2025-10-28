@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { ClientBasePage } from './ClientBasePage';
 
-export class NotFound404Page extends BasePage {
+export class NotFound404Page extends ClientBasePage {
   constructor(page: Page) {
     super(page);
   }

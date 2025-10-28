@@ -1,20 +1,18 @@
-import {Locator, Page} from '@playwright/test';
+import { Page } from '@playwright/test';
+import { BasePage} from '../BasePage';
 import { HeaderComponent } from '../../component/client/HeaderComponent';
 import { FooterComponent } from '../../component/client/FooterComponent';
-import {CookiesModal} from "../../component/client/CookiesModal";
+import { CookiesModal } from "../../component/client/CookiesModal";
 
-export class BasePage {
-  protected page: Page;
+export class ClientBasePage extends BasePage {
   header: HeaderComponent;
   footer: FooterComponent;
-  private  title: Locator;
   protected cookiesModal: CookiesModal;
 
   constructor(page: Page) {
-    this.page = page;
+    super(page);
     this.header = new HeaderComponent(page);
     this.footer = new FooterComponent(page);
-    this.title = page.locator('//head/title');
     this.cookiesModal = new CookiesModal(page);
   }
 

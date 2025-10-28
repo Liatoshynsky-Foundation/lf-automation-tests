@@ -1,9 +1,9 @@
-import {Page} from '@playwright/test';
-import {BasePage} from './BasePage';
-import {VolunteerActionComponent} from '../../component/client/VolunteerActionComponent';
+import { Page } from '@playwright/test';
+import { ClientBasePage } from './ClientBasePage';
+import { VolunteerActionComponent } from '../../component/client/VolunteerActionComponent';
 import { QuickDonationComponent } from '../../component/client/QuickDonationComponent';
 
-export class SupportUsPage extends BasePage {
+export class SupportUsPage extends ClientBasePage {
 
     public volunteerAction: VolunteerActionComponent;
     public quickDonation: QuickDonationComponent;

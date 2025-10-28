@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { ClientBasePage } from './ClientBasePage';
 
-export class ResearchAndAcademicWorksPage extends BasePage {
+export class ResearchAndAcademicWorksPage extends ClientBasePage {
   constructor(page: Page) {
     super(page);
   }
