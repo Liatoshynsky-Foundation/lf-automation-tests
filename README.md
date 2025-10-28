@@ -7,6 +7,7 @@ Quickstart
 Prerequisites:
 - Node.js (16+ recommended)
 - Git (optional)
+- Java 8+ (required for Allure Commandline to generate reports)
 
 1. Install project dependencies:
 
@@ -20,7 +21,13 @@ Prerequisites:
     npx playwright install
     ```
 
-3. Create a `.env` file from the example and edit values if needed:
+3. Install Allure dependencies:
+
+    ```cmd
+    npm install -D allure-playwright@3.4.1 allure-commandline@2.34.1
+    ```
+
+4. Create a `.env` file from the example and edit values if needed:
 
     ```cmd
     copy .env.example .env
@@ -97,9 +104,13 @@ The Allure report provides:
 - Screenshots and attachments (if configured)
 - Test categorization and filtering
 
-**Note:** The `allure-results/` folder is generated during test execution and is used to create the report. Both `allure-results/` and `allure-report/` are excluded from version control via `.gitignore`.
+**Note:** 
+- The `allure-results/` folder is generated during test execution and is used to create the report. 
+- Both `allure-results/` and `allure-report/` are excluded from version control via `.gitignore`.
+- Allure Commandline requires Java 8 or newer to be installed and available in your system PATH.
 
 For detailed information on using Allure annotations, creating test steps, and customizing reports, see [docs/ALLURE_GUIDE.md](docs/ALLURE_GUIDE.md).
+For an example test with Allure annotations, steps, and attachments, see tests/allure-demo.spec.ts.
 
 Environment variables (`.env`)
 ------------------------------
