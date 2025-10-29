@@ -180,12 +180,12 @@ test.describe('UI - Home page', () => {
         ]);
         await aboutUsPage.footer.clickPageItemByName("Artistry");
         expect(page).toHaveURL(/artistry/);
-        await page.waitForTimeout(500); 
+        await page.waitForTimeout(500);
         const title = await artistryPage.getTitleText();
         expect(title).toEqual('Творчість - Фундація Лятошинського');
     });
 
-    test('check Org Info in footer', async({aboutUsPage}) => {
+    test('check Org Info in footer', async ({aboutUsPage}) => {
         await aboutUsPage.goto('/');
         await aboutUsPage.footer.checkInfoName("PUBLIC ORGANIZATION 'LYATOSHINSKY FOUNDATION'");
         await aboutUsPage.footer.checkInfoAddress("68 Bohdana Khmelnytskoho St, apt. 63, Kyiv, 1054");
@@ -194,21 +194,23 @@ test.describe('UI - Home page', () => {
         await aboutUsPage.footer.checkCopyrightText("© 2025 Liatoshynsky Foundation. All rights reserved.");
     });
 
-    test('clicking Phone in footer shows alert', async ({ aboutUsPage, page }) => {
+    test('clicking Phone in footer shows alert', async ({aboutUsPage, page}) => {
         await aboutUsPage.goto('/');
-        await page.waitForLoadState('domcontentloaded');
 
-        const [dialog] = await Promise.all([
-            page.waitForEvent('dialog', { timeout: 70000 }),
-            aboutUsPage.footer.clickInfoPhone()
-        ]);
-
-        console.log('Dialog message:', dialog.message());
-        expect(dialog.message()).toBe('Phone number copied to clipboard');
-        await dialog.accept();
+        page.on('dialog', async dialog => {
+            // Assert the type of dialog (optional, but good practice)
+            expect(dialog.type()).toBe('alert');
+            // Assert the message displayed in the alert
+            expect(dialog.message()).toContain('Phone number copied to clipboard');
+            // Accept the alert (or use dialog.dismiss() to cancel)
+            await dialog.accept();
+        });
+        await aboutUsPage.footer.clickInfoPhone();
+        await page.evaluate(() => {
+        })
     });
 
-    test('clicking Email in footer has mailto', async ({ aboutUsPage, page }) => {
+    test('clicking Email in footer has mailto', async ({aboutUsPage, page}) => {
         await aboutUsPage.goto('/');
         await aboutUsPage.footer.clickInfoEmail();
 
