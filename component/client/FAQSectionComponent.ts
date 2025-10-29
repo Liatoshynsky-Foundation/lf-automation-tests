@@ -11,7 +11,7 @@ export class FAQSectionComponent {
         
     }
 
-    async expand(): Promise<void> {
+    async clickQuestionTitle(): Promise<void> {
         await this.questionTitle.click();
     }
     async isExpanded(): Promise<boolean> {
