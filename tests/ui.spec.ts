@@ -180,8 +180,42 @@ test.describe('UI - Home page', () => {
         ]);
         await aboutUsPage.footer.clickPageItemByName("Artistry");
         expect(page).toHaveURL(/artistry/);
-        await page.waitForTimeout(500); 
+        await page.waitForTimeout(500);
         const title = await artistryPage.getTitleText();
         expect(title).toEqual('Творчість - Фундація Лятошинського');
     });
+
+    test('check Org Info in footer', async ({aboutUsPage}) => {
+        await aboutUsPage.goto('/');
+        await aboutUsPage.footer.checkInfoName("PUBLIC ORGANIZATION 'LYATOSHINSKY FOUNDATION'");
+        await aboutUsPage.footer.checkInfoAddress("68 Bohdana Khmelnytskoho St, apt. 63, Kyiv, 1054");
+        await aboutUsPage.footer.checkInfoPhone("067 963 8366");
+        await aboutUsPage.footer.checkInfoEmail("liatoshynsky@gmail.com");
+        await aboutUsPage.footer.checkCopyrightText("© 2025 Liatoshynsky Foundation. All rights reserved.");
+    });
+
+    test('clicking Phone in footer shows alert', async ({aboutUsPage, page}) => {
+        await aboutUsPage.goto('/');
+
+        page.on('dialog', async dialog => {
+            // Assert the type of dialog (optional, but good practice)
+            expect(dialog.type()).toBe('alert');
+            // Assert the message displayed in the alert
+            expect(dialog.message()).toContain('Phone number copied to clipboard');
+            // Accept the alert (or use dialog.dismiss() to cancel)
+            await dialog.accept();
+        });
+        await aboutUsPage.footer.clickInfoPhone();
+        await page.evaluate(() => {
+        })
+    });
+
+    test('clicking Email in footer has mailto', async ({aboutUsPage, page}) => {
+        await aboutUsPage.goto('/');
+        await aboutUsPage.footer.clickInfoEmail();
+
+        const href = await aboutUsPage.footer.infoEmail.locator('a').getAttribute('href');
+        expect(href).toBe('mailto:liatoshynsky@gmail.com');
+    });
+
 });

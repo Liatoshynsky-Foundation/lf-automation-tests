@@ -26,14 +26,14 @@ export class FooterComponent extends BaseComponent{
   constructor(page: Page) {
     super(page, page.locator('footer'));
     this.logo = this.parent.locator('svg[title="Company logo"]');
-    this.infoName = this.parent.locator('');
-    this.infoAddress = this.parent.locator('');
-    this.infoPhone = this.parent.locator('');
-    this.infoEmail = this.parent.locator('');
+    this.infoName = this.parent.locator('//div[2]/div[3]/div/div[1]/p');
+    this.infoAddress = this.parent.locator('//div[2]/div[3]/div/div[1]/div/p');
+    this.infoPhone = this.parent.locator('//div[2]/div[3]/div/div[2]/div[1]');
+    this.infoEmail = this.parent.locator('//div[2]/div[3]/div/div[2]/div[2]');
     this.contactUsBtn = new ContactUsBtn(this.parent);
     this.supportFundBtn = new SupportFoundationBtn(this.parent);
     this.legalMenu = this.parent.locator('div[2]/div[7]/div/ul');
-    this.copyrightText = this.parent.locator('div[2]/div[7]/div/p');
+    this.copyrightText = this.parent.locator('//div[2]/div[7]/div/p');
     this.changeLangBtn = new FooterChangeLangBtn(this.page, this.parent);
     this.pageMenu = this.page.locator('//footer/div[2]/div[6]/div');
     this.menuItems = this.parent.locator('div:has(> ul) ul');
@@ -59,18 +59,6 @@ export class FooterComponent extends BaseComponent{
     const items = await this.menuItems.locator('li > a').all();
     return items.map(item => new PageItemComponent(item));
   }
-
-  // async clickPageItemByName(str:string): Promise< void> {
-  //   await this.waitIsVisible(this.menuItems,50000);
-  //   let pages = await this.getMenuItems();
-  //   for (let i = 0; i < pages.length; i++){
-  //     if (await pages[i].get_Name() === str){
-  //       pages[i].click();
-  //     } 
-  //   }
-
-  //   const items = await this.menuItems.locator('li > a').all();
-  // }
 
   async getPageItemByName(str: string): Promise<PageItemComponent> {
     let elementFound: PageItemComponent;
@@ -98,7 +86,51 @@ export class FooterComponent extends BaseComponent{
     }
   }
 
+  async checkInfoName(str: string): Promise<void>{
+    await this.infoName.waitFor({ state: 'visible' });
+    await this.infoName.scrollIntoViewIfNeeded();
+    expect(this.infoName).toHaveText(str);
+  }
 
+  async checkInfoAddress(str: string): Promise<void>{
+    await this.infoAddress.waitFor({ state: 'visible' });
+    await this.infoAddress.scrollIntoViewIfNeeded();
+    expect(this.infoAddress).toHaveText(str);
+  }
+
+  async checkInfoPhone(str: string): Promise<void>{
+    await this.infoPhone.waitFor({ state: 'visible' });
+    await this.infoPhone.scrollIntoViewIfNeeded();
+    expect(this.infoPhone.locator('p')).toHaveText("Phone:");
+    expect(this.infoPhone.locator('a')).toHaveText(str);
+  }
+
+  async clickInfoPhone(): Promise<void>{
+    await this.infoPhone.waitFor({ state: 'visible' });
+    await this.infoPhone.scrollIntoViewIfNeeded();
+    await this.infoPhone.locator('a').click({ force: true });
+  }
+
+  async checkInfoEmail(str: string): Promise<void>{
+    await this.infoEmail.waitFor({ state: 'visible' });
+    await this.infoEmail.scrollIntoViewIfNeeded();
+    expect(this.infoEmail.locator('p')).toHaveText("Email:");
+    expect(this.infoEmail.locator('a')).toHaveText(str);
+  }
+
+  async clickInfoEmail(): Promise<void>{
+    await this.infoEmail.waitFor({ state: 'visible' });
+    await this.infoEmail.scrollIntoViewIfNeeded();
+    const link = this.infoEmail.locator('a');
+    await expect(link).toHaveAttribute('href', /mailto:/);
+    await link.click({ force: true });
+  }
+
+  async checkCopyrightText(str: string): Promise<void>{
+    await this.copyrightText.waitFor({ state: 'visible' });
+    await this.copyrightText.scrollIntoViewIfNeeded();
+    expect(this.copyrightText).toHaveText(str);
+  }
 
 
 
