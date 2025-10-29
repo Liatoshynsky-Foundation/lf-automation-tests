@@ -159,7 +159,7 @@ test-results/
 /playwright/.cache/
 /playwright/.auth/
 
-
-#allure-report
-allure-report/
+# Allure files
 allure-results/
+allure-report/
+.allure/
