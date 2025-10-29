@@ -5,7 +5,7 @@ import {FooterChangeLangBtn} from './FooterChangeLangBtn';
 import {ContactUsBtn} from './ContactUsBtn';
 import {MediaMenuBtn} from './MediaMenuBtn';
 import {PageItemComponent} from './PageItemComponent';
-import {allure} from "allure-playwright";
+import * as allure from "allure-js-commons";
 
 export class FooterComponent extends BaseComponent {
     logo: Locator;
