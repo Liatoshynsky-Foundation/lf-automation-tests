@@ -129,7 +129,7 @@ export class FooterComponent extends BaseComponent{
   async checkCopyrightText(str: string): Promise<void>{
     await this.copyrightText.waitFor({ state: 'visible' });
     await this.copyrightText.scrollIntoViewIfNeeded();
-    expect (this.copyrightText).toHaveText(str);
+    expect(this.copyrightText).toHaveText(str);
   }
 
 
