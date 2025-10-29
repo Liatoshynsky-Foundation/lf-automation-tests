@@ -28,7 +28,7 @@ export class SupportFoundationBtn {
 
   async getLink(): Promise<string> {
     let link: string = "";
-    await allure.step('Get image link of Support Btn', async () => {
+    await allure.step('Get link on Support Btn', async () => {
       link = await this.link.getAttribute('href') ?? '';
     })
     return link;
