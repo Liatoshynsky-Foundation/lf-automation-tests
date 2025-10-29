@@ -1,31 +1,41 @@
 import {Locator, Page} from '@playwright/test';
-import { HeaderComponent } from '../../component/client/HeaderComponent';
-import { FooterComponent } from '../../component/client/FooterComponent';
+import {HeaderComponent} from '../../component/client/HeaderComponent';
+import {FooterComponent} from '../../component/client/FooterComponent';
+import {CookiesModal} from "../../component/client/CookiesModal";
+import {allure} from "allure-playwright";
 
 export class BasePage {
-  protected page: Page;
-  readonly header: HeaderComponent;
-  readonly footer: FooterComponent;
-  private  title: Locator;
+    protected page: Page;
+    header: HeaderComponent;
+    footer: FooterComponent;
+    private title: Locator;
+    protected cookiesModal: CookiesModal;
 
-  constructor(page: Page) {
-    this.page = page;
-    this.header = new HeaderComponent(page);
-    this.footer = new FooterComponent(page);
-    this.title = page.locator('//title');
-  }
-
-  async goto(path = ''): Promise<void> {
-    // allow either full url or relative path
-    if (path.startsWith('http')) {
-      await this.page.goto(path);
-    } else {
-      await this.page.goto(path || '/');
+    constructor(page: Page) {
+        this.page = page;
+        this.header = new HeaderComponent(page);
+        this.footer = new FooterComponent(page);
+        this.title = page.locator('//head/title');
+        this.cookiesModal = new CookiesModal(page);
     }
-  }
 
-  async getTitleText(): Promise<string> {
-    return await this.title.textContent() || '';
-  }
+    async getPathCurrentLanguage(path: string) {
+        const currentURL = new URL(this.page.url());
+        const basePath = currentURL.pathname.split('/')[1];
+        return `/${basePath}/${path}`;
+    }
+
+    async goto(path: string): Promise<void> {
+        await this.page.goto(path, {waitUntil: 'domcontentloaded'});
+        await this.cookiesModal.acceptAll(2000);
+    }
+
+    async getTitleText(): Promise<string> {
+        let text = '';
+        await allure.step('Navigate to Playwright website', async () => {
+            text = await this.title.textContent() || '';
+        });
+        return text;
+    }
 
 }

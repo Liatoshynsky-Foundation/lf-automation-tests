@@ -7,6 +7,7 @@ Quickstart
 Prerequisites:
 - Node.js (16+ recommended)
 - Git (optional)
+- Java 8+ (required for Allure Commandline to generate reports)
 
 1. Install project dependencies:
 
@@ -29,6 +30,8 @@ Prerequisites:
 
 Run tests
 ---------
+You can run tests using the npm scripts defined in `package.json`.
+
 - Run the entire test suite (all configured browsers):
 
     ```cmd
@@ -47,7 +50,7 @@ Run tests
     npm run test:api
     ```
 
-- Run tests for a specific project (e.g. Chromium) with Playwright directly:
+- Run tests for a specific Playwright project (e.g. Chromium):
 
     ```cmd
     npx playwright test --project=chromium
@@ -59,6 +62,50 @@ Run tests
     npm run typecheck
     ```
 
+Project scripts (from package.json)
+-----------------------------------
+- `test` — run Playwright tests
+- `test:ui` — run UI tests (tests/ui.spec.ts)
+- `test:api` — run API tests (tests/api.spec.ts)
+- `typecheck` — run `tsc` to type-check sources
+- `show` — show Playwright HTML report (`npx playwright show-report` or `npm run show`)
+- `lint` / `lint:fix` — ESLint commands
+- `allure:generate` — generate Allure report from test results
+- `allure:open` — open the generated Allure report
+- `allure:serve` — generate and serve Allure report (opens in browser)
+
+Allure Reporting
+----------------
+This project includes Allure reporting for enhanced test result visualization.
+
+After running tests, you can view the Allure report in two ways:
+
+1. Generate and open the report:
+    ```cmd
+    npm run allure:generate
+    npm run allure:open
+    ```
+
+2. Generate and serve the report in one command:
+    ```cmd
+    npm run allure:serve
+    ```
+
+The Allure report provides:
+- Detailed test execution results with steps
+- Historical trends and statistics
+- Failed test analysis
+- Screenshots and attachments (if configured)
+- Test categorization and filtering
+
+**Note:** 
+- The `allure-results/` folder is generated during test execution and is used to create the report. 
+- Both `allure-results/` and `allure-report/` are excluded from version control via `.gitignore`.
+- Allure Commandline requires Java 8 or newer to be installed and available in your system PATH.
+
+For detailed information on using Allure annotations, creating test steps, and customizing reports, see [docs/ALLURE_GUIDE.md](docs/ALLURE_GUIDE.md).
+For an example test with Allure annotations, steps, and attachments, see tests/allure-demo.spec.ts.
+
 Environment variables (`.env`)
 ------------------------------
 This project supports a small set of environment variables loaded via `dotenv` from the repository root. See `config/env.ts` for the implementation.
@@ -66,6 +113,15 @@ This project supports a small set of environment variables loaded via `dotenv` f
 - `BASE_CLIENT_URL` — Base URL used for client-facing UI tests. Default: `https://example.com`
 - `BASE_ADMIN_URL` — Base URL used for admin UI flows. Default: automatically derived from `BASE_CLIENT_URL` as `${BASE_CLIENT_URL}/admin` when not provided.
 - `BASE_API_URL` — Base URL used for API tests. Default: `https://jsonplaceholder.typicode.com`
+
+Example `.env.example` (copy to `.env` and adjust as needed):
+
+```text
+BASE_CLIENT_URL=https://example.com
+# Leave empty to derive from BASE_CLIENT_URL, e.g. https://example.com/admin
+BASE_ADMIN_URL=
+BASE_API_URL=https://jsonplaceholder.typicode.com
+```
 
 A sample file is included as `.env.example`. Do not commit secrets to source control.
 
@@ -82,7 +138,9 @@ Project structure (key files)
 
 Using the fixtures in tests
 ---------------------------
-The repository provides small fixture modules you can import from tests instead of `@playwright/test` directly. Example (UI test):
+The repository provides small fixture modules you can import from tests instead of `@playwright/test` directly.
+
+Example (UI test inside `tests/`):
 
 ```ts
 import { test, expect } from './fixtures/fixturePage';
@@ -99,7 +157,7 @@ test('Home page heading', async ({ homePage, baseClientURL }) => {
 });
 ```
 
-Example (API test):
+Example (API test inside `tests/`):
 
 ```ts
 import { test, expect } from './fixtures/fixtureBase';
