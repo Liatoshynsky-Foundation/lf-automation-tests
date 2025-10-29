@@ -3,7 +3,8 @@ import { BasePage } from './BasePage';
 import { ContactsInfoComponent } from '../../component/client/ContactsInfoComponent';
 import { ContactFormC } from '../../component/client/ContactFormC';
 
-const CONTACTS_PAGE_PATH = '/uk/contacts';
+const CONTACTS_PAGE_PATH = 'contacts';
+
 
 export class ContactsPage extends BasePage {
   public pageHeading: Locator;
@@ -30,7 +31,7 @@ export class ContactsPage extends BasePage {
   }
   
   async visit(): Promise<void> {
-    await this.page.goto(CONTACTS_PAGE_PATH);
+    await this.page.goto(await this.getPathCurrentLanguage(CONTACTS_PAGE_PATH));
   }
 
 }
