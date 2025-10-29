@@ -122,7 +122,7 @@ export class FooterComponent extends BaseComponent{
     await this.infoEmail.waitFor({ state: 'visible' });
     await this.infoEmail.scrollIntoViewIfNeeded();
     const link = this.infoEmail.locator('a');
-    await expect(link).toHaveAttribute('href', /mailto:/)
+    await expect(link).toHaveAttribute('href', /mailto:/);
     await link.click({ force: true });
   }
 
