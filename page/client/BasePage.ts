@@ -2,6 +2,7 @@ import {Locator, Page} from '@playwright/test';
 import {HeaderComponent} from '../../component/client/HeaderComponent';
 import {FooterComponent} from '../../component/client/FooterComponent';
 import {CookiesModal} from "../../component/client/CookiesModal";
+import {allure} from "allure-playwright";
 
 export class BasePage {
     protected page: Page;
@@ -30,7 +31,11 @@ export class BasePage {
     }
 
     async getTitleText(): Promise<string> {
-        return await this.title.textContent() || '';
+        let text = '';
+        await allure.step('Navigate to Playwright website', async () => {
+            text = await this.title.textContent() || '';
+        });
+        return text;
     }
 
 }
