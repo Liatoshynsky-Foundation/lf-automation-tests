@@ -19,9 +19,13 @@ export class BasePage {
         this.cookiesModal = new CookiesModal(page);
     }
 
-    async getPathCurrentLanguage(path: string) {
+    async getPathCurrentLanguage(path: string): Promise<string> {
         const currentURL = new URL(this.page.url());
-        const basePath = currentURL.pathname.split('/')[1];
+        let basePath = currentURL.pathname.split('/')[1];
+        
+        if (!basePath) {
+        basePath = 'en'; 
+        }
         return `/${basePath}/${path}`;
     }
 

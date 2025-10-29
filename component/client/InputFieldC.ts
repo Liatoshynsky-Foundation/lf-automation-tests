@@ -13,9 +13,7 @@ export class InputFieldC {
      */
     constructor(page: Page, name: InputFieldName) {
         this.fieldLocator = page.locator(`
-            .MuiFormControl-root[name="${name}"],
-            .MuiFormControl-root:has(input[name="${name}"]),
-            .MuiFormControl-root:has(textarea[name="${name}"])
+            .MuiFormControl-root[name="${name}"],.MuiFormControl-root:has(input[name="${name}"]),.MuiFormControl-root:has(textarea[name="${name}"])
         `);
         
        
