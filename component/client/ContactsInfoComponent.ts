@@ -3,10 +3,10 @@ import { type Locator, type Page } from '@playwright/test';
 export type Platform = 'instagram' | 'facebook' | 'youtube';
 
 export class ContactsInfoComponent {
-    private  page: Page;
-    public  mainContainer: Locator;
-    public  phoneNumberLink: Locator;
-    public  emailLink: Locator;
+    private page: Page;
+    public mainContainer: Locator;
+    public phoneNumberLink: Locator;
+    public emailLink: Locator;
     private socialMediaBlock: Locator;
 
     constructor(page: Page) {
@@ -20,11 +20,7 @@ export class ContactsInfoComponent {
     }
 
     async getPhoneNumber(): Promise<string> {
-<<<<<<< HEAD
       return(await this.phoneNumberLink.textContent()) ?? '';
-=======
-        return (await this.phoneNumberLink.textContent()) ?? '';
->>>>>>> 3baf5a6cc4eec28b78b5916a589dfa42c5eaf27e
     }
 
     async clickEmail(): Promise<void> {

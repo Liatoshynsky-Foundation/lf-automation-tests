@@ -19,7 +19,7 @@ export class ContactsPage extends BasePage {
 
   async getHeadingText(): Promise<string> {
     return (await this.pageHeading.textContent()) ?? '';
- }
+  }
 
   getContactsInfoComponent(): ContactsInfoComponent {
     return this.contactsInfoComponent;
@@ -32,6 +32,5 @@ export class ContactsPage extends BasePage {
   async visit(): Promise<void> {
     await this.page.goto(CONTACTS_PAGE_PATH);
   }
-
 }
 

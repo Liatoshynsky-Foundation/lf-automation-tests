@@ -3,7 +3,6 @@ import { type Locator, type Page } from '@playwright/test';
 type InputFieldName = 'name' | 'email' | 'phoneNumber' | 'message';
 
 export class InputFieldC {
-    private readonly page: Page;
     public readonly fieldLocator: Locator;
     public readonly input: Locator;
     public readonly errorText: Locator;
@@ -13,7 +12,6 @@ export class InputFieldC {
      * @param name The 'name' attribute of the input field (e.g., 'name', 'email').
      */
     constructor(page: Page, name: InputFieldName) {
-        this.page = page;
         this.fieldLocator = page.locator(`
             .MuiFormControl-root[name="${name}"],
             .MuiFormControl-root:has(input[name="${name}"]),
@@ -28,7 +26,7 @@ export class InputFieldC {
         }
         
 
-        this.errorText = this.fieldLocator.locator('.Mui-error').locator('~ p'); 
+        this.errorText = this.fieldLocator.locator('.Mui-error'); 
     }
 
    
