@@ -66,6 +66,7 @@ Project scripts (from package.json)
 -----------------------------------
 - `test` — run Playwright tests
 - `test:ui` — run UI tests (tests/ui.spec.ts)
+- `client:ui` — run client UI tests (tests/client)
 - `test:api` — run API tests (tests/api.spec.ts)
 - `typecheck` — run `tsc` to type-check sources
 - `show` — show Playwright HTML report (`npx playwright show-report` or `npm run show`)

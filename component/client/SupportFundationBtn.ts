@@ -1,4 +1,5 @@
 import { Locator } from "@playwright/test";
+import * as allure from "allure-js-commons";
 
 export class SupportFoundationBtn {
   link: Locator;
@@ -12,15 +13,24 @@ export class SupportFoundationBtn {
   }
 
   async click(): Promise<void>{
-    await this.button.click();
+    await allure.step ('Click Support Btn', async () => {
+      await this.button.click();
+    })
   }
 
   async getText(): Promise<string> {
-    return (await this.button.innerText()).trim();
+    let btnText: string = "";
+    await allure.step('Get text on Support Btn', async () => {
+      btnText = await this.button.innerText();
+    })
+    return btnText.trim();
   }
 
   async getLink(): Promise<string> {
-    const href = await this.link.getAttribute('href') ?? '';
-    return href ;
+    let link: string = "";
+    await allure.step('Get image link of Support Btn', async () => {
+      link = await this.link.getAttribute('href') ?? '';
+    })
+    return link;
   }
 }
