@@ -158,3 +158,8 @@ test-results/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+
+#allure-report
+allure-report/
+allure-results/
