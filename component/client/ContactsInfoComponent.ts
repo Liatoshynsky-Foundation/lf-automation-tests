@@ -3,9 +3,9 @@ import { type Locator, type Page } from '@playwright/test';
 export type Platform = 'instagram' | 'facebook' | 'youtube';
 
 export class ContactsInfoComponent {
-    private  page: Page;
-    public  mainContainer: Locator;
-    public  phoneNumberLink: Locator;
+    private page: Page;
+    public mainContainer: Locator;
+    public phoneNumberLink: Locator;
     public  emailLink: Locator;
     private socialMediaBlock: Locator;
 
