@@ -21,13 +21,7 @@ Prerequisites:
     npx playwright install
     ```
 
-3. Install Allure dependencies:
-
-    ```cmd
-    npm install -D allure-playwright@3.4.1 allure-commandline@2.34.1
-    ```
-
-4. Create a `.env` file from the example and edit values if needed:
+3. Create a `.env` file from the example and edit values if needed:
 
     ```cmd
     copy .env.example .env
