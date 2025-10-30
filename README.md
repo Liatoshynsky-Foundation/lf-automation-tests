@@ -8,6 +8,7 @@ Prerequisites:
 
 - Node.js (16+ recommended)
 - Git (optional)
+- Java 8+ (required for Allure Commandline to generate reports)
 
 1. Install project dependencies:
 
@@ -82,6 +83,41 @@ You can run tests using the npm scripts defined in `package.json`.
 - `typecheck` — run `tsc` to type-check sources
 - `show` — show Playwright HTML report (`npx playwright show-report` or `npm run show`)
 - `lint` / `lint:fix` — ESLint commands
+- `allure:generate` — generate Allure report from test results
+- `allure:open` — open the generated Allure report
+- `allure:serve` — generate and serve Allure report (opens in browser)
+
+Allure Reporting
+----------------
+This project includes Allure reporting for enhanced test result visualization.
+
+After running tests, you can view the Allure report in two ways:
+
+1. Generate and open the report:
+    ```cmd
+    npm run allure:generate
+    npm run allure:open
+    ```
+
+2. Generate and serve the report in one command:
+    ```cmd
+    npm run allure:serve
+    ```
+
+The Allure report provides:
+- Detailed test execution results with steps
+- Historical trends and statistics
+- Failed test analysis
+- Screenshots and attachments (if configured)
+- Test categorization and filtering
+
+**Note:** 
+- The `allure-results/` folder is generated during test execution and is used to create the report. 
+- Both `allure-results/` and `allure-report/` are excluded from version control via `.gitignore`.
+- Allure Commandline requires Java 8 or newer to be installed and available in your system PATH.
+
+For detailed information on using Allure annotations, creating test steps, and customizing reports, see [docs/ALLURE_GUIDE.md](docs/ALLURE_GUIDE.md).
+For an example test with Allure annotations, steps, and attachments, see tests/allure-demo.spec.ts.
 
 ## Environment variables (`.env`)
 

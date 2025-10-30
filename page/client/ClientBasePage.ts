@@ -2,7 +2,8 @@ import { Page } from '@playwright/test';
 import { BasePage} from '../BasePage';
 import { HeaderComponent } from '../../component/client/HeaderComponent';
 import { FooterComponent } from '../../component/client/FooterComponent';
-import { CookiesModal } from "../../component/client/CookiesModal";
+import {CookiesModal} from "../../component/client/CookiesModal";
+import { step } from "allure-js-commons";
 
 export class ClientBasePage extends BasePage {
   header: HeaderComponent;
@@ -22,7 +23,10 @@ export class ClientBasePage extends BasePage {
   }
 
   async getTitleText(): Promise<string> {
-    return await this.title.textContent() || '';
+    return await step('Navigate to Playwright website', async () => {
+      return await this.title.textContent() || '';
+    });
+
   }
 
 }
