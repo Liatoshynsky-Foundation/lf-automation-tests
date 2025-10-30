@@ -74,9 +74,8 @@ test.describe('UI - Footer', () => {
         await allure.step('Click language button and verify it changes to English', async () => {
             await aboutUsPage.footer.changeLangBtn.click();
 
-            const currentPageLang = await aboutUsPage.getCurrentPageLanguage();
-
             const text = await aboutUsPage.footer.changeLangBtn.getText();
+            const currentPageLang = await aboutUsPage.getCurrentPageLanguage();
             allure.parameter('Language', currentPageLang);
             allure.parameter('Button Text', text);
 
