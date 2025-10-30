@@ -5,16 +5,16 @@ export class InputFieldComponent {
     input: Locator;
     label: Locator;
 
-    constructor(page: Page, inputId: string) {
+
+    constructor(page: Page, inputSelector: string, labelSelector: string) {
         this.page = page;
-        this.input = page.locator(`#${inputId}`);
-        this.label = page.locator(`label[for="${inputId}"]`);
+        this.input = page.locator(inputSelector);
+        this.label = page.locator(labelSelector);
     }
 
     async fill(value: string) {
-        await this.input.focus();
-        await this.page.waitForLoadState('networkidle');
-        await this.input.pressSequentially(value, { delay: 100 });
+        await this.input.click();
+        await this.input.pressSequentially(value);
     }
 
     async getValue(): Promise<string> {

@@ -26,6 +26,7 @@ test.describe('Admin Login Page', () => {
 
   test('should login with credentials', async ({ adminLoginPage, page }) => {
     await adminLoginPage.navigate();
+    await page.waitForLoadState('networkidle');
     await adminLoginPage.fillEmail(ADMIN_EMAIL);
     await adminLoginPage.fillPassword(ADMIN_PASSWORD);
     await adminLoginPage.togglePasswordVisibility();

@@ -17,7 +17,7 @@ export class LoginFormComponent {
         this.container = page.locator('.MuiBox-root.css-16x26qu');
         this.title = this.container.locator('h5');
         this.description = this.container.locator('h6');
-        this.emailField = new InputFieldComponent(page, '_R_ajl5fivb_');
+        this.emailField = new InputFieldComponent(page, '#_R_ajl5fivb_', 'label[for="_R_ajl5fivb_"]');
         this.passwordField = new InputFieldPassComponent(page, 'outlined-adornment-password');
         this.errorMessage = this.container.locator('p.MuiTypography-body2');
         this.enterButton = this.container.locator('button.MuiButton-root');
@@ -59,7 +59,6 @@ export class LoginFormComponent {
 
     async clickEnterButton() {
         await this.enterButton.waitFor({ state: 'visible' });
-        await this.page.waitForTimeout(200);
         await this.enterButton.click({ force: true });
     }
 }

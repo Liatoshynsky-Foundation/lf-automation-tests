@@ -1,6 +1,6 @@
-import {PageItemComponent} from '../component/client/PageItemComponent';
-import {expect, test} from '../fixtures/fixturePage';
-import {Language, FooterLanguage} from "../data/enums";
+import {PageItemComponent} from '../../component/client/PageItemComponent';
+import {expect, test} from '../../fixtures/fixturePage';
+import {Language, FooterLanguage} from "../../data/enums";
 
 
 test.describe('UI - Home page', () => {

@@ -14,7 +14,7 @@ export class InputFieldPassComponent {
     }
 
     async fill(value: string) {
-        await this.input.pressSequentially(value, { delay: 100 });
+        await this.input.pressSequentially(value);
     }
 
     async toggleVisibility() {

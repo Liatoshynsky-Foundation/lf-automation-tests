@@ -48,7 +48,7 @@ export default defineConfig({
     },
     {
       name: 'client',
-      testMatch: /tests\/(ui|example|api)\.spec\.ts/,
+      testMatch: /tests\/client\/.*\.spec\.ts/,
       use: {
          /* Base URL to use in actions like `await page.goto('')`. */
         baseURL: BASE_CLIENT_URL,
