@@ -98,20 +98,52 @@ test.describe('UI - Footer', () => {
     });
 
     test('check Footer ContactUs Btn', async ({aboutUsPage, contactsPage, page}) => {
-        await aboutUsPage.goto('/');
+        allure.description('Verify that the footer "Contact Us" button correctly displays text in both English and Ukrainian and navigates to the Contacts page.');
+        allure.label('feature', 'Footer');
+        allure.label('severity', 'normal');
+        allure.parameter('Component', 'Footer');
 
-        const btnEnText = await aboutUsPage.footer.contactUsBtn.getText();
-        expect(btnEnText).toEqual('Contact us');
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.goto('/');
+        });
 
-        await aboutUsPage.footer.changeLangBtn.click();
-        const btnUaText = await aboutUsPage.footer.contactUsBtn.getText();
-        expect(btnUaText).toEqual('Напишіть нам');
+        await allure.step('Verify Contact Us button text in English', async () => {
+            const btnEnText = await aboutUsPage.footer.contactUsBtn.getText();
+            allure.parameter('Language', 'English');
+            allure.parameter('Button Text', btnEnText);
+            expect(btnEnText).toEqual('Contact us');
+        });
 
-        await aboutUsPage.footer.contactUsBtn.click();
+        await allure.step('Switch language to Ukrainian', async () => {
+            await aboutUsPage.footer.changeLangBtn.click();
+        });
 
-        await expect(page).toHaveURL(/contacts/);
-        const title = await contactsPage.getTitleText();
-        expect(title).toEqual('Контакти');
+        await allure.step('Verify Contact Us button text in Ukrainian', async () => {
+            const btnUaText = await aboutUsPage.footer.contactUsBtn.getText();
+            allure.parameter('Language', 'Ukrainian');
+            allure.parameter('Button Text', btnUaText);
+            expect(btnUaText).toEqual('Напишіть нам');
+        });
+
+        await allure.step('Click Contact Us button and verify navigation to Contacts page', async () => {
+            await aboutUsPage.footer.contactUsBtn.click();
+            await expect(page).toHaveURL(/contacts/);
+        });
+
+        await allure.step('Verify Contacts page title', async () => {
+            const title = await contactsPage.getTitleText();
+            allure.parameter('Contacts Page Title', title);
+            expect(title).toEqual('Контакти');
+        });
+
+        await allure.step('Verify that Contact Us button link matches current page path', async () => {
+            const link = await contactsPage.footer.contactUsBtn.getLink();
+            const url = new URL(await page.url());
+            const pagepath = url.pathname;
+            allure.parameter('Page URL Path', pagepath);
+            allure.parameter('Button Link', link);
+            expect(link).toEqual(pagepath);
+        });
     });
 
     test('check footer page menu', async ({aboutUsPage, artistryPage, page}) => {
