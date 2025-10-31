@@ -53,12 +53,10 @@ export class BasePage {
       
       if (firstSegment === 'uk') {
         lang = 'uk';
-      } else if (firstSegment === 'en') {
-        lang = 'en';
-      } else {
+      }  else {
         lang = 'en';
       }
-    })
+    });
     return lang;
   }
 
