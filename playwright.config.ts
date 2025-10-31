@@ -42,6 +42,7 @@ export default defineConfig({
       args: ['--start-maximized'],
     },
     video: "retain-on-failure",
+    screenshot: 'only-on-failure',
 
   },
   projects: [

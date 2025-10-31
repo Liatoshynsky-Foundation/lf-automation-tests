@@ -1,6 +1,6 @@
 # lf-automation-tests
 
-A Playwright test project written in TypeScript. It contains a Playwright configuration, a Page Object Model (POM) structure under `page/client`, reusable components under `component/client`, fixtures under `tests/fixtures`, and example UI + API tests.
+A Playwright test project written in TypeScript. It contains a Playwright configuration, a Page Object Model (POM) structure under `page/client`, reusable components under `component/client`, fixtures under `fixtures`, and example UI + API tests.
 
 ## Quickstart
 
@@ -28,6 +28,30 @@ Prerequisites:
     copy .env.example .env
     notepad .env
     ```
+
+## Environment variables (`.env`)
+
+This project supports a small set of environment variables loaded via `dotenv` from the repository root. See `config/env.ts` for the implementation.
+
+- `BASE_CLIENT_URL` — Base URL used for client-facing UI tests. Default is defined in `config/env.ts`.
+- `BASE_ADMIN_URL` — Base URL used for admin UI flows. Default is defined in `config/env.ts`.
+- `BASE_API_URL` — Base URL used for API tests. Default: `https://jsonplaceholder.typicode.com`
+
+Example `.env.example` (copy to `.env` and adjust as needed):
+
+```text
+BASE_CLIENT_URL=https://example.com
+# Leave empty to use value from config or to keep default
+BASE_ADMIN_URL=
+BASE_API_URL=https://jsonplaceholder.typicode.com
+# ADMIN credentials
+ADMIN_EMAIL=admin
+ADMIN_PASSWORD=adminpassword
+
+```
+
+A sample file is included as `.env.example`. Do not commit secrets to source control.
+
 
 ## Run tests
 
@@ -63,126 +87,47 @@ You can run tests using the npm scripts defined in `package.json`.
     npm run test:api
     ```
 
-- Run tests for a specific Playwright project (e.g. Chromium):
-
-    ```shell
-    npx playwright test --project=chromium
-    ```
-
 - Type-check the TypeScript sources:
 
     ```shell
     npm run typecheck
     ```
 
-## Project scripts (from package.json)
 
-- `test` — run Playwright tests
-- `test:ui` — run UI tests (tests/ui.spec.ts)
-- `client:ui` — run client UI tests (tests/client)
-- `test:api` — run API tests (tests/api.spec.ts)
-- `typecheck` — run `tsc` to type-check sources
-- `show` — show Playwright HTML report (`npx playwright show-report` or `npm run show`)
-- `lint` / `lint:fix` — ESLint commands
-- `allure:generate` — generate Allure report from test results
-- `allure:open` — open the generated Allure report
-- `allure:serve` — generate and serve Allure report (opens in browser)
+## Screenshots, videos and Allure attachments
 
-Allure Reporting
-----------------
-This project includes Allure reporting for enhanced test result visualization.
+The test suite is configured to capture artifacts for failed tests and include them in reports:
 
-After running tests, you can view the Allure report in two ways:
+- Playwright is configured to save screenshots only on failure (`screenshot: 'only-on-failure'`) and videos are retained on failure (`video: 'retain-on-failure'`).
+- The fixtures include a global `afterEach` hook (in `fixtures/fixtureBase.ts`) that explicitly captures a full-page screenshot when a test fails and attaches it to the test result (Playwright and Allure will pick it up in `allure-results`).
 
-1. Generate and open the report:
-    ```shell
-    npm run allure:generate
-    npm run allure:open
-    ```
+To generate and view the Allure report after running tests:
 
-2. Generate and serve the report in one command:
-    ```shell
-    npm run allure:serve
-    ```
-
-The Allure report provides:
-- Detailed test execution results with steps
-- Historical trends and statistics
-- Failed test analysis
-- Screenshots and attachments (if configured)
-- Test categorization and filtering
-
-**Note:** 
-- The `allure-results/` folder is generated during test execution and is used to create the report. 
-- Both `allure-results/` and `allure-report/` are excluded from version control via `.gitignore`.
-- Allure Commandline requires Java 8 or newer to be installed and available in your system PATH.
-
-For detailed information on using Allure annotations, creating test steps, and customizing reports, see [docs/ALLURE_GUIDE.md](docs/ALLURE_GUIDE.md).
-For an example test with Allure annotations, steps, and attachments, see tests/allure-demo.spec.ts.
-
-## Environment variables (`.env`)
-
-This project supports a small set of environment variables loaded via `dotenv` from the repository root. See `config/env.ts` for the implementation.
-
-- `BASE_CLIENT_URL` — Base URL used for client-facing UI tests. Default: `https://example.com`
-- `BASE_ADMIN_URL` — Base URL used for admin UI flows. Default: automatically derived from `BASE_CLIENT_URL` as `${BASE_CLIENT_URL}/admin` when not provided.
-- `BASE_API_URL` — Base URL used for API tests. Default: `https://jsonplaceholder.typicode.com`
-
-Example `.env.example` (copy to `.env` and adjust as needed):
-
-```text
-BASE_CLIENT_URL=https://example.com
-# Leave empty to derive from BASE_CLIENT_URL, e.g. https://example.com/admin
-BASE_ADMIN_URL=
-BASE_API_URL=https://jsonplaceholder.typicode.com
+```shell
+npm run allure:generate
+npm run allure:open
 ```
 
-A sample file is included as `.env.example`. Do not commit secrets to source control.
+Or serve it immediately:
+
+```shell
+npm run allure:serve
+```
+## Fixtures
+
+- `fixtures/fixtureBase.ts` — base fixtures that expose `baseClientURL`, `baseAdminURL`, `baseApiURL` and attach screenshots on failed tests.
+- `fixtures/fixturePage.ts` — page-level fixtures that instantiate page objects like `AboutUsPage`, `ArtistryPage`, etc.
 
 ## Project structure (key files)
 
-- `playwright.config.ts` — Playwright configuration (the `baseURL` is set from `BASE_CLIENT_URL`).
+- `playwright.config.ts` — Playwright configuration (the `baseURL` is set from environment variables via `config/env.ts`).
 - `config/env.ts` — Loads `.env` and exports `BASE_CLIENT_URL`, `BASE_ADMIN_URL`, `BASE_API_URL`.
 - `component/client/*` — small POM components (Header, Footer).
-- `page/client/*` — Page objects that extend `BasePage` (HomePage, AboutUsPage, NewsPage, etc.).
-- `tests/fixtures/fixtureBase.ts` — Base fixtures exposing `baseClientURL`, `baseAdminURL`, `baseApiURL`.
-- `tests/fixtures/fixturePage.ts` — Fixtures that provide page objects such as `homePage`.
-- `tests/ui.spec.ts` — Example UI test that uses the `homePage` fixture.
+- `page/client/*` — Page objects that extend `ClientBasePage` (HomePage, AboutUsPage, NewsPage, etc.).
+- `fixtures/fixtureBase.ts` — Base fixtures exposing `baseClientURL`, `baseAdminURL`, `baseApiURL` and failure screenshot hook.
+- `fixtures/fixturePage.ts` — Fixtures that provide page objects such as `aboutUsPage`.
+- `tests/client/*` — UI tests that use the page fixtures.
 - `tests/api.spec.ts` — Example API smoke test that uses `baseApiURL`.
-
-## Using the fixtures in tests
-
-The repository provides small fixture modules you can import from tests instead of `@playwright/test` directly.
-
-Example (UI test inside `tests/`):
-
-```ts
-import { test, expect } from "./fixtures/fixturePage";
-
-test("Home page heading", async ({ homePage, baseClientURL }) => {
-  await homePage.goto("/");
-  const heading = await homePage.getHeadingText();
-
-  if ((baseClientURL ?? "").includes("example.com")) {
-    expect(heading).toBe("Example Domain");
-  } else {
-    expect(heading).toBeTruthy();
-  }
-});
-```
-
-Example (API test inside `tests/`):
-
-```ts
-import { test, expect } from "./fixtures/fixtureBase";
-
-test("GET /posts/1 returns id=1", async ({ request, baseApiURL }) => {
-  const resp = await request.get(`${baseApiURL}/posts/1`);
-  expect(resp.status()).toBe(200);
-  const body = await resp.json();
-  expect(body.id).toBe(1);
-});
-```
 
 ## Notes and troubleshooting
 
