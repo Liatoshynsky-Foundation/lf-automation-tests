@@ -3,6 +3,7 @@ import {PageMenuItemComponent} from './PageMenuItemComponent';
 import {HeaderChangeLangBtn} from './HeaderChangeLangBtn';
 import {SupportFoundationBtn} from './SupportFundationBtn';
 import {BaseComponent} from "./BaseComponent";
+import * as allure from "allure-js-commons";
 
 export class HeaderComponent extends BaseComponent {
     logo: Locator;
@@ -10,7 +11,6 @@ export class HeaderComponent extends BaseComponent {
     playerBtn: Locator;
     changeLangBtn: HeaderChangeLangBtn;
     supportFundBtn: SupportFoundationBtn;
-
 
     constructor(page: Page) {
         super(page, page.locator('header'));
@@ -22,11 +22,14 @@ export class HeaderComponent extends BaseComponent {
     }
 
     async getMenuItems(): Promise<PageMenuItemComponent[]> {
-        await this.waitIsVisible(this.pageMenu,50000);
-        const buttons = await this.pageMenu.locator('button').all();
-        return buttons.map(button => new PageMenuItemComponent(button));
+        let items: PageMenuItemComponent[] = []; 
+            await allure.step('Get Header Btns of Page menu', async () => {
+                await this.waitIsVisible(this.pageMenu,50000);
+                const buttons = await this.pageMenu.locator('button').all();
+                items = buttons.map(button => new PageMenuItemComponent(button));
+            })
+        return items;
     }
-
 
     async getMenuByName(str: string): Promise<PageMenuItemComponent> {
         let elementFound: PageMenuItemComponent;
@@ -45,14 +48,15 @@ export class HeaderComponent extends BaseComponent {
         return  elementFound!;
     }
 
-
     async clickMenuByName(name: string){
-        const menuItem = await this.getMenuByName(name);
-        if (menuItem){
-            await test.step(`Click on menu item: ${name}`, async () => {
-                await menuItem.clickDropdown();
-            });
-        }
+        await allure.step(`Click on page item: ${name}`, async () => {
+            const menuItem = await this.getMenuByName(name);
+            if (menuItem){
+                await test.step(`Click on menu item: ${name}`, async () => {
+                    await menuItem.clickDropdown();
+                });
+            }
+        })
     }
 }
 
