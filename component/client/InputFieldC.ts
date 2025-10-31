@@ -12,9 +12,9 @@ export class InputFieldC {
      * @param name The 'name' attribute of the input field (e.g., 'name', 'email').
      */
     constructor(page: Page, name: InputFieldName) {
-        this.fieldLocator = page.locator(`
-            .MuiFormControl-root[name="${name}"],.MuiFormControl-root:has(input[name="${name}"]),.MuiFormControl-root:has(textarea[name="${name}"])
-        `);
+        this.fieldLocator = page.locator(
+            `.MuiFormControl-root[name="${name}"],.MuiFormControl-root:has(input[name="${name}"]),.MuiFormControl-root:has(textarea[name="${name}"])`
+        );
         
        
         if (name === 'message') {

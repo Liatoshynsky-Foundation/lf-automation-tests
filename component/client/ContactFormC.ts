@@ -21,7 +21,7 @@ export class ContactFormC {
 
     constructor(page: Page) {
         this.page = page;
-        this.formContainer = page.locator('form.MuiBox-root.css-0');
+        this.formContainer = page.locator('form:has(button:has-text("Надіслати запит"))');
 
         this.nameField = new InputFieldC(page, 'name');
         this.emailField = new InputFieldC(page, 'email');
@@ -29,8 +29,8 @@ export class ContactFormC {
         this.messageField = new InputFieldC(page, 'message');
 
         this.policyCheckbox = this.formContainer.locator('input[type="checkbox"][name="policy"]');
-        this.policyLink = this.formContainer.locator('a').filter({ hasText: 'Політикою конфіденційності' });
-        this.submitButton = this.formContainer.locator('button').filter({ hasText: 'Надіслати запит' });
+        this.policyLink = this.formContainer.locator('p:has(a[href="#"]) > a');
+        this.submitButton = this.formContainer.locator('button').last();
     }
 
     async submitForm(data: FormData, agreeToPolicy: boolean = true): Promise<void> {

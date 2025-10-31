@@ -4,6 +4,8 @@ import {FooterComponent} from '../../component/client/FooterComponent';
 import {CookiesModal} from "../../component/client/CookiesModal";
 import {allure} from "allure-playwright";
 
+const supportedLangs = ['en', 'fr', 'de', 'es', 'it', 'pt', 'ru', 'zh', 'ja']; 
+
 export class BasePage {
     protected page: Page;
     header: HeaderComponent;
@@ -21,13 +23,14 @@ export class BasePage {
 
     async getPathCurrentLanguage(path: string): Promise<string> {
         const currentURL = new URL(this.page.url());
-        let basePath = currentURL.pathname.split('/')[1];
+        const firstSegment = currentURL.pathname.split('/')[1];
         
-        if (!basePath) {
-        basePath = 'en'; 
+        if (supportedLangs.includes(firstSegment)) {
+            return `/${firstSegment}/${path}`;
+        } else {
+            return `/${path}`;
         }
-        return `/${basePath}/${path}`;
-    }
+      }
 
     async goto(path: string): Promise<void> {
         await this.page.goto(path, {waitUntil: 'domcontentloaded'});

@@ -11,12 +11,12 @@ export class ContactsInfoComponent {
 
     constructor(page: Page) {
         this.page = page;
-        this.mainContainer = page.locator('.MuiBox-root.css-1ak52z1');
+        this.mainContainer = page.locator('.MuiBox-root:has(h2:has-text("КонТактИ"))').first();
         
-        this.phoneNumberLink = this.mainContainer.locator('a').filter({ hasText: '067 963 8366' });
-        this.emailLink = this.mainContainer.locator('a').filter({ hasText: 'liatoshynsky@gmail.com' });
+        this.phoneNumberLink = this.mainContainer.locator('h6:has-text("Телефон:") + a');
+        this.emailLink = this.mainContainer.locator('h6:has-text("Email:") + a');
         
-        this.socialMediaBlock = this.mainContainer.locator('.MuiBox-root.css-1gxeym5');
+        this.socialMediaBlock = this.mainContainer.locator('h6:has-text("Ми в соцмережах:") + div');
     }
 
     async getPhoneNumber(): Promise<string> {
