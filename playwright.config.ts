@@ -1,5 +1,5 @@
 import { defineConfig } from '@playwright/test';
-import { BASE_CLIENT_URL, BASE_ADMIN_URL } from './config/env';
+import {BASE_CLIENT_URL, BASE_ADMIN_URL, HEADLESS} from './config/env';
 
 /**
  * Read environment variables from file.
@@ -36,7 +36,7 @@ export default defineConfig({
   use: {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    headless: false,
+    headless: HEADLESS,
     viewport: null,
     launchOptions: {
       args: ['--start-maximized'],
