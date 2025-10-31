@@ -18,7 +18,7 @@ export class FilterChipComponent extends BaseComponent {
     }
 
     async clickDelete(): Promise<void> {
-        await this.deleteBtn.click({ force: true });
+        await this.deleteBtn.click();
     }
 
     async expectVisible(): Promise<void> {
