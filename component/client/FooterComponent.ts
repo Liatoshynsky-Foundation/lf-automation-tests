@@ -41,24 +41,29 @@ export class FooterComponent extends BaseComponent {
         this.mediaMenu = new MediaMenuBtn(this.parent.locator('div[2]/div[5]/div'));
         this.developedBy = this.parent.locator('img[alt="OpenTech Academy logo"]');
         this.bigFooterImage = this.parent.locator('img[alt="Lyatoshynsky Foundation"]');
-
     }
 
     async getPageMenuHeaders(): Promise<string[]> {
-        await this.waitIsVisible(this.pageMenu, 50000);
-        const locators = await this.pageMenu.locator('div > p');
-        const count = await locators.count();
         const headers: string[] = [];
-        for (let i = 0; i < count; i++) {
-            headers.push(await locators.nth(i).innerText());
-        }
+        await allure.step('Get Headers of Page menu', async () => {
+            await this.waitIsVisible(this.pageMenu, 50000);
+            const locators = await this.pageMenu.locator('div > p');
+            const count = await locators.count();
+            
+            for (let i = 0; i < count; i++) {
+                headers.push(await locators.nth(i).innerText());
+            }
+        })
         return headers;
     }
 
     async getMenuItems(): Promise<PageItemComponent[]> {
-
-        const items = await this.menuItems.locator('li > a').all();
-        return items.map(item => new PageItemComponent(item));
+        let items: PageItemComponent[] = []; 
+        await allure.step('Get Items of Page menu', async () => {
+            const locators = await this.menuItems.locator('li > a').all();
+            items = locators.map(item => new PageItemComponent(item));
+        })
+        return items;
     }
 
     async getPageItemByName(str: string): Promise<PageItemComponent> {
@@ -85,55 +90,66 @@ export class FooterComponent extends BaseComponent {
                 await menuItem.footerclick();
             }
         })
-
     }
 
     async checkInfoName(str: string): Promise<void> {
-        await this.infoName.waitFor({state: 'visible'});
-        await this.infoName.scrollIntoViewIfNeeded();
-        expect(this.infoName).toHaveText(str);
+        await allure.step(`Check OrgName to be ${str}`, async () => {
+            await this.infoName.waitFor({state: 'visible'});
+            await this.infoName.scrollIntoViewIfNeeded();
+            expect(this.infoName).toHaveText(str);
+        })
     }
 
     async checkInfoAddress(str: string): Promise<void> {
-        await this.infoAddress.waitFor({state: 'visible'});
-        await this.infoAddress.scrollIntoViewIfNeeded();
-        expect(this.infoAddress).toHaveText(str);
+        await allure.step(`Check Address to be ${str}`, async () => {
+            await this.infoAddress.waitFor({state: 'visible'});
+            await this.infoAddress.scrollIntoViewIfNeeded();
+            expect(this.infoAddress).toHaveText(str);
+        })
     }
 
     async checkInfoPhone(str: string): Promise<void> {
-        await this.infoPhone.waitFor({state: 'visible'});
-        await this.infoPhone.scrollIntoViewIfNeeded();
-        expect(this.infoPhone.locator('p')).toHaveText("Phone:");
-        expect(this.infoPhone.locator('a')).toHaveText(str);
+        await allure.step(`Check Phone number to be ${str}`, async () => {
+            await this.infoPhone.waitFor({state: 'visible'});
+            await this.infoPhone.scrollIntoViewIfNeeded();
+            expect(this.infoPhone.locator('p')).toHaveText("Phone:");
+            expect(this.infoPhone.locator('a')).toHaveText(str);    
+        })
     }
 
     async clickInfoPhone(): Promise<void> {
-        await this.infoPhone.waitFor({state: 'visible'});
-        await this.infoPhone.scrollIntoViewIfNeeded();
-        await this.infoPhone.locator('a').click({force: true});
+        await allure.step('Click Phone number', async () => {
+            await this.infoPhone.waitFor({state: 'visible'});
+            await this.infoPhone.scrollIntoViewIfNeeded();
+            await this.infoPhone.locator('a').click({force: true});
+        })
     }
 
     async checkInfoEmail(str: string): Promise<void> {
-        await this.infoEmail.waitFor({state: 'visible'});
-        await this.infoEmail.scrollIntoViewIfNeeded();
-        expect(this.infoEmail.locator('p')).toHaveText("Email:");
-        expect(this.infoEmail.locator('a')).toHaveText(str);
+        await allure.step(`Check Email to be ${str}`, async () => {
+            await this.infoEmail.waitFor({state: 'visible'});
+            await this.infoEmail.scrollIntoViewIfNeeded();
+            expect(this.infoEmail.locator('p')).toHaveText("Email:");
+            expect(this.infoEmail.locator('a')).toHaveText(str);
+        })
     }
 
     async clickInfoEmail(): Promise<void> {
-        await this.infoEmail.waitFor({state: 'visible'});
-        await this.infoEmail.scrollIntoViewIfNeeded();
-        const link = this.infoEmail.locator('a');
-        await expect(link).toHaveAttribute('href', /mailto:/);
-        await link.click({force: true});
+        await allure.step('Click Email', async () => {
+            await this.infoEmail.waitFor({state: 'visible'});
+            await this.infoEmail.scrollIntoViewIfNeeded();
+            const link = this.infoEmail.locator('a');
+            await expect(link).toHaveAttribute('href', /mailto:/);
+            await link.click({force: true});
+        })
     }
 
     async checkCopyrightText(str: string): Promise<void> {
-        await this.copyrightText.waitFor({state: 'visible'});
-        await this.copyrightText.scrollIntoViewIfNeeded();
-        expect(this.copyrightText).toHaveText(str);
+        await allure.step(`Check copyright text to be ${str}`, async () => {
+            await this.copyrightText.waitFor({state: 'visible'});
+            await this.copyrightText.scrollIntoViewIfNeeded();
+            expect(this.copyrightText).toHaveText(str);
+        })
     }
-
-
 }
 

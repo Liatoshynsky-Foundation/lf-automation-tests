@@ -12,22 +12,22 @@ Prerequisites:
 
 1. Install project dependencies:
 
-   ```cmd
-   npm install
-   ```
+    ```shell
+    npm install
+    ```
 
 2. Install Playwright browsers (required for UI tests):
 
-   ```cmd
-   npx playwright install
-   ```
+    ```shell
+    npx playwright install
+    ```
 
 3. Create a `.env` file from the example and edit values if needed:
 
-   ```cmd
-   copy .env.example .env
-   notepad .env
-   ```
+    ```shell
+    copy .env.example .env
+    notepad .env
+    ```
 
 ## Run tests
 
@@ -35,50 +35,51 @@ You can run tests using the npm scripts defined in `package.json`.
 
 - Run the entire test suite (all configured browsers):
 
-  ```cmd
-  npm test
-  ```
+    ```shell
+    npm test
+    ```
 
 - Run the Admin tests only:
 
-  ```cmd
+  ```shell
    npx playwright test --project=admin
   ```
 
 - Run the Client tests only:
 
-  ```cmd
+  ```shell
    npx playwright test --project=client
   ```
 
 - Run the UI tests only:
 
-  ```cmd
-  npm run test:ui
-  ```
+    ```shell
+    npm run test:ui
+    ```
 
 - Run the API tests only:
 
-  ```cmd
-  npm run test:api
-  ```
+    ```shell
+    npm run test:api
+    ```
 
 - Run tests for a specific Playwright project (e.g. Chromium):
 
-  ```cmd
-  npx playwright test --project=chromium
-  ```
+    ```shell
+    npx playwright test --project=chromium
+    ```
 
 - Type-check the TypeScript sources:
 
-  ```cmd
-  npm run typecheck
-  ```
+    ```shell
+    npm run typecheck
+    ```
 
 ## Project scripts (from package.json)
 
 - `test` — run Playwright tests
 - `test:ui` — run UI tests (tests/ui.spec.ts)
+- `client:ui` — run client UI tests (tests/client)
 - `test:api` — run API tests (tests/api.spec.ts)
 - `typecheck` — run `tsc` to type-check sources
 - `show` — show Playwright HTML report (`npx playwright show-report` or `npm run show`)
@@ -94,13 +95,13 @@ This project includes Allure reporting for enhanced test result visualization.
 After running tests, you can view the Allure report in two ways:
 
 1. Generate and open the report:
-    ```cmd
+    ```shell
     npm run allure:generate
     npm run allure:open
     ```
 
 2. Generate and serve the report in one command:
-    ```cmd
+    ```shell
     npm run allure:serve
     ```
 
