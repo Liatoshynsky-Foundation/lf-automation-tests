@@ -13,7 +13,7 @@ export class ArtistryPage extends ClientBasePage {
     }
 
     async visit(): Promise<void> {
-        await this.goto('uk/artistry');
+        await this.goto(await this.getPathCurrentLanguage('artistry'));
     }
 }
 
