@@ -7,7 +7,7 @@ import { FiltersMenuComponent } from './FiltersMenuComponent';
  * Represents the "Filters" button that opens the filters panel.
  */
 
-export class FiltersButtonComponent extends BaseComponent {
+export class FilterButtonComponent extends BaseComponent {
     private button: Locator;
     private menuRoot: Locator;
     private badgeLocator: Locator;
