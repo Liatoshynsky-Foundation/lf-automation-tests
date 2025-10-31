@@ -1,4 +1,4 @@
-import {test as baseTest, expect as baseExpect} from './fixtureBase';
+import {expect as baseExpect, test as baseTest} from './fixtureBase';
 import {AboutUsPage} from '../page/client/AboutUsPage';
 import {ArchiveCabinetPage} from "../page/client/ArchiveCabinetPage";
 import {ArtistryPage} from '../page/client/ArtistryPage';

@@ -1,7 +1,7 @@
-import { Locator, Page, expect } from '@playwright/test';
-import { BaseComponent } from '../BaseComponent';
-import { FilterBadgeComponent } from './FilterBadgeComponent';
-import { FiltersMenuComponent } from './FiltersMenuComponent';
+import {expect, Locator, Page} from '@playwright/test';
+import {BaseComponent} from '../BaseComponent';
+import {FilterBadgeComponent} from './FilterBadgeComponent';
+import {FiltersMenuComponent} from './FiltersMenuComponent';
 
 /**
  * Represents the "Filters" button that opens the filters panel.

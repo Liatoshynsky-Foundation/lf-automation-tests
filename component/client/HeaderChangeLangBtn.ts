@@ -23,7 +23,7 @@ export class HeaderChangeLangBtn extends BaseComponent {
 
     async getImage(): Promise<string> {
         let link: string = "";
-            await allure.step('Get image link of Change Language Btn', async () => {
+        await allure.step('Get image link of Change Language Btn', async () => {
             link = await this.image.getAttribute('src') || "";
         })
         return link;
@@ -38,7 +38,7 @@ export class HeaderChangeLangBtn extends BaseComponent {
     async selectLanguage(language: LanguageDetails): Promise<void> {
         await allure.step(`Select Language ${language}`, async () => {
             await this.menuLocator.locator(`li:has-text("${language.value}")`).click();
-            await this.page.waitForURL(`**/${language.shortName}/**`, { waitUntil: 'domcontentloaded' });
+            await this.page.waitForURL(`**/${language.shortName}/**`, {waitUntil: 'domcontentloaded'});
         })
     }
 

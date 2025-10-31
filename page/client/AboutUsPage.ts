@@ -15,6 +15,6 @@ export class AboutUsPage extends ClientBasePage {
     }
 
     async waitForAboutFoundationLabelVisible(timeout = 5000): Promise<void> {
-        await this.aboutFoundationLabel.waitFor({ state: 'visible', timeout });
+        await this.aboutFoundationLabel.waitFor({state: 'visible', timeout});
     }
 }

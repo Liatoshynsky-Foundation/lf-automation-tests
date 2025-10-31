@@ -1,9 +1,8 @@
-import { Locator, Page } from '@playwright/test';
-import { InputFieldComponent } from './InputFieldComponent';
-import { InputFieldPassComponent } from './InputFieldPassComponent';
+import {Locator, Page} from '@playwright/test';
+import {InputFieldComponent} from './InputFieldComponent';
+import {InputFieldPassComponent} from './InputFieldPassComponent';
 
 export class LoginFormComponent {
-    protected page: Page;
     container: Locator;
     title: Locator;
     description: Locator;
@@ -11,6 +10,7 @@ export class LoginFormComponent {
     passwordField: InputFieldPassComponent;
     errorMessage: Locator;
     enterButton: Locator;
+    protected page: Page;
 
     constructor(page: Page) {
         this.page = page;
@@ -52,13 +52,13 @@ export class LoginFormComponent {
         await this.fillPassword(password);
         await this.clickEnterButton();
     }
-    
+
     async isVisible(): Promise<boolean> {
         return await this.container.isVisible();
     }
 
     async clickEnterButton() {
-        await this.enterButton.waitFor({ state: 'visible' });
-        await this.enterButton.click({ force: true });
+        await this.enterButton.waitFor({state: 'visible'});
+        await this.enterButton.click({force: true});
     }
 }

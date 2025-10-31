@@ -1,7 +1,9 @@
 # Allure Reporting Guide
 
 ## Overview
-This project uses Allure Framework for generating beautiful and comprehensive test reports. Allure provides detailed insights into test execution, including test steps, attachments, categorization, and historical trends.
+
+This project uses Allure Framework for generating beautiful and comprehensive test reports. Allure provides detailed
+insights into test execution, including test steps, attachments, categorization, and historical trends.
 
 ## Basic Usage
 
@@ -19,7 +21,7 @@ This project uses Allure Framework for generating beautiful and comprehensive te
    ```bash
    npm run allure:serve
    ```
-   
+
    Or generate and open separately:
    ```bash
    npm run allure:generate
@@ -57,6 +59,7 @@ test('Example test', async ({ page }) => {
 ```
 
 ### Severity Levels
+
 - `blocker` - Critical functionality is broken
 - `critical` - Critical functionality has defects
 - `normal` - Normal priority (default)
@@ -69,16 +72,16 @@ Steps help organize test actions and make reports more readable:
 
 ```typescript
 await allure.step('Navigate to login page', async () => {
-  await page.goto('/login');
+    await page.goto('/login');
 });
 
 await allure.step('Enter credentials', async () => {
-  await page.fill('#username', 'testuser');
-  await page.fill('#password', 'password');
+    await page.fill('#username', 'testuser');
+    await page.fill('#password', 'password');
 });
 
 await allure.step('Submit form', async () => {
-  await page.click('button[type="submit"]');
+    await page.click('button[type="submit"]');
 });
 ```
 
@@ -100,30 +103,31 @@ await allure.attachment('Screenshot', screenshot, 'image/png');
 Allure reports include:
 
 1. **Overview Dashboard**
-   - Test execution statistics
-   - Success rate
-   - Duration trends
-   - Environment information
+    - Test execution statistics
+    - Success rate
+    - Duration trends
+    - Environment information
 
 2. **Test Details**
-   - Step-by-step execution
-   - Screenshots and attachments
-   - Error messages and stack traces
-   - Execution time
+    - Step-by-step execution
+    - Screenshots and attachments
+    - Error messages and stack traces
+    - Execution time
 
 3. **Categorization**
-   - Filter by feature, story, tag
-   - Group by severity
-   - Search capabilities
+    - Filter by feature, story, tag
+    - Group by severity
+    - Search capabilities
 
 4. **Historical Trends**
-   - Track test stability over time
-   - Identify flaky tests
-   - Monitor performance changes
+    - Track test stability over time
+    - Identify flaky tests
+    - Monitor performance changes
 
 ## CI/CD Integration
 
 The GitHub Actions workflow automatically:
+
 1. Runs tests
 2. Generates Allure report
 3. Uploads report as an artifact
@@ -133,24 +137,30 @@ Download the `allure-report` artifact from the Actions tab to view results.
 ## Troubleshooting
 
 ### Java dependency required
+
 Allure commandline requires Java Runtime Environment (JRE) 8 or higher to be installed:
+
 - **Check if Java is installed:** `java -version`
 - **Install Java:**
-  - **Ubuntu/Debian:** `sudo apt-get install default-jre`
-  - **macOS:** `brew install openjdk`
-  - **Windows:** Download from [Oracle](https://www.oracle.com/java/technologies/downloads/) or use [OpenJDK](https://adoptium.net/)
+    - **Ubuntu/Debian:** `sudo apt-get install default-jre`
+    - **macOS:** `brew install openjdk`
+    - **Windows:** Download from [Oracle](https://www.oracle.com/java/technologies/downloads/) or
+      use [OpenJDK](https://adoptium.net/)
 
 If Java is not installed, the `allure:generate` and `allure:serve` commands will fail.
 
 ### Report not generating
+
 - Ensure tests have run at least once to create `allure-results/` folder
 - Check that `allure-results/` contains JSON files
 
 ### Missing test details
+
 - Add `allure.step()` calls to break down test actions
 - Use annotations to provide metadata
 
 ### Reports in version control
+
 - Don't commit `allure-results/` or `allure-report/` directories
 - These are excluded in `.gitignore`
 

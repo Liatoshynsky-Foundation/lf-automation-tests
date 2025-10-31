@@ -1,12 +1,12 @@
-import { Locator, Page } from "@playwright/test";
-import { FAQSectionComponent } from './FAQSectionComponent';
+import {Locator, Page} from "@playwright/test";
+import {FAQSectionComponent} from './FAQSectionComponent';
 
 export class FAQComponent {
     private root: Locator;
     private sectionRoots: Locator;
 
     constructor(private page: Page) {
-        this.root = page.locator('div.MuiBox-root').filter({ has: page.locator('h2') }).first();
+        this.root = page.locator('div.MuiBox-root').filter({has: page.locator('h2')}).first();
         this.sectionRoots = this.root.locator('.MuiAccordion-root');
     }
 
@@ -26,8 +26,8 @@ export class FAQComponent {
     }
 
     async getSectionByTitle(titleText: string): Promise<FAQSectionComponent> {
-        const sectionRoot = this.root.locator('.MuiAccordion-root', { hasText: titleText }).first();
-        
+        const sectionRoot = this.root.locator('.MuiAccordion-root', {hasText: titleText}).first();
+
         if (await sectionRoot.count() === 0) {
             throw new Error(`FAQ section with title "${titleText}" not found.`);
         }

@@ -2,7 +2,7 @@ import {expect, test} from '../../fixtures/fixturePage';
 import {FooterLanguage} from "../../data/enums";
 import * as allure from 'allure-js-commons';
 
-test.describe('UI - Footer', () => { 
+test.describe('UI - Footer', () => {
     test('check Footer Support Btn link', async ({aboutUsPage, supportUsPage, page}) => {
         allure.description('Verify that the Footer "Support the Foundation" button works correctly in English and Ukrainian and navigates to the correct page.');
         allure.label('severity', 'critical');
@@ -53,7 +53,7 @@ test.describe('UI - Footer', () => {
     test('check Footer Change Language Btn', async ({aboutUsPage}) => {
         allure.description('Verify that the footer Change Language button correctly toggles between Ukrainian and English text on each click.');
         allure.label('feature', 'Footer');
-        allure.label('severity', 'normal'); 
+        allure.label('severity', 'normal');
         allure.parameter('Component', 'Footer');
 
         await allure.step('Go to homepage', async () => {
@@ -62,7 +62,7 @@ test.describe('UI - Footer', () => {
 
         await allure.step('Verify default language button text (Ukrainian)', async () => {
             const currentPageLang = await aboutUsPage.getCurrentPageLanguage();
-            
+
             const text = await aboutUsPage.footer.changeLangBtn.getText();
             allure.parameter('Language', currentPageLang);
             allure.parameter('Button Text', text);

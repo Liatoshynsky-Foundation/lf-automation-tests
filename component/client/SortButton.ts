@@ -31,7 +31,7 @@ export class SortButton extends BaseComponent {
     }
 
     async waitForState(state: SortState, timeout = 2000): Promise<void> {
-        await expect(this.image).toHaveAttribute('src', new RegExp(`${state}-chevron`), { timeout });
+        await expect(this.image).toHaveAttribute('src', new RegExp(`${state}-chevron`), {timeout});
     }
 
     async click(): Promise<void> {
@@ -45,7 +45,8 @@ export class SortButton extends BaseComponent {
 
         for (let i = 0; i < 3; i++) {
             await this.click();
-            await this.waitForState(target).catch(() => {});
+            await this.waitForState(target).catch(() => {
+            });
 
             const newState = await this.getState();
             if (newState === target) return;

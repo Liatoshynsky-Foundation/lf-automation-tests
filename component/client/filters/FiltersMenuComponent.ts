@@ -1,14 +1,14 @@
-import { Locator, Page, expect } from '@playwright/test';
-import { BaseComponent } from '../BaseComponent';
-import { FilterListItemComponent } from './FilterListItemComponent';
-import { FilterYearItemComponent } from './FilterYearItemComponent';
-import { FilterChipComponent } from './FilterChipComponent';
+import {expect, Locator, Page} from '@playwright/test';
+import {BaseComponent} from '../BaseComponent';
+import {FilterListItemComponent} from './FilterListItemComponent';
+import {FilterYearItemComponent} from './FilterYearItemComponent';
+import {FilterChipComponent} from './FilterChipComponent';
 
 
 export class FiltersMenuComponent extends BaseComponent {
+    readonly activeChip: FilterChipComponent;
     private container: Locator;
     private filterTitles: Locator;
-    readonly activeChip: FilterChipComponent;
 
     constructor(page: Page, parent: Locator) {
         super(page, parent);
@@ -18,7 +18,7 @@ export class FiltersMenuComponent extends BaseComponent {
     }
 
     async init(): Promise<this> {
-        await expect(this.container).toBeVisible({ timeout: 5000 });
+        await expect(this.container).toBeVisible({timeout: 5000});
         return this;
     }
 

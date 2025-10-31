@@ -19,7 +19,7 @@ export class CookiesModal {
 
     async isVisible(timeout = 5000): Promise<boolean> {
         try {
-            await this.modalContainer.waitFor({ state: 'visible', timeout: timeout });
+            await this.modalContainer.waitFor({state: 'visible', timeout: timeout});
             return true;
         } catch {
             return false;
@@ -27,7 +27,7 @@ export class CookiesModal {
     }
 
     async waitUntilClosed(): Promise<void> {
-        await this.modalContainer.waitFor({ state: 'hidden', timeout: 5000 });
+        await this.modalContainer.waitFor({state: 'hidden', timeout: 5000});
     }
 
     async closeModal(timeout = 5000): Promise<void> {

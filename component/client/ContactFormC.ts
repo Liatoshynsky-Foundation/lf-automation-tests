@@ -1,5 +1,5 @@
-import { type Locator, type Page } from '@playwright/test';
-import { InputFieldC } from './InputFieldC';
+import {type Locator, type Page} from '@playwright/test';
+import {InputFieldC} from './InputFieldC';
 
 export interface FormData {
     name: string;
@@ -9,7 +9,6 @@ export interface FormData {
 }
 
 export class ContactFormC {
-    private readonly page: Page;
     public readonly formContainer: Locator;
     public readonly nameField: InputFieldC;
     public readonly emailField: InputFieldC;
@@ -18,6 +17,7 @@ export class ContactFormC {
     public readonly policyCheckbox: Locator;
     public readonly submitButton: Locator;
     public readonly policyLink: Locator;
+    private readonly page: Page;
 
     constructor(page: Page) {
         this.page = page;
@@ -37,11 +37,11 @@ export class ContactFormC {
         await this.nameField.fill(data.name);
         await this.emailField.fill(data.email);
         await this.messageField.fill(data.message);
-        
+
         if (data.phoneNumber) {
             await this.phoneField.fill(data.phoneNumber);
         }
-        
+
         if (agreeToPolicy) {
             await this.checkPolicyCheckbox();
         }
@@ -60,10 +60,14 @@ export class ContactFormC {
 
     getValidationField(fieldName: 'name' | 'email' | 'phoneNumber' | 'message'): InputFieldC {
         switch (fieldName) {
-            case 'name': return this.nameField;
-            case 'email': return this.emailField;
-            case 'phoneNumber': return this.phoneField;
-            case 'message': return this.messageField;
+            case 'name':
+                return this.nameField;
+            case 'email':
+                return this.emailField;
+            case 'phoneNumber':
+                return this.phoneField;
+            case 'message':
+                return this.messageField;
         }
     }
 }

@@ -1,5 +1,5 @@
-import { Locator, Page, expect } from '@playwright/test';
-import { BaseComponent } from '../BaseComponent';
+import {expect, Locator, Page} from '@playwright/test';
+import {BaseComponent} from '../BaseComponent';
 
 /**
  * Represents an option item inside a filter dropdown menu

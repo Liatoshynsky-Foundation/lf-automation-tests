@@ -1,12 +1,13 @@
-import { Locator } from '@playwright/test';
+import {Locator} from '@playwright/test';
+
 export class VolunteerActionCardComponent {
     private root: Locator;
-    private mainDescription: Locator; 
-    private actionTitle: Locator;   
+    private mainDescription: Locator;
+    private actionTitle: Locator;
 
     constructor(root: Locator) {
         this.root = root;
-        this.mainDescription = this.root.locator('p.css-1tm0pgl'); 
+        this.mainDescription = this.root.locator('p.css-1tm0pgl');
         this.actionTitle = this.root.locator('p.css-3gdhnp');
     }
 

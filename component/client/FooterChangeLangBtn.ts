@@ -14,17 +14,17 @@ export class FooterChangeLangBtn extends BaseComponent {
 
     async click(): Promise<void> {
         await allure.step('Click Change Language Btn', async () => {
-            await this.button.waitFor({ state: 'visible' });
+            await this.button.waitFor({state: 'visible'});
             await this.button.scrollIntoViewIfNeeded();
             await expect(this.button).toBeEnabled();
 
             const currentText = (await this.button.innerText());
             await Promise.all([
-                this.page.waitForLoadState('networkidle'), 
+                this.page.waitForLoadState('networkidle'),
                 this.button.click(),
             ]);
             this.button = this.page.locator('button:has(img[alt="switch language"])');
-            await expect(this.button).not.toHaveText(currentText, { timeout: 50000 });
+            await expect(this.button).not.toHaveText(currentText, {timeout: 50000});
         })
     }
 
@@ -40,7 +40,7 @@ export class FooterChangeLangBtn extends BaseComponent {
         let btnText: string = "";
         await allure.step('Get text on Change Language Btn', async () => {
             const button = this.page.locator('button:has(img[alt="switch language"])');
-            await button.waitFor({ state: 'visible' });
+            await button.waitFor({state: 'visible'});
             btnText = await this.button.innerText();
         })
         return btnText;

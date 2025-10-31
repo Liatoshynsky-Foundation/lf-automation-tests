@@ -1,8 +1,8 @@
-import { Page } from '@playwright/test';
-import { ClientBasePage } from './ClientBasePage';
-import { VolunteerActionComponent } from '../../component/client/VolunteerActionComponent';
-import { QuickDonationComponent } from '../../component/client/QuickDonationComponent';
-import { FAQComponent } from '../../component/client/FAQComponent';
+import {Page} from '@playwright/test';
+import {ClientBasePage} from './ClientBasePage';
+import {VolunteerActionComponent} from '../../component/client/VolunteerActionComponent';
+import {QuickDonationComponent} from '../../component/client/QuickDonationComponent';
+import {FAQComponent} from '../../component/client/FAQComponent';
 
 export class SupportUsPage extends ClientBasePage {
 

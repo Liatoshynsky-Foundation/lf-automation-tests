@@ -22,12 +22,12 @@ export class HeaderComponent extends BaseComponent {
     }
 
     async getMenuItems(): Promise<PageMenuItemComponent[]> {
-        let items: PageMenuItemComponent[] = []; 
-            await allure.step('Get Header Btns of Page menu', async () => {
-                await this.waitIsVisible(this.pageMenu,50000);
-                const buttons = await this.pageMenu.locator('button').all();
-                items = buttons.map(button => new PageMenuItemComponent(button));
-            })
+        let items: PageMenuItemComponent[] = [];
+        await allure.step('Get Header Btns of Page menu', async () => {
+            await this.waitIsVisible(this.pageMenu, 50000);
+            const buttons = await this.pageMenu.locator('button').all();
+            items = buttons.map(button => new PageMenuItemComponent(button));
+        })
         return items;
     }
 
@@ -37,7 +37,7 @@ export class HeaderComponent extends BaseComponent {
             const elements = await this.getMenuItems()
 
             for (const element of elements) {
-                const itemName: string =  (await element.getName()).trim();
+                const itemName: string = (await element.getName()).trim();
                 if (itemName === str.trim()) {
                     elementFound = element;
                     break
@@ -45,13 +45,13 @@ export class HeaderComponent extends BaseComponent {
             }
             expect(elementFound, {message: (`Menu item not found: ${str}`)}).not.toBeNull();
         });
-        return  elementFound!;
+        return elementFound!;
     }
 
-    async clickMenuByName(name: string){
+    async clickMenuByName(name: string) {
         await allure.step(`Click on page item: ${name}`, async () => {
             const menuItem = await this.getMenuByName(name);
-            if (menuItem){
+            if (menuItem) {
                 await test.step(`Click on menu item: ${name}`, async () => {
                     await menuItem.clickDropdown();
                 });

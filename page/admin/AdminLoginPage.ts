@@ -1,6 +1,6 @@
-import { Page, Locator } from '@playwright/test';
-import { AdminBasePage } from './AdminBasePage';
-import { LoginFormComponent } from '../../component/admin/LoginFormComponent';
+import {Locator, Page} from '@playwright/test';
+import {AdminBasePage} from './AdminBasePage';
+import {LoginFormComponent} from '../../component/admin/LoginFormComponent';
 
 export class AdminLoginPage extends AdminBasePage {
     logoElement: Locator;
@@ -39,6 +39,7 @@ export class AdminLoginPage extends AdminBasePage {
     async togglePasswordVisibility(): Promise<void> {
         await this.loginForm.togglePasswordVisibility();
     }
+
     async clickLoginButton(): Promise<void> {
         await this.loginForm.clickEnterButton();
     }

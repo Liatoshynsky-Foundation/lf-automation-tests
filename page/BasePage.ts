@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import {Locator, Page} from '@playwright/test';
 
 export abstract class BasePage {
     protected page: Page;
@@ -10,7 +10,7 @@ export abstract class BasePage {
     }
 
     async goto(path: string): Promise<void> {
-        await this.page.goto(path, { waitUntil: 'domcontentloaded' });
+        await this.page.goto(path, {waitUntil: 'domcontentloaded'});
     }
 
     async getTitleText(): Promise<string> {
