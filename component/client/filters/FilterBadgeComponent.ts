@@ -16,7 +16,7 @@ export class FilterBadgeComponent extends BaseComponent {
         this.badge = this.page.locator('.MuiBadge-root .MuiBadge-badge');}
 
 
-    async getCount() {
+    async getCount(): Promise<number> {
         const text = await this.badge.textContent();
         return parseInt(text || "0", 10);
     }
