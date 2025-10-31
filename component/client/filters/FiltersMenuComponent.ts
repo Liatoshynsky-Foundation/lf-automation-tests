@@ -6,7 +6,7 @@ import {FilterChipComponent} from './FilterChipComponent';
 
 
 export class FiltersMenuComponent extends BaseComponent {
-    readonly activeChip: FilterChipComponent;
+    activeChip: FilterChipComponent;
     private container: Locator;
     private filterTitles: Locator;
 

@@ -2,9 +2,9 @@ import {expect, Locator, Page} from '@playwright/test';
 import {BaseComponent} from '../BaseComponent';
 
 export class FilterChipComponent extends BaseComponent {
-    private readonly chip: Locator;
-    private readonly label: Locator;
-    private readonly deleteBtn: Locator;
+    private chip: Locator;
+    private label: Locator;
+    private deleteBtn: Locator;
 
     constructor(page: Page, parent: Locator) {
         super(page, parent);

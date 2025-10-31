@@ -6,8 +6,8 @@ import {BaseComponent} from '../BaseComponent';
  */
 
 export class FilterOptionItemComponent extends BaseComponent {
-    private readonly checkbox: Locator;
-    private readonly label: Locator;
+    private checkbox: Locator;
+    private label: Locator;
 
     constructor(page: Page, parent: Locator, optionName: string) {
         super(page, parent);

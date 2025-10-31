@@ -5,7 +5,7 @@ import {ClientBasePage} from "./ClientBasePage";
 
 export class ArtistryPage extends ClientBasePage {
 
-    readonly filterButton: FilterButtonComponent;
+    filterButton: FilterButtonComponent;
 
     constructor(page: Page) {
         super(page);

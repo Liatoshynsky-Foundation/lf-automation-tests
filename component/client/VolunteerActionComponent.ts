@@ -2,8 +2,8 @@ import {Locator, Page} from '@playwright/test';
 import {VolunteerActionCardComponent} from './VolunteerActionCardComponent';
 
 export class VolunteerActionComponent {
-    private readonly sectionCards: Locator;
-    private readonly offerHelpButton: Locator;
+    private sectionCards: Locator;
+    private offerHelpButton: Locator;
 
     constructor(private page: Page) {
         this.sectionCards = this.page.locator('div.MuiBox-root.css-1fesufy > div.MuiBox-root');

@@ -3,9 +3,9 @@ import {type Locator, type Page} from '@playwright/test';
 type InputFieldName = 'name' | 'email' | 'phoneNumber' | 'message';
 
 export class InputFieldC {
-    public readonly fieldLocator: Locator;
-    public readonly input: Locator;
-    public readonly errorText: Locator;
+    public fieldLocator: Locator;
+    public input: Locator;
+    public errorText: Locator;
 
     /**
      * @param page Playwright Page object.

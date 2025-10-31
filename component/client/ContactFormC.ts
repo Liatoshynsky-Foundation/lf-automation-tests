@@ -9,15 +9,15 @@ export interface FormData {
 }
 
 export class ContactFormC {
-    public readonly formContainer: Locator;
-    public readonly nameField: InputFieldC;
-    public readonly emailField: InputFieldC;
-    public readonly phoneField: InputFieldC;
-    public readonly messageField: InputFieldC;
-    public readonly policyCheckbox: Locator;
-    public readonly submitButton: Locator;
-    public readonly policyLink: Locator;
-    private readonly page: Page;
+    public formContainer: Locator;
+    public nameField: InputFieldC;
+    public emailField: InputFieldC;
+    public phoneField: InputFieldC;
+    public messageField: InputFieldC;
+    public policyCheckbox: Locator;
+    public submitButton: Locator;
+    public policyLink: Locator;
+    private page: Page;
 
     constructor(page: Page) {
         this.page = page;
