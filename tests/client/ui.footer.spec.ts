@@ -1,22 +1,53 @@
-import {PageItemComponent} from '../../component/client/PageItemComponent';
 import {expect, test} from '../../fixtures/fixturePage';
-import {Language, FooterLanguage} from "../../data/enums";
+import {FooterLanguage} from "../../data/enums";
 import * as allure from 'allure-js-commons';
 
 test.describe('UI - Footer', () => { 
     test('check Footer Support Btn link', async ({aboutUsPage, supportUsPage, page}) => {
-        await aboutUsPage.goto('/');
-        const btnEnText = await aboutUsPage.footer.supportFundBtn.getText();
-        expect(btnEnText).toEqual('Support the Foundation');
+        allure.description('Verify that the Footer "Support the Foundation" button works correctly in English and Ukrainian and navigates to the correct page.');
+        allure.label('severity', 'critical');
 
-        await aboutUsPage.footer.changeLangBtn.click();
-        const btnUaText = await aboutUsPage.footer.supportFundBtn.getText();
-        expect(btnUaText).toEqual('Підтримати діяльність фундації');
-        await aboutUsPage.footer.supportFundBtn.getLink();
-        await aboutUsPage.footer.supportFundBtn.click();
-        await expect(page).toHaveURL(/support-us/);
-        const title = await supportUsPage.getTitleText();
-        expect(title).toEqual('Create Next App');
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.goto('/');
+        });
+
+        await allure.step('Verify "Support the Foundation" button text in English', async () => {
+            const btnEnText = await aboutUsPage.footer.supportFundBtn.getText();
+            allure.parameter('Language', 'English');
+            allure.parameter('Button Text', btnEnText);
+            expect(btnEnText).toEqual('Support the Foundation');
+        });
+
+        await allure.step('Change language to Ukrainian', async () => {
+            await aboutUsPage.footer.changeLangBtn.click();
+        });
+
+        await allure.step('Verify "Support the Foundation" button text in Ukrainian', async () => {
+            const btnUaText = await aboutUsPage.footer.supportFundBtn.getText();
+            allure.parameter('Language', 'Ukrainian');
+            allure.parameter('Button Text', btnUaText);
+            expect(btnUaText).toEqual('Підтримати діяльність фундації');
+        });
+
+        await allure.step('Click on "Support the Foundation" button', async () => {
+            await aboutUsPage.footer.supportFundBtn.click();
+        });
+
+        await allure.step('Verify URL-link on "Support the Foundation" button', async () => {
+            const link = await aboutUsPage.footer.supportFundBtn.getLink();
+            const url = new URL(await page.url());
+            const pagepath = url.pathname;
+            expect(link).toEqual(pagepath);
+        });
+
+        await allure.step('Verify URL of the "Support Us" page', async () => {
+            await expect(page).toHaveURL(/support-us/);
+        });
+
+        await allure.step('Verify Support Us page title', async () => {
+            const title = await supportUsPage.getTitleText();
+            expect(title).toEqual('Create Next App');
+        });
     });
 
     test('check Footer Change Language Btn', async ({aboutUsPage}) => {

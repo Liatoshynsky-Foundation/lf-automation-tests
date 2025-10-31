@@ -1,6 +1,6 @@
 import {PageItemComponent} from '../../component/client/PageItemComponent';
 import {expect, test} from '../../fixtures/fixturePage';
-import {Language, FooterLanguage} from "../../data/enums";
+import {Language} from "../../data/enums";
 import * as allure from 'allure-js-commons';
 
 test.describe('UI - Header', () => { 
