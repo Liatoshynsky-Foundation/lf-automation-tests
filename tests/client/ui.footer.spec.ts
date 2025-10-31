@@ -1,0 +1,137 @@
+import {expect, test} from '../../fixtures/fixturePage';
+import {FooterLanguage} from "../../data/enums";
+import * as allure from 'allure-js-commons';
+
+test.describe('UI - Footer', () => { 
+    test('check Footer Support Btn link', async ({aboutUsPage, supportUsPage, page}) => {
+        allure.description('Verify that the Footer "Support the Foundation" button works correctly in English and Ukrainian and navigates to the correct page.');
+        allure.label('severity', 'critical');
+
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.goto('/');
+        });
+
+        await allure.step('Verify "Support the Foundation" button text in English', async () => {
+            const btnEnText = await aboutUsPage.footer.supportFundBtn.getText();
+            allure.parameter('Language', 'English');
+            allure.parameter('Button Text', btnEnText);
+            expect(btnEnText).toEqual('Support the Foundation');
+        });
+
+        await allure.step('Change language to Ukrainian', async () => {
+            await aboutUsPage.footer.changeLangBtn.click();
+        });
+
+        await allure.step('Verify "Support the Foundation" button text in Ukrainian', async () => {
+            const btnUaText = await aboutUsPage.footer.supportFundBtn.getText();
+            allure.parameter('Language', 'Ukrainian');
+            allure.parameter('Button Text', btnUaText);
+            expect(btnUaText).toEqual('Підтримати діяльність фундації');
+        });
+
+        await allure.step('Click on "Support the Foundation" button', async () => {
+            await aboutUsPage.footer.supportFundBtn.click();
+        });
+
+        await allure.step('Verify URL-link on "Support the Foundation" button', async () => {
+            const link = await aboutUsPage.footer.supportFundBtn.getLink();
+            const url = new URL(await page.url());
+            const pagepath = url.pathname;
+            expect(link).toEqual(pagepath);
+        });
+
+        await allure.step('Verify URL of the "Support Us" page', async () => {
+            await expect(page).toHaveURL(/support-us/);
+        });
+
+        await allure.step('Verify Support Us page title', async () => {
+            const title = await supportUsPage.getTitleText();
+            expect(title).toEqual('Create Next App');
+        });
+    });
+
+    test('check Footer Change Language Btn', async ({aboutUsPage}) => {
+        await aboutUsPage.goto('/');
+        await expect(await aboutUsPage.footer.changeLangBtn.getText())
+            .toEqual(FooterLanguage.Ukrainian.value);
+
+        await aboutUsPage.footer.changeLangBtn.click();
+        await expect(await aboutUsPage.footer.changeLangBtn.getText())
+            .toEqual(FooterLanguage.English.value);
+
+        await aboutUsPage.footer.changeLangBtn.click();
+        await expect(await aboutUsPage.footer.changeLangBtn.getText())
+            .toEqual(FooterLanguage.Ukrainian.value);
+
+        await aboutUsPage.footer.changeLangBtn.click();
+        await expect(await aboutUsPage.footer.changeLangBtn.getText())
+            .toEqual(FooterLanguage.English.value);
+    });
+
+    test('check Footer ContactUs Btn', async ({aboutUsPage, contactsPage, page}) => {
+        await aboutUsPage.goto('/');
+
+        const btnEnText = await aboutUsPage.footer.contactUsBtn.getText();
+        expect(btnEnText).toEqual('Contact us');
+
+        await aboutUsPage.footer.changeLangBtn.click();
+        const btnUaText = await aboutUsPage.footer.contactUsBtn.getText();
+        expect(btnUaText).toEqual('Напишіть нам');
+
+        await aboutUsPage.footer.contactUsBtn.click();
+
+        await expect(page).toHaveURL(/contacts/);
+        const title = await contactsPage.getTitleText();
+        expect(title).toEqual('Контакти');
+    });
+
+    test('check footer page menu', async ({aboutUsPage, artistryPage, page}) => {
+        await aboutUsPage.goto('/');
+
+        const items = await aboutUsPage.footer.getPageMenuHeaders();
+        expect(items).toEqual([
+            'BORYS LIATOSHYNSKYI',
+            'FOUNDATION',
+            'MUSEUM',
+            'PARTNERSHIP'
+        ]);
+        await aboutUsPage.footer.clickPageItemByName("Artistry");
+        expect(page).toHaveURL(/artistry/);
+        await page.waitForTimeout(500);
+        const title = await page.title();
+        expect(title).toEqual('Творчість - Фундація Лятошинського');
+    });
+
+    test('check Org Info in footer', async ({aboutUsPage}) => {
+        await aboutUsPage.goto('/');
+        await aboutUsPage.footer.checkInfoName("PUBLIC ORGANIZATION 'LYATOSHINSKY FOUNDATION'");
+        await aboutUsPage.footer.checkInfoAddress("68 Bohdana Khmelnytskoho St, apt. 63, Kyiv, 1054");
+        await aboutUsPage.footer.checkInfoPhone("067 963 8366");
+        await aboutUsPage.footer.checkInfoEmail("liatoshynsky@gmail.com");
+        await aboutUsPage.footer.checkCopyrightText("© 2025 Liatoshynsky Foundation. All rights reserved.");
+    });
+
+    test('clicking Phone in footer shows alert', async ({aboutUsPage, page}) => {
+        await aboutUsPage.goto('/');
+
+        page.on('dialog', async dialog => {
+            // Assert the type of dialog (optional, but good practice)
+            expect(dialog.type()).toBe('alert');
+            // Assert the message displayed in the alert
+            expect(dialog.message()).toContain('Phone number copied to clipboard');
+            // Accept the alert (or use dialog.dismiss() to cancel)
+            await dialog.accept();
+        });
+        await aboutUsPage.footer.clickInfoPhone();
+        await page.evaluate(() => {
+        })
+    });
+
+    test('clicking Email in footer has mailto', async ({aboutUsPage, page}) => {
+        await aboutUsPage.goto('/');
+        await aboutUsPage.footer.clickInfoEmail();
+
+        const href = await aboutUsPage.footer.infoEmail.locator('a').getAttribute('href');
+        expect(href).toBe('mailto:liatoshynsky@gmail.com');
+    });
+});
