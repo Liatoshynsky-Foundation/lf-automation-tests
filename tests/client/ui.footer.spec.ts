@@ -33,13 +33,6 @@ test.describe('UI - Footer', () => {
             await aboutUsPage.footer.supportFundBtn.click();
         });
 
-        await allure.step('Verify URL-link on "Support the Foundation" button', async () => {
-            const link = await aboutUsPage.footer.supportFundBtn.getLink();
-            const url = new URL(await page.url());
-            const pagepath = url.pathname;
-            expect(link).toEqual(pagepath);
-        });
-
         await allure.step('Verify URL of the "Support Us" page', async () => {
             await expect(page).toHaveURL(/support-us/);
         });
@@ -48,24 +41,60 @@ test.describe('UI - Footer', () => {
             const title = await supportUsPage.getTitleText();
             expect(title).toEqual('Create Next App');
         });
+
+        await allure.step('Verify URL-link on "Support the Foundation" button', async () => {
+            const link = await aboutUsPage.footer.supportFundBtn.getLink();
+            const url = new URL(await page.url());
+            const pagepath = url.pathname;
+            expect(link).toEqual(pagepath);
+        });
     });
 
     test('check Footer Change Language Btn', async ({aboutUsPage}) => {
-        await aboutUsPage.goto('/');
-        await expect(await aboutUsPage.footer.changeLangBtn.getText())
-            .toEqual(FooterLanguage.Ukrainian.value);
+        allure.description('Verify that the footer Change Language button correctly toggles between Ukrainian and English text on each click.');
+        allure.label('feature', 'Footer');
+        allure.label('severity', 'normal'); 
+        allure.parameter('Component', 'Footer');
 
-        await aboutUsPage.footer.changeLangBtn.click();
-        await expect(await aboutUsPage.footer.changeLangBtn.getText())
-            .toEqual(FooterLanguage.English.value);
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.goto('/');
+        });
 
-        await aboutUsPage.footer.changeLangBtn.click();
-        await expect(await aboutUsPage.footer.changeLangBtn.getText())
-            .toEqual(FooterLanguage.Ukrainian.value);
+        await allure.step('Verify default language button text (Ukrainian)', async () => {
+            const currentPageLang = await aboutUsPage.getCurrentPageLanguage();
+            
+            const text = await aboutUsPage.footer.changeLangBtn.getText();
+            allure.parameter('Language', currentPageLang);
+            allure.parameter('Button Text', text);
 
-        await aboutUsPage.footer.changeLangBtn.click();
-        await expect(await aboutUsPage.footer.changeLangBtn.getText())
-            .toEqual(FooterLanguage.English.value);
+            expect(currentPageLang).toEqual('en');
+            expect(text).toEqual(FooterLanguage.Ukrainian.value);
+        });
+
+        await allure.step('Click language button and verify it changes to English', async () => {
+            await aboutUsPage.footer.changeLangBtn.click();
+
+            const text = await aboutUsPage.footer.changeLangBtn.getText();
+            const currentPageLang = await aboutUsPage.getCurrentPageLanguage();
+            allure.parameter('Language', currentPageLang);
+            allure.parameter('Button Text', text);
+
+            expect(currentPageLang).toEqual('uk');
+            expect(text).toEqual(FooterLanguage.English.value);
+        });
+
+        await allure.step('Click again and verify it changes back to Ukrainian', async () => {
+            await aboutUsPage.footer.changeLangBtn.click();
+
+            const currentPageLang = await aboutUsPage.getCurrentPageLanguage();
+
+            const text = await aboutUsPage.footer.changeLangBtn.getText();
+            allure.parameter('Language', currentPageLang);
+            allure.parameter('Button Text', text);
+
+            expect(currentPageLang).toEqual('en');
+            expect(text).toEqual(FooterLanguage.Ukrainian.value);
+        });
     });
 
     test('check Footer ContactUs Btn', async ({aboutUsPage, contactsPage, page}) => {

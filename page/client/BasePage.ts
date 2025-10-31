@@ -45,4 +45,19 @@ export class BasePage {
     return text;
   }
 
+  async getCurrentPageLanguage(): Promise<string> {
+    let lang: string = "";
+    await allure.step('Get current language of the page', async () => {
+      const currentURL = new URL(await this.page.url());
+      const firstSegment = currentURL.pathname.split('/')[1];
+      
+      if (firstSegment === 'uk') {
+        lang = 'uk';
+      }  else {
+        lang = 'en';
+      }
+    });
+    return lang;
+  }
+
 }
