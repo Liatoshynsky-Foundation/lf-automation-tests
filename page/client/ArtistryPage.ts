@@ -1,8 +1,9 @@
 import { Page } from '@playwright/test';
-import { BasePage } from './BasePage';
-import {FilterButtonComponent} from "../../component/client/filters/FilterButtonComponent";
 
-export class ArtistryPage extends BasePage {
+import {FilterButtonComponent} from "../../component/client/filters/FilterButtonComponent";
+import {ClientBasePage} from "./ClientBasePage";
+
+export class ArtistryPage extends ClientBasePage {
 
     readonly filterButton: FilterButtonComponent;
 

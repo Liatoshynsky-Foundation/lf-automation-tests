@@ -1,12 +1,12 @@
 import { type Locator, type Page } from '@playwright/test';
-import { BasePage } from './BasePage';
 import { ContactsInfoComponent } from '../../component/client/ContactsInfoComponent';
 import { ContactFormC } from '../../component/client/ContactFormC';
+import {ClientBasePage} from "./ClientBasePage";
 
 const CONTACTS_PAGE_PATH = 'contacts';
 
 
-export class ContactsPage extends BasePage {
+export class ContactsPage extends ClientBasePage {
   public pageHeading: Locator;
   private contactsInfoComponent: ContactsInfoComponent;
   private contactFormC: ContactFormC;

@@ -1,4 +1,4 @@
-import {expect, test} from '../fixtures/fixturePage';
+import {test, expect} from "../../fixtures/fixturePage";
 
 
 test.describe('UI - Home page', () => {

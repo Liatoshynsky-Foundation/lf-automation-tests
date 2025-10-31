@@ -1,5 +1,6 @@
 import {Locator, Page} from '@playwright/test';
-import {ClientBasePage} from './ClientBasePage';
+import {ClientBasePage} from "./ClientBasePage";
+
 
 export class AboutUsPage extends ClientBasePage {
     private aboutFoundationLabel: Locator;
