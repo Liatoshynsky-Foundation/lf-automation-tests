@@ -146,7 +146,7 @@ test.describe('UI - Footer', () => {
         });
     });
 
-    test('check footer page menu', async ({aboutUsPage, artistryPage, page}) => {
+    test('check footer page menu', async ({aboutUsPage, page}) => {
         await aboutUsPage.goto('/');
 
         const items = await aboutUsPage.footer.getPageMenuHeaders();
@@ -188,7 +188,7 @@ test.describe('UI - Footer', () => {
         })
     });
 
-    test('clicking Email in footer has mailto', async ({aboutUsPage, page}) => {
+    test('clicking Email in footer has mailto', async ({aboutUsPage}) => {
         await aboutUsPage.goto('/');
         await aboutUsPage.footer.clickInfoEmail();
 

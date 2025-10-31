@@ -1,7 +1,6 @@
 import {PageItemComponent} from '../../component/client/PageItemComponent';
 import {expect, test} from '../../fixtures/fixturePage';
 import {Language} from "../../data/enums";
-import * as allure from 'allure-js-commons';
 
 test.describe('UI - Header', () => { 
     test('check header page menu', async ({aboutUsPage}) => {

@@ -11,19 +11,19 @@ Prerequisites:
 
 1. Install project dependencies:
 
-    ```cmd
+    ```shell
     npm install
     ```
 
 2. Install Playwright browsers (required for UI tests):
 
-    ```cmd
+    ```shell
     npx playwright install
     ```
 
 3. Create a `.env` file from the example and edit values if needed:
 
-    ```cmd
+    ```shell
     copy .env.example .env
     notepad .env
     ```
@@ -34,31 +34,31 @@ You can run tests using the npm scripts defined in `package.json`.
 
 - Run the entire test suite (all configured browsers):
 
-    ```cmd
+    ```shell
     npm test
     ```
 
 - Run the UI tests only:
 
-    ```cmd
+    ```shell
     npm run test:ui
     ```
 
 - Run the API tests only:
 
-    ```cmd
+    ```shell
     npm run test:api
     ```
 
 - Run tests for a specific Playwright project (e.g. Chromium):
 
-    ```cmd
+    ```shell
     npx playwright test --project=chromium
     ```
 
 - Type-check the TypeScript sources:
 
-    ```cmd
+    ```shell
     npm run typecheck
     ```
 
@@ -82,13 +82,13 @@ This project includes Allure reporting for enhanced test result visualization.
 After running tests, you can view the Allure report in two ways:
 
 1. Generate and open the report:
-    ```cmd
+    ```shell
     npm run allure:generate
     npm run allure:open
     ```
 
 2. Generate and serve the report in one command:
-    ```cmd
+    ```shell
     npm run allure:serve
     ```
 
