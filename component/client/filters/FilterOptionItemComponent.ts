@@ -1,13 +1,13 @@
-import { Locator, Page, expect } from '@playwright/test';
-import { BaseComponent } from '../BaseComponent';
+import {expect, Locator, Page} from '@playwright/test';
+import {BaseComponent} from '../BaseComponent';
 
 /**
  * Represents an option item inside a filter dropdown menu
  */
 
 export class FilterOptionItemComponent extends BaseComponent {
-    private readonly checkbox: Locator;
-    private readonly label: Locator;
+    private checkbox: Locator;
+    private label: Locator;
 
     constructor(page: Page, parent: Locator, optionName: string) {
         super(page, parent);

@@ -1,6 +1,6 @@
-import { Locator, Page } from '@playwright/test';
-import { BaseComponent } from '../BaseComponent';
-import { FilterDropdownComponent } from './FilterDropdownComponent';
+import {Locator, Page} from '@playwright/test';
+import {BaseComponent} from '../BaseComponent';
+import {FilterDropdownComponent} from './FilterDropdownComponent';
 import {FilterChipComponent} from "./FilterChipComponent";
 
 /**
@@ -30,14 +30,14 @@ export class FilterListItemComponent extends BaseComponent {
     }
 
     async openDropdown(): Promise<FilterDropdownComponent> {
-        await this.dropdownIcon.click({ force: true });
+        await this.dropdownIcon.click({force: true});
         return new FilterDropdownComponent(this.page, this.popup);
     }
 
     async closeDropdown(): Promise<void> {
         if (await this.popup.isVisible()) {
-            await this.page.locator('body').click({ position: { x: 5, y: 5 } });
-            await this.popup.waitFor({ state: 'hidden', timeout: 3000 });
+            await this.page.locator('body').click({position: {x: 5, y: 5}});
+            await this.popup.waitFor({state: 'hidden', timeout: 3000});
         }
     }
 

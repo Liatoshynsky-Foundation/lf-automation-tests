@@ -49,7 +49,7 @@ export class FooterComponent extends BaseComponent {
             await this.waitIsVisible(this.pageMenu, 50000);
             const locators = await this.pageMenu.locator('div > p');
             const count = await locators.count();
-            
+
             for (let i = 0; i < count; i++) {
                 headers.push(await locators.nth(i).innerText());
             }
@@ -58,7 +58,7 @@ export class FooterComponent extends BaseComponent {
     }
 
     async getMenuItems(): Promise<PageItemComponent[]> {
-        let items: PageItemComponent[] = []; 
+        let items: PageItemComponent[] = [];
         await allure.step('Get Items of Page menu', async () => {
             const locators = await this.menuItems.locator('li > a').all();
             items = locators.map(item => new PageItemComponent(item));
@@ -113,7 +113,7 @@ export class FooterComponent extends BaseComponent {
             await this.infoPhone.waitFor({state: 'visible'});
             await this.infoPhone.scrollIntoViewIfNeeded();
             expect(this.infoPhone.locator('p')).toHaveText("Phone:");
-            expect(this.infoPhone.locator('a')).toHaveText(str);    
+            expect(this.infoPhone.locator('a')).toHaveText(str);
         })
     }
 

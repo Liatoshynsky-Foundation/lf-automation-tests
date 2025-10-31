@@ -1,5 +1,5 @@
-import { Locator, Page } from '@playwright/test';
-import { BaseComponent } from '../BaseComponent';
+import {Locator, Page} from '@playwright/test';
+import {BaseComponent} from '../BaseComponent';
 
 /**
  * Represents the "Year" filter item with range inputs ("From" / "To").

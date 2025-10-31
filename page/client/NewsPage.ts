@@ -1,13 +1,13 @@
-import { Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import {Page} from '@playwright/test';
+import {ClientBasePage} from './ClientBasePage';
 
-export class NewsPage extends BasePage {
-  constructor(page: Page) {
-    super(page);
-  }
+export class NewsPage extends ClientBasePage {
+    constructor(page: Page) {
+        super(page);
+    }
 
-  async visit(): Promise<void> {
-    await this.goto('/news');
-  }
+    async visit(): Promise<void> {
+        await this.goto('/news');
+    }
 }
 

@@ -2,7 +2,7 @@ import {PageItemComponent} from '../../component/client/PageItemComponent';
 import {expect, test} from '../../fixtures/fixturePage';
 import {Language} from "../../data/enums";
 
-test.describe('UI - Header', () => { 
+test.describe('UI - Header', () => {
     test('check header page menu', async ({aboutUsPage}) => {
         await aboutUsPage.goto('/');
         const items = await aboutUsPage.header.getMenuItems();
@@ -111,5 +111,5 @@ test.describe('UI - Header', () => {
             .toEqual(Language.English.value);
     });
 
-    
+
 });   

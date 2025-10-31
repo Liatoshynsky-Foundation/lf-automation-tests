@@ -1,7 +1,7 @@
-import { Locator, Page } from "@playwright/test";
+import {Locator, Page} from "@playwright/test";
 
 export class QuickDonationComponent {
-    private root: Locator; 
+    private root: Locator;
     private mainTitle: Locator;
     private amountInput: Locator;
     private currencyDropdown: Locator;
@@ -9,7 +9,7 @@ export class QuickDonationComponent {
     private presetAmountButtons: Locator;
     private makeDonationButton: Locator;
 
-    constructor(private page: Page){
+    constructor(private page: Page) {
         this.root = page.locator('div.MuiBox-root.css-1txbm8g').first();
 
         this.mainTitle = this.root.locator('h4')
@@ -21,24 +21,24 @@ export class QuickDonationComponent {
     }
 
 
-    async isMainTitleVisible(): Promise<boolean>{
+    async isMainTitleVisible(): Promise<boolean> {
         return this.mainTitle.isVisible();
     }
 
-    async enterCustomAmount(amount: string | number): Promise<void>{
+    async enterCustomAmount(amount: string | number): Promise<void> {
         await this.amountInput.fill(String(amount));
     }
 
-    async clickCurrencyDropdown(): Promise<void>{
+    async clickCurrencyDropdown(): Promise<void> {
         await this.currencyDropdown.click();
     }
 
-    async clickMakeDonationButton(): Promise<void>{
+    async clickMakeDonationButton(): Promise<void> {
         await this.makeDonationButton.click();
     }
 
     async selectContributionTypeTab(type: string): Promise<void> {
-        const tabToClick = this.contributionTypeTabs.locator('button', { hasText: type });
+        const tabToClick = this.contributionTypeTabs.locator('button', {hasText: type});
         await tabToClick.click();
     }
 }

@@ -2,9 +2,10 @@
 
 A Playwright test project written in TypeScript. It contains a Playwright configuration, a Page Object Model (POM) structure under `page/client`, reusable components under `component/client`, fixtures under `tests/fixtures`, and example UI + API tests.
 
-Quickstart
-----------
+## Quickstart
+
 Prerequisites:
+
 - Node.js (16+ recommended)
 - Git (optional)
 - Java 8+ (required for Allure Commandline to generate reports)
@@ -28,8 +29,8 @@ Prerequisites:
     notepad .env
     ```
 
-Run tests
----------
+## Run tests
+
 You can run tests using the npm scripts defined in `package.json`.
 
 - Run the entire test suite (all configured browsers):
@@ -37,6 +38,18 @@ You can run tests using the npm scripts defined in `package.json`.
     ```shell
     npm test
     ```
+
+- Run the Admin tests only:
+
+  ```shell
+   npx playwright test --project=admin
+  ```
+
+- Run the Client tests only:
+
+  ```shell
+   npx playwright test --project=client
+  ```
 
 - Run the UI tests only:
 
@@ -62,8 +75,8 @@ You can run tests using the npm scripts defined in `package.json`.
     npm run typecheck
     ```
 
-Project scripts (from package.json)
------------------------------------
+## Project scripts (from package.json)
+
 - `test` — run Playwright tests
 - `test:ui` — run UI tests (tests/ui.spec.ts)
 - `client:ui` — run client UI tests (tests/client)
@@ -107,8 +120,8 @@ The Allure report provides:
 For detailed information on using Allure annotations, creating test steps, and customizing reports, see [docs/ALLURE_GUIDE.md](docs/ALLURE_GUIDE.md).
 For an example test with Allure annotations, steps, and attachments, see tests/allure-demo.spec.ts.
 
-Environment variables (`.env`)
-------------------------------
+## Environment variables (`.env`)
+
 This project supports a small set of environment variables loaded via `dotenv` from the repository root. See `config/env.ts` for the implementation.
 
 - `BASE_CLIENT_URL` — Base URL used for client-facing UI tests. Default: `https://example.com`
@@ -126,8 +139,8 @@ BASE_API_URL=https://jsonplaceholder.typicode.com
 
 A sample file is included as `.env.example`. Do not commit secrets to source control.
 
-Project structure (key files)
-----------------------------
+## Project structure (key files)
+
 - `playwright.config.ts` — Playwright configuration (the `baseURL` is set from `BASE_CLIENT_URL`).
 - `config/env.ts` — Loads `.env` and exports `BASE_CLIENT_URL`, `BASE_ADMIN_URL`, `BASE_API_URL`.
 - `component/client/*` — small POM components (Header, Footer).
@@ -137,21 +150,21 @@ Project structure (key files)
 - `tests/ui.spec.ts` — Example UI test that uses the `homePage` fixture.
 - `tests/api.spec.ts` — Example API smoke test that uses `baseApiURL`.
 
-Using the fixtures in tests
----------------------------
+## Using the fixtures in tests
+
 The repository provides small fixture modules you can import from tests instead of `@playwright/test` directly.
 
 Example (UI test inside `tests/`):
 
 ```ts
-import { test, expect } from './fixtures/fixturePage';
+import { test, expect } from "./fixtures/fixturePage";
 
-test('Home page heading', async ({ homePage, baseClientURL }) => {
-  await homePage.goto('/');
+test("Home page heading", async ({ homePage, baseClientURL }) => {
+  await homePage.goto("/");
   const heading = await homePage.getHeadingText();
 
-  if ((baseClientURL ?? '').includes('example.com')) {
-    expect(heading).toBe('Example Domain');
+  if ((baseClientURL ?? "").includes("example.com")) {
+    expect(heading).toBe("Example Domain");
   } else {
     expect(heading).toBeTruthy();
   }
@@ -161,9 +174,9 @@ test('Home page heading', async ({ homePage, baseClientURL }) => {
 Example (API test inside `tests/`):
 
 ```ts
-import { test, expect } from './fixtures/fixtureBase';
+import { test, expect } from "./fixtures/fixtureBase";
 
-test('GET /posts/1 returns id=1', async ({ request, baseApiURL }) => {
+test("GET /posts/1 returns id=1", async ({ request, baseApiURL }) => {
   const resp = await request.get(`${baseApiURL}/posts/1`);
   expect(resp.status()).toBe(200);
   const body = await resp.json();
@@ -171,14 +184,14 @@ test('GET /posts/1 returns id=1', async ({ request, baseApiURL }) => {
 });
 ```
 
-Notes and troubleshooting
--------------------------
+## Notes and troubleshooting
+
 - If a UI test times out, make sure Playwright browsers are installed (`npx playwright install`) and that the `BASE_CLIENT_URL` is reachable from your environment.
 - Page objects are intentionally assertion-free; they expose actions and wait helpers. Keep assertions in tests or fixtures.
 - For CI, ensure you run `npx playwright install --with-deps` (or the platform-appropriate Playwright install) before running tests.
 
-Next steps (suggestions)
-------------------------
+## Next steps (suggestions)
+
 - Add a GitHub Actions workflow to run `npm install`, `npx playwright install --with-deps`, `npm run typecheck`, and `npm test` on push/PR.
 - Add more fixtures (logged-in user, admin pages) or a `PageFactory` for easier page instantiation.
 - Expand page object selectors and add more UI flows (navigation, forms, error pages).

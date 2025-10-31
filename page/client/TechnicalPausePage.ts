@@ -1,13 +1,13 @@
-import { Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import {Page} from '@playwright/test';
+import {ClientBasePage} from './ClientBasePage';
 
-export class TechnicalPausePage extends BasePage {
-  constructor(page: Page) {
-    super(page);
-  }
+export class TechnicalPausePage extends ClientBasePage {
+    constructor(page: Page) {
+        super(page);
+    }
 
-  async visit(): Promise<void> {
-    await this.goto('/technical-pause');
-  }
+    async visit(): Promise<void> {
+        await this.goto('/technical-pause');
+    }
 }
 

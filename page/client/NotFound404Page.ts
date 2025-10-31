@@ -1,13 +1,13 @@
-import { Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import {Page} from '@playwright/test';
+import {ClientBasePage} from './ClientBasePage';
 
-export class NotFound404Page extends BasePage {
-  constructor(page: Page) {
-    super(page);
-  }
+export class NotFound404Page extends ClientBasePage {
+    constructor(page: Page) {
+        super(page);
+    }
 
-  async visit(): Promise<void> {
-    await this.goto('/not-found-404');
-  }
+    async visit(): Promise<void> {
+        await this.goto('/not-found-404');
+    }
 }
 
