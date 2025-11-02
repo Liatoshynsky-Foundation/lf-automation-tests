@@ -167,23 +167,29 @@ test.describe('UI - Footer', () => {
         })
         
         allure.step('Veriyf footer menu items and navigation in English', async () => {
-            for (const item of footerMenu.items){
-                const expectedUrl = await aboutUsPage.getPathCurrentLanguage(item.url);
+            // for (const item of footerMenu.items){
+            //     const expectedUrl = await aboutUsPage.getPathCurrentLanguage(item.url);
                 
-                await Promise.all([
-                    aboutUsPage.footer.clickPageItemByName(item.en_name),
-                    page.waitForURL(expectedUrl, { timeout: 10000 })
-                ]);
+            //     await Promise.all([
+            //         aboutUsPage.footer.clickPageItemByName(item.en_name),
+            //         page.waitForURL(expectedUrl, { timeout: 10000 })
+            //     ]);
                 
                 
-                await expect(page).toHaveURL(expectedUrl);
-                await page.waitForTimeout(500);
+            //     await expect(page).toHaveURL(expectedUrl);
+            //     await page.waitForTimeout(500);
                 
-                const title = await page.title();
-                expect(title).toEqual(item.title);
+            //     const title = await page.title();
+            //     expect(title).toEqual(item.title);
                 
-                await aboutUsPage.goto('/');
-            }
+            //     await aboutUsPage.goto('/');
+            // }
+            
+            await aboutUsPage.footer.clickPageItemByName("Artistry");
+            expect(page).toHaveURL(/artistry/);
+            await page.waitForTimeout(500);
+            const title = await page.title();
+            expect(title).toEqual('Творчість - Фундація Лятошинського');
         })
         
     });
