@@ -1,6 +1,7 @@
 import {expect, test} from '../../fixtures/fixturePage';
 import {FooterLanguage} from "../../data/enums";
 import * as allure from 'allure-js-commons';
+import {footerMenu} from '../../data/footerMenu'
 
 test.describe('UI - Footer', () => {
     test('check Footer Support Btn link', async ({aboutUsPage, supportUsPage, page}) => {
@@ -147,20 +148,44 @@ test.describe('UI - Footer', () => {
     });
 
     test('check footer page menu', async ({aboutUsPage, page}) => {
-        await aboutUsPage.goto('/');
+        allure.description('Verify footer headers, items, and navigation for both English and Ukrainian languages.');
+        allure.label('feature', 'Footer Menu');
+        allure.label('severity', 'normal');
+        allure.parameter('Component', 'Footer');
+        
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.goto('/');
+        });
 
-        const items = await aboutUsPage.footer.getPageMenuHeaders();
-        expect(items).toEqual([
-            'BORYS LIATOSHYNSKYI',
-            'FOUNDATION',
-            'MUSEUM',
-            'PARTNERSHIP'
-        ]);
-        await aboutUsPage.footer.clickPageItemByName("Artistry");
-        expect(page).toHaveURL(/artistry/);
-        await page.waitForTimeout(500);
-        const title = await page.title();
-        expect(title).toEqual('Творчість - Фундація Лятошинського');
+        await allure.step('Verify footer menu headers in English', async () =>{
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            expect(currentLang).toBe('en');
+            allure.parameter('Language', currentLang);
+
+            const headers = await aboutUsPage.footer.getPageMenuHeaders();
+            expect(headers).toEqual(footerMenu.headers.en);
+        })
+        
+        allure.step('Veriyf footer menu items and navigation in English', async () => {
+            for (const item of footerMenu.items){
+                const expectedUrl = await aboutUsPage.getPathCurrentLanguage(item.url);
+                
+                await Promise.all([
+                    aboutUsPage.footer.clickPageItemByName(item.en_name),
+                    page.waitForURL(expectedUrl, { timeout: 10000 })
+                ]);
+                
+                
+                await expect(page).toHaveURL(expectedUrl);
+                await page.waitForTimeout(500);
+                
+                const title = await page.title();
+                expect(title).toEqual(item.title);
+                
+                await aboutUsPage.goto('/');
+            }
+        })
+        
     });
 
     test('check Org Info in footer', async ({aboutUsPage}) => {

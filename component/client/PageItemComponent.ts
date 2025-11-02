@@ -26,7 +26,7 @@ export class PageItemComponent {
     async footerclick(): Promise<void> {
         await Promise.all([
             this.name.click(),
-            this.name.page().waitForLoadState('networkidle'),
+            this.name.page().waitForLoadState('domcontentloaded'),
         ]);
     }
 }
