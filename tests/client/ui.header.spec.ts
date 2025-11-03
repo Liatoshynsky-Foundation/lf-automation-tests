@@ -1,6 +1,7 @@
 import {PageItemComponent} from '../../component/client/PageItemComponent';
 import {expect, test} from '../../fixtures/fixturePage';
 import {Language} from "../../data/enums";
+import * as allure from 'allure-js-commons';
 
 test.describe('UI - Header', () => {
     test('check header page menu', async ({aboutUsPage}) => {
@@ -96,19 +97,38 @@ test.describe('UI - Header', () => {
     });
 
     test('check Header Change Language Btn', async ({aboutUsPage}) => {
-        await aboutUsPage.goto('/');
-        const button = aboutUsPage.header.changeLangBtn;
-        await aboutUsPage.header.changeLangBtn.click();
-        await button.selectLanguage(Language.Ukrainian);
-        await aboutUsPage.header.changeLangBtn.click();
+        allure.description('Verify that the header language change button correctly switches between English and Ukrainian.');
+        allure.label('feature', 'Header');
+        allure.label('severity', 'normal');
+        allure.parameter('Component', 'Header Language Switch');
 
-        await expect(await aboutUsPage.header.changeLangBtn.getSelectedLanguage())
-            .toEqual(Language.Ukrainian.value);
-        await button.selectLanguage(Language.English);
-        await aboutUsPage.header.changeLangBtn.click();
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.goto('/');
+        });
 
-        await expect(await aboutUsPage.header.changeLangBtn.getSelectedLanguage())
+        await allure.step('Open language selector and change to Ukrainian', async () => {
+            const button = aboutUsPage.header.changeLangBtn;
+            await aboutUsPage.header.changeLangBtn.click();
+            await button.selectLanguage(Language.Ukrainian);
+        });
+
+        await allure.step('Verify selected language is Ukrainian', async () => {
+            await aboutUsPage.header.changeLangBtn.click();
+            allure.parameter('Language', 'Ukrainian');
+            await expect(await aboutUsPage.header.changeLangBtn.getSelectedLanguage()).toEqual(Language.Ukrainian.value);
+        });
+
+        await allure.step('Switch back to English', async () => {
+            const button = aboutUsPage.header.changeLangBtn;
+            await button.selectLanguage(Language.English);
+            await aboutUsPage.header.changeLangBtn.click();
+        });
+
+        await allure.step('Verify selected language is English', async () => {
+            allure.parameter('Language', 'English');
+            await expect(await aboutUsPage.header.changeLangBtn.getSelectedLanguage())
             .toEqual(Language.English.value);
+        });
     });
 
 
