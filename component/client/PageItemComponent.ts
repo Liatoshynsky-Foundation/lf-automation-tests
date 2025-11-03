@@ -1,4 +1,4 @@
-import {Locator} from "@playwright/test";
+import {expect, Locator} from "@playwright/test";
 
 export class PageItemComponent {
     private name: Locator;
@@ -24,13 +24,16 @@ export class PageItemComponent {
     }
 
     async footerclick(): Promise<void> {
-         await Promise.all([
-            this.name.click(),
-            this.name.page().waitForLoadState('networkidle'),
-        ]);
-        //const page = this.name.page();
-        //const oldUrl = page.url();
-        //await this.name.click();
+        await this.name.waitFor({state: 'visible'});
+        await this.name.scrollIntoViewIfNeeded();
+        await this.name.click();    
+        //  await Promise.all([
+        //     this.name.click(),
+        //     this.name.page().waitForLoadState('networkidle'),
+        // ]);
+        // const page = this.name.page();
+        // const oldUrl = page.url();
+        // await this.name.click();
         // await expect.poll(() => page.url()).not.toBe(oldUrl);
         // await expect(page.locator('main')).toBeVisible({timeout: 10000});
     }
