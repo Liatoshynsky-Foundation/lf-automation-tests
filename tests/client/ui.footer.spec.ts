@@ -3,6 +3,7 @@ import {FooterLanguage} from "../../data/enums";
 import {OrgInfo} from '../../data/orgInfo';
 import * as allure from 'allure-js-commons';
 import {footerMenu} from '../../data/footerMenu'
+import {AboutUsPage} from "../../page/client/AboutUsPage";
 
 test.describe('UI - Footer', () => {
     test('check Footer Support Btn link', async ({aboutUsPage, supportUsPage, page}) => {
@@ -155,9 +156,11 @@ test.describe('UI - Footer', () => {
         allure.parameter('Component', 'Footer');
         
         await allure.step('Go to homepage', async () => {
-            await aboutUsPage.goto('/');
+            // await aboutUsPage.goto('/');
+            await aboutUsPage.visit();
         });
 
+        aboutUsPage = new AboutUsPage(page); // re-initialize to avoid stale element references
         await allure.step('Verify footer menu headers in English', async () =>{
             const currentLang = await aboutUsPage.getCurrentPageLanguage();
             expect(currentLang).toBe('en');
@@ -175,10 +178,9 @@ test.describe('UI - Footer', () => {
                 
             //     await aboutUsPage.goto('/');
             // }
-            
-             await aboutUsPage.footer.clickPageItemByName("Artistry");
-            expect(page).toHaveURL(/artistry/);
-            
+            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+            await aboutUsPage.footer.clickPageItemByName("Artistry");
+            await expect(page).toHaveURL(/artistry/);
         })
         
     });
