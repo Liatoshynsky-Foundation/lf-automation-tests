@@ -4,6 +4,7 @@ import {FooterComponent} from '../../component/client/FooterComponent';
 import {CookiesModal} from "../../component/client/CookiesModal";
 import * as allure from "allure-js-commons";
 import {BasePage} from "../BasePage";
+import {SupportedLang} from '../../data/orgInfo';
 import {QuoteComponent} from "../../component/client/QuoteComponent";
 
 const supportedLangs = ['en', 'fr', 'de', 'es', 'it', 'pt', 'ru', 'zh', 'ja'];
@@ -46,8 +47,8 @@ export class ClientBasePage extends BasePage {
         return text;
     }
 
-    async getCurrentPageLanguage(): Promise<string> {
-        let lang: string = "";
+    async getCurrentPageLanguage(): Promise<SupportedLang> {
+        let lang: SupportedLang = 'en';
         await allure.step('Get current language of the page', async () => {
             const currentURL = new URL(await this.page.url());
             const firstSegment = currentURL.pathname.split('/')[1];

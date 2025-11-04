@@ -39,7 +39,7 @@ test.afterEach(async ({ page }, testInfo: TestInfo) => {
             // Note: Playwright automatically attaches video when configured as `retain-on-failure` and using 'attachments' in reporter. This ensures screenshot is attached too.
         } catch (err) {
             // avoid failing the hook if screenshot couldn't be taken
-            // eslint-disable-next-line no-console
+             
             console.warn('Could not capture screenshot in afterEach hook:', err);
         }
     }
