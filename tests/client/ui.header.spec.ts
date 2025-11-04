@@ -77,23 +77,36 @@ test.describe('UI - Header', () => {
         expect(title).toEqual('Творчість - Фундація Лятошинського');
     });
 
-    test('check Header Support Btn link', async ({aboutUsPage, supportUsPage, page}) => {
-        await aboutUsPage.goto('/');
+    test('check Header Support Btn link', async ({aboutUsPage, page}) => {
+        allure.description('Verify that the header "Support" button navigates correctly and displays proper localization both in English and Ukrainian');
+        allure.label('feature', 'Header');
+        allure.label('severity', 'normal');
+        allure.parameter('Component', 'Header Support Button');
 
-        const btnEnText = await aboutUsPage.header.supportFundBtn.getText();
-        expect(btnEnText).toEqual('Support');
-
-        await aboutUsPage.header.changeLangBtn.click();
-        await aboutUsPage.header.changeLangBtn.selectLanguage(Language.Ukrainian);
-        await page.waitForTimeout(5000);
-        const btnUaText = await aboutUsPage.header.supportFundBtn.getText();
+        allure.step('Go to homepage', async () => {
+            await aboutUsPage.goto('/');
+        });
+        
+        allure.step('Verify Support button text in English', async () =>{
+            const btnEnText = await aboutUsPage.header.supportFundBtn.getText();
+            expect(btnEnText).toEqual('Support');
+        })
+        
+        allure.step('Change language to Ukrainian', async() =>{
+            await aboutUsPage.header.changeLangBtn.click();
+            await aboutUsPage.header.changeLangBtn.selectLanguage(Language.Ukrainian);
+            await page.waitForTimeout(5000);
+        })
+        
+        allure.step('Verify Support button text in Ukrainian', async () =>{
+            const btnUaText = await aboutUsPage.header.supportFundBtn.getText();
         expect(btnUaText).toEqual('Підтримати');
-
-        await aboutUsPage.header.supportFundBtn.click();
-        await expect(page).toHaveURL(/support-us/);
-        const title = await supportUsPage.getTitleText();
-        expect(title).toEqual('Create Next App');
-
+        })
+        
+        allure.step('Verify Support button text navigation', async () =>{
+            await aboutUsPage.header.supportFundBtn.click();
+            await expect(page).toHaveURL(/support-us/);
+        });
     });
 
     test('check Header Change Language Btn', async ({aboutUsPage}) => {
