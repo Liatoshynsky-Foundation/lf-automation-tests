@@ -1,10 +1,11 @@
-import {Page} from '@playwright/test';
+import {Locator, Page} from '@playwright/test';
 import {HeaderComponent} from '../../component/client/HeaderComponent';
 import {FooterComponent} from '../../component/client/FooterComponent';
 import {CookiesModal} from "../../component/client/CookiesModal";
 import * as allure from "allure-js-commons";
 import {BasePage} from "../BasePage";
 import {SupportedLang} from '../../data/orgInfo';
+import {QuoteComponent} from "../../component/client/QuoteComponent";
 
 const supportedLangs = ['en', 'fr', 'de', 'es', 'it', 'pt', 'ru', 'zh', 'ja'];
 
@@ -12,12 +13,14 @@ export class ClientBasePage extends BasePage {
     header: HeaderComponent;
     footer: FooterComponent;
     protected cookiesModal: CookiesModal;
+    protected quoteRoots: Locator;
 
     constructor(page: Page) {
         super(page);
         this.header = new HeaderComponent(page);
         this.footer = new FooterComponent(page);
         this.cookiesModal = new CookiesModal(page);
+        this.quoteRoots = page.locator('.quote-component');
     }
 
     async getPathCurrentLanguage(path: string): Promise<string> {
@@ -57,6 +60,40 @@ export class ClientBasePage extends BasePage {
             }
         });
         return lang;
+    }
+
+    async getQuotes(): Promise<QuoteComponent[]> {
+        const count = await this.quoteRoots.count();
+        const quotes: QuoteComponent[] = [];
+
+        for (let i = 0; i < count; i++) {
+            quotes.push(new QuoteComponent(this.page, this.quoteRoots.nth(i)));
+        }
+
+        return quotes;
+    }
+
+    async getQuotesTexts(): Promise<string[]> {
+        const quotes = await this.getQuotes();
+        const texts = [];
+        for (const quote of quotes) {
+            texts.push(await quote.getQuoteText());
+        }
+        return texts;
+    }
+
+    async getQuotesSourcesTexts(): Promise<string[]> {
+        const quotes = await this.getQuotes();
+        const texts = [];
+        for (const quote of quotes) {
+            texts.push(await quote.getQuoteSourceText());
+        }
+        return texts;
+    }
+
+    async getQuoteByOrder(index: number): Promise<QuoteComponent | null> {
+        const quotes = await this.getQuotes();
+        return quotes[index] ?? null;
     }
 
 }
