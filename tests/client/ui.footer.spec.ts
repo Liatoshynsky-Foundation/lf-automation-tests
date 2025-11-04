@@ -2,8 +2,7 @@ import {expect, test} from '../../fixtures/fixturePage';
 import {FooterLanguage} from "../../data/enums";
 import {OrgInfo} from '../../data/orgInfo';
 import * as allure from 'allure-js-commons';
-import {footerMenu} from '../../data/footerMenu'
-import {AboutUsPage} from "../../page/client/AboutUsPage";
+import {footerMenu} from '../../data/footerMenu';
 
 test.describe('UI - Footer', () => {
     test('check Footer Support Btn link', async ({aboutUsPage, supportUsPage, page}) => {
@@ -160,28 +159,58 @@ test.describe('UI - Footer', () => {
             await aboutUsPage.visit();
         });
 
-        aboutUsPage = new AboutUsPage(page); // re-initialize to avoid stale element references
         await allure.step('Verify footer menu headers in English', async () =>{
             const currentLang = await aboutUsPage.getCurrentPageLanguage();
             expect(currentLang).toBe('en');
             allure.parameter('Language', currentLang);
-
-            const headers = await aboutUsPage.footer.getPageMenuHeaders();
-            expect(headers).toEqual(footerMenu.headers.en);
-        })
-        
-        allure.step('Veriyf footer menu items and navigation in English', async () => {
-            // for (const item of footerMenu.items){
-            //     const expectedUrl = await aboutUsPage.getPathCurrentLanguage(item.url);
-            //     await aboutUsPage.footer.clickPageItemByName(item.en_name);
-            //     await expect(page).toHaveURL(expectedUrl);
-                
-            //     await aboutUsPage.goto('/');
-            // }
             await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-            await aboutUsPage.footer.clickPageItemByName("Artistry");
-            await expect(page).toHaveURL(/artistry/);
+            const menuHeaders = await aboutUsPage.footer.pageMenu.getSectionHeaders();
+            expect(menuHeaders).toEqual(footerMenu.headers.en);
         })
+
+        allure.step('Veriyf footer menu items and navigation in English', async () => {
+            const menuItems = await aboutUsPage.footer.pageMenu.getAllMenuItems();
+            const names = menuItems.map(i => i.name);
+            const urls = menuItems.map(i => i.href.replace('/', ''));
+
+            expect(names).toEqual(footerMenu.items.map(i => i.en_name));
+            expect(urls).toEqual(footerMenu.items.map(i =>i.url));
+        });
+
+        // aboutUsPage = new AboutUsPage(page); // re-initialize to avoid stale element references
+        // await allure.step('Verify footer menu headers in English', async () =>{
+        //     const currentLang = await aboutUsPage.getCurrentPageLanguage();
+        //     expect(currentLang).toBe('en');
+        //     allure.parameter('Language', currentLang);
+
+        //     const headers = await aboutUsPage.footer.getPageMenuHeaders();
+        //     expect(headers).toEqual(footerMenu.headers.en);
+        // })
+
+        // allure.step('Veriyf footer menu items and navigation in English', async () => {
+        //     const menuItems = await aboutUsPage.footer.getMenuItems();
+        //     const names: string[] = [];
+        //     for (const item of menuItems){
+        //         const name = await item.get_Name();
+        //         allure.parameter('item', name);
+        //         names.push(name); 
+        //     }
+        //     for (let i=0; i<footerMenu.items.length; i++){
+        //     expect(names[i]).toEqual(footerMenu.items[i].en_name);}
+        // });
+        
+        // allure.step('Veriyf footer menu items and navigation in English', async () => {
+        //     for (const item of footerMenu.items){
+        //         const expectedUrl = await aboutUsPage.getPathCurrentLanguage(item.url);
+        //         await aboutUsPage.footer.clickPageItemByName(item.en_name);
+        //         await expect(page).toHaveURL(expectedUrl);
+                
+        //         await aboutUsPage.goto('/');
+        //     }
+        //     // await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+        //     // await aboutUsPage.footer.clickPageItemByName("Artistry");
+        //     // await expect(page).toHaveURL(/artistry/);
+        // })
         
     });
 
