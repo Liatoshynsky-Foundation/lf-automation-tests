@@ -206,19 +206,51 @@ test.describe('UI - Footer', () => {
     });
 
     test('clicking Phone in footer shows alert', async ({aboutUsPage, page}) => {
-        await aboutUsPage.goto('/');
+        allure.description('Verify that clicking the phone number in the footer triggers a localized alert message in English and Ukrainian.');
+        allure.label('feature', 'Footer');
+        allure.label('severity', 'normal');
+        allure.parameter('Component', 'Footer');
 
-        page.on('dialog', async dialog => {
-            // Assert the type of dialog (optional, but good practice)
-            expect(dialog.type()).toBe('alert');
-            // Assert the message displayed in the alert
-            expect(dialog.message()).toContain('Phone number copied to clipboard');
-            // Accept the alert (or use dialog.dismiss() to cancel)
-            await dialog.accept();
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.goto('/');
         });
-        await aboutUsPage.footer.clickInfoPhone();
-        await page.evaluate(() => {
-        })
+
+
+        await allure.step('Verify alert on phone click in English', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            allure.parameter('Language', currentLang);
+            expect(currentLang).toEqual('en');
+
+            page.once('dialog', async dialog => {
+                allure.step(`Alert appears with message: ${dialog.message()}`, async () => {
+                    expect(dialog.type()).toBe('alert');
+                    expect(dialog.message()).toContain('Phone number copied to clipboard');
+                    await dialog.accept();
+                });
+            });
+
+            await aboutUsPage.footer.clickInfoPhone();
+        });
+
+        await allure.step('Change language to Ukrainian', async () => {
+            await aboutUsPage.footer.changeLangBtn.click();
+        });
+
+        await allure.step('Verify alert on phone click in Ukrainian', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            allure.parameter('Language', currentLang);
+            expect(currentLang).toEqual('uk');
+
+            page.once('dialog', async dialog => {
+                allure.step(`Alert appears with message: ${dialog.message()}`, async () => {
+                    expect(dialog.type()).toBe('alert');
+                    expect(dialog.message()).toContain('Номер телефону скопійовано до буферу обміну');
+                    await dialog.accept();
+                });
+            });
+
+            await aboutUsPage.footer.clickInfoPhone();
+        });
     });
 
     test('clicking Email in footer has mailto', async ({aboutUsPage}) => {
