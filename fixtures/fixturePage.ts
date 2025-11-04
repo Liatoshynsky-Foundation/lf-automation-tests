@@ -5,6 +5,7 @@ import {ArtistryPage} from '../page/client/ArtistryPage';
 import {SupportUsPage} from '../page/client/SupportUsPage';
 import {ContactsPage} from '../page/client/ContactsPage';
 import {AdminLoginPage} from '../page/admin/AdminLoginPage';
+import {AdminDashboardPage} from '../page/admin/AdminDashboardPage';
 
 
 type MyFixturesPage = {
@@ -14,6 +15,7 @@ type MyFixturesPage = {
     supportUsPage: SupportUsPage;
     contactsPage: ContactsPage;
     adminLoginPage: AdminLoginPage;
+    adminDashboardPage: AdminDashboardPage;
 };
 
 export const test = baseTest.extend<MyFixturesPage>({
@@ -40,6 +42,9 @@ export const test = baseTest.extend<MyFixturesPage>({
     adminLoginPage: async ({page}, use) => {
         const adminLoginPage = new AdminLoginPage(page);
         await use(adminLoginPage);
+    },
+    adminDashboardPage: async ({ page }, use) => {
+        await use(new AdminDashboardPage(page));
     }
 });
 
