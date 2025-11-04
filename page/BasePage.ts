@@ -20,4 +20,7 @@ export abstract class BasePage {
     async getCurrentUrl(): Promise<string> {
         return this.page.url();
     }
+    async sleep(ms: number): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 }
