@@ -44,7 +44,8 @@ export const test = baseTest.extend<MyFixturesPage>({
         await use(adminLoginPage);
     },
     adminDashboardPage: async ({ page }, use) => {
-        await use(new AdminDashboardPage(page));
+        const adminDashboardPage = new AdminDashboardPage(page);
+        await use(adminDashboardPage);
     }
 });
 
