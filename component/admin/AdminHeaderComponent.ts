@@ -65,6 +65,8 @@ export class AdminHeaderComponent extends BaseComponent {
     }
 
     async isSaveButtonEnabled(): Promise<boolean> {
-        return await this.saveButton.isEnabled();
+        return await step('Check if save button is enabled', async () => {
+            return await this.saveButton.isEnabled();
+        });
     }
 }
