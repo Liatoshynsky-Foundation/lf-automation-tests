@@ -9,7 +9,9 @@ export default defineConfig([
             "node_modules/",
             "dist/",
             "allure-report/",
-            "allure-results/"
+            "allure-results/",
+            "playwright-report/"
+
         ],
     },
     {

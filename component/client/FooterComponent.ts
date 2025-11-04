@@ -6,6 +6,7 @@ import {ContactUsBtn} from './ContactUsBtn';
 import {MediaMenuBtn} from './MediaMenuBtn';
 import {PageItemComponent} from './PageItemComponent';
 import * as allure from "allure-js-commons";
+import { ClientBasePage } from '../../page/client/ClientBasePage';
 
 export class FooterComponent extends BaseComponent {
     logo: Locator;
@@ -108,12 +109,26 @@ export class FooterComponent extends BaseComponent {
         })
     }
 
-    async checkInfoPhone(str: string): Promise<void> {
+    async checkInfoPhone(str: string, clientPage: ClientBasePage): Promise<void> {
         await allure.step(`Check Phone number to be ${str}`, async () => {
             await this.infoPhone.waitFor({state: 'visible'});
             await this.infoPhone.scrollIntoViewIfNeeded();
-            expect(this.infoPhone.locator('p')).toHaveText("Phone:");
-            expect(this.infoPhone.locator('a')).toHaveText(str);
+
+            const currentLang = await clientPage.getCurrentPageLanguage();
+            const expectedLabel = currentLang === 'uk' ? 'Телефон:' : 'Phone:';
+            
+            const actualLabel = await this.infoPhone.locator('p').innerText();
+            const actualPhone = await this.infoPhone.locator('a').innerText();
+
+            allure.parameter('Language', currentLang);
+            allure.parameter('Expected Label', expectedLabel);
+            allure.parameter('Actual Label', actualLabel);
+            allure.parameter('Expected Phone', str);
+            allure.parameter('Actual Phone', actualPhone);
+
+
+            expect(actualLabel).toEqual(expectedLabel);
+            expect(actualPhone).toEqual(str);
         })
     }
 
