@@ -1,5 +1,6 @@
 import {expect, test} from '../../fixtures/fixturePage';
 import {FooterLanguage} from "../../data/enums";
+import {OrgInfo} from '../../data/orgInfo';
 import * as allure from 'allure-js-commons';
 import {footerMenu} from '../../data/footerMenu'
 
@@ -183,35 +184,112 @@ test.describe('UI - Footer', () => {
     });
 
     test('check Org Info in footer', async ({aboutUsPage}) => {
-        await aboutUsPage.goto('/');
-        await aboutUsPage.footer.checkInfoName("PUBLIC ORGANIZATION 'LYATOSHINSKY FOUNDATION'");
-        await aboutUsPage.footer.checkInfoAddress("68 Bohdana Khmelnytskoho St, apt. 63, Kyiv, 1054");
-        await aboutUsPage.footer.checkInfoPhone("067 963 8366");
-        await aboutUsPage.footer.checkInfoEmail("liatoshynsky@gmail.com");
-        await aboutUsPage.footer.checkCopyrightText("© 2025 Liatoshynsky Foundation. All rights reserved.");
+        allure.description('Verify that footer displays correct organization info including name, address, phone, email, and copyright (localized for English and Ukrainian).');
+        allure.label('feature', 'Footer');
+        allure.label('severity', 'minor');
+        allure.parameter('Component', 'Footer');
+
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.goto('/');
+        });
+
+        await allure.step('Verify organization information in footer in English', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            const expectedInfo = OrgInfo[currentLang];
+
+            allure.parameter('Language', currentLang);
+            expect(expectedInfo).toBeDefined();
+
+            await aboutUsPage.footer.checkInfoName(expectedInfo.Name);
+            await aboutUsPage.footer.checkInfoAddress(expectedInfo.Address);
+            await aboutUsPage.footer.checkInfoPhone(expectedInfo.Phone, aboutUsPage);
+            await aboutUsPage.footer.checkInfoEmail(expectedInfo.Email);
+            await aboutUsPage.footer.checkCopyrightText(expectedInfo.Copyright);
+        });
+
+        await allure.step('Change language to Ukrainian and verify info', async () => {
+            await aboutUsPage.footer.changeLangBtn.click();
+
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            const expectedInfo = OrgInfo[currentLang];
+
+            allure.parameter('Language', currentLang);
+            expect(expectedInfo).toBeDefined();
+
+            await aboutUsPage.footer.checkInfoName(expectedInfo.Name);
+            await aboutUsPage.footer.checkInfoAddress(expectedInfo.Address);
+            await aboutUsPage.footer.checkInfoPhone(expectedInfo.Phone, aboutUsPage);
+            await aboutUsPage.footer.checkInfoEmail(expectedInfo.Email);
+            await aboutUsPage.footer.checkCopyrightText(expectedInfo.Copyright);
+        });
     });
 
     test('clicking Phone in footer shows alert', async ({aboutUsPage, page}) => {
-        await aboutUsPage.goto('/');
+        allure.description('Verify that clicking the phone number in the footer triggers a localized alert message in English and Ukrainian.');
+        allure.label('feature', 'Footer');
+        allure.label('severity', 'normal');
+        allure.parameter('Component', 'Footer');
 
-        page.on('dialog', async dialog => {
-            // Assert the type of dialog (optional, but good practice)
-            expect(dialog.type()).toBe('alert');
-            // Assert the message displayed in the alert
-            expect(dialog.message()).toContain('Phone number copied to clipboard');
-            // Accept the alert (or use dialog.dismiss() to cancel)
-            await dialog.accept();
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.goto('/');
         });
-        await aboutUsPage.footer.clickInfoPhone();
-        await page.evaluate(() => {
-        })
+
+
+        await allure.step('Verify alert on phone click in English', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            allure.parameter('Language', currentLang);
+            expect(currentLang).toEqual('en');
+
+            page.once('dialog', async dialog => {
+                allure.step(`Alert appears with message: ${dialog.message()}`, async () => {
+                    expect(dialog.type()).toBe('alert');
+                    expect(dialog.message()).toContain('Phone number copied to clipboard');
+                    await dialog.accept();
+                });
+            });
+
+            await aboutUsPage.footer.clickInfoPhone();
+        });
+
+        await allure.step('Change language to Ukrainian', async () => {
+            await aboutUsPage.footer.changeLangBtn.click();
+        });
+
+        await allure.step('Verify alert on phone click in Ukrainian', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            allure.parameter('Language', currentLang);
+            expect(currentLang).toEqual('uk');
+
+            page.once('dialog', async dialog => {
+                allure.step(`Alert appears with message: ${dialog.message()}`, async () => {
+                    expect(dialog.type()).toBe('alert');
+                    expect(dialog.message()).toContain('Номер телефону скопійовано до буферу обміну');
+                    await dialog.accept();
+                });
+            });
+
+            await aboutUsPage.footer.clickInfoPhone();
+        });
     });
 
     test('clicking Email in footer has mailto', async ({aboutUsPage}) => {
-        await aboutUsPage.goto('/');
-        await aboutUsPage.footer.clickInfoEmail();
+        allure.description('Verify that clicking the email in the footer opens the default mail client using a valid "mailto" link.');
+        allure.label('feature', 'Footer');
+        allure.label('severity', 'minor');
+        allure.parameter('Component', 'Footer');
 
-        const href = await aboutUsPage.footer.infoEmail.locator('a').getAttribute('href');
-        expect(href).toBe('mailto:liatoshynsky@gmail.com');
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.goto('/');
+        });
+
+        await allure.step('Click email link in footer', async () => {
+            await aboutUsPage.footer.clickInfoEmail();
+        });
+
+        await allure.step('Verify email link contains correct "mailto" attribute', async () => {
+            const href = await aboutUsPage.footer.infoEmail.locator('a').getAttribute('href') || '';
+            await allure.parameter('Email href', href);
+            expect(href).toBe('mailto:liatoshynsky@gmail.com');
+        });
     });
 });

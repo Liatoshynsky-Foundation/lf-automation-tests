@@ -1,4 +1,4 @@
-import {expect, Locator} from "@playwright/test";
+import {Locator} from "@playwright/test";
 
 export class PageItemComponent {
     private name: Locator;
