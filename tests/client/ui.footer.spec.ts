@@ -253,11 +253,24 @@ test.describe('UI - Footer', () => {
         });
     });
 
-    test('clicking Email in footer has mailto', async ({aboutUsPage}) => {
-        await aboutUsPage.goto('/');
-        await aboutUsPage.footer.clickInfoEmail();
+    test('clicking Email in footer has mailto', async ({ aboutUsPage }) => {
+        allure.description('Verify that clicking the email in the footer opens the default mail client using a valid "mailto" link.');
+        allure.label('feature', 'Footer');
+        allure.label('severity', 'minor');
+        allure.parameter('Component', 'Footer');
 
-        const href = await aboutUsPage.footer.infoEmail.locator('a').getAttribute('href');
-        expect(href).toBe('mailto:liatoshynsky@gmail.com');
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.goto('/');
+        });
+
+        await allure.step('Click email link in footer', async () => {
+            await aboutUsPage.footer.clickInfoEmail();
+        });
+
+        await allure.step('Verify email link contains correct "mailto" attribute', async () => {
+            const href = await aboutUsPage.footer.infoEmail.locator('a').getAttribute('href');
+            allure.parameter('Email href', href);
+            expect(href).toBe('mailto:liatoshynsky@gmail.com');
+        });
     });
 });
