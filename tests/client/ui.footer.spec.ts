@@ -1,5 +1,6 @@
 import {expect, test} from '../../fixtures/fixturePage';
 import {FooterLanguage} from "../../data/enums";
+import {OrgInfo} from '../../data/orgInfo';
 import * as allure from 'allure-js-commons';
 
 test.describe('UI - Footer', () => {
@@ -164,12 +165,44 @@ test.describe('UI - Footer', () => {
     });
 
     test('check Org Info in footer', async ({aboutUsPage}) => {
-        await aboutUsPage.goto('/');
-        await aboutUsPage.footer.checkInfoName("PUBLIC ORGANIZATION 'LYATOSHINSKY FOUNDATION'");
-        await aboutUsPage.footer.checkInfoAddress("68 Bohdana Khmelnytskoho St, apt. 63, Kyiv, 1054");
-        await aboutUsPage.footer.checkInfoPhone("067 963 8366");
-        await aboutUsPage.footer.checkInfoEmail("liatoshynsky@gmail.com");
-        await aboutUsPage.footer.checkCopyrightText("© 2025 Liatoshynsky Foundation. All rights reserved.");
+        allure.description('Verify that footer displays correct organization info including name, address, phone, email, and copyright (localized for English and Ukrainian).');
+        allure.label('feature', 'Footer');
+        allure.label('severity', 'minor');
+        allure.parameter('Component', 'Footer');
+
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.goto('/');
+        });
+
+        await allure.step('Verify organization information in footer in English', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            const expectedInfo = OrgInfo[currentLang];
+
+            allure.parameter('Language', currentLang);
+            expect(expectedInfo).toBeDefined();
+
+            await aboutUsPage.footer.checkInfoName(expectedInfo.Name);
+            await aboutUsPage.footer.checkInfoAddress(expectedInfo.Address);
+            await aboutUsPage.footer.checkInfoPhone(expectedInfo.Phone, aboutUsPage);
+            await aboutUsPage.footer.checkInfoEmail(expectedInfo.Email);
+            await aboutUsPage.footer.checkCopyrightText(expectedInfo.Copyright);
+        });
+
+        await allure.step('Change language to Ukrainian and verify info', async () => {
+            await aboutUsPage.footer.changeLangBtn.click();
+
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            const expectedInfo = OrgInfo[currentLang];
+
+            allure.parameter('Language', currentLang);
+            expect(expectedInfo).toBeDefined();
+
+            await aboutUsPage.footer.checkInfoName(expectedInfo.Name);
+            await aboutUsPage.footer.checkInfoAddress(expectedInfo.Address);
+            await aboutUsPage.footer.checkInfoPhone(expectedInfo.Phone, aboutUsPage);
+            await aboutUsPage.footer.checkInfoEmail(expectedInfo.Email);
+            await aboutUsPage.footer.checkCopyrightText(expectedInfo.Copyright);
+        });
     });
 
     test('clicking Phone in footer shows alert', async ({aboutUsPage, page}) => {
