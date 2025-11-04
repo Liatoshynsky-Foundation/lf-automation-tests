@@ -253,7 +253,7 @@ test.describe('UI - Footer', () => {
         });
     });
 
-    test('clicking Email in footer has mailto', async ({ aboutUsPage }) => {
+    test('clicking Email in footer has mailto', async ({aboutUsPage}) => {
         allure.description('Verify that clicking the email in the footer opens the default mail client using a valid "mailto" link.');
         allure.label('feature', 'Footer');
         allure.label('severity', 'minor');
@@ -268,8 +268,8 @@ test.describe('UI - Footer', () => {
         });
 
         await allure.step('Verify email link contains correct "mailto" attribute', async () => {
-            const href = await aboutUsPage.footer.infoEmail.locator('a').getAttribute('href');
-            allure.parameter('Email href', href);
+            const href = await aboutUsPage.footer.infoEmail.locator('a').getAttribute('href') || '';
+            await allure.parameter('Email href', href);
             expect(href).toBe('mailto:liatoshynsky@gmail.com');
         });
     });
