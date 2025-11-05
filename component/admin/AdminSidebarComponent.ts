@@ -28,14 +28,15 @@ export class AdminSidebarComponent extends BaseComponent {
     }
 
     getMenuItem(menuText: string): AdminMenuItemComponent {
-        return new AdminMenuItemComponent(this.page, this.menuList, menuText);
+        const itemLocator = this.menuList.locator(`.MuiListItemButton-root:has-text("${menuText}")`);
+        return new AdminMenuItemComponent(this.page, itemLocator);
     }
 
     async getAllMenuItems(): Promise<AdminMenuItemComponent[]> {
         return await step('Get all menu items', async () => {
             const items = await this.menuList.locator('.MuiListItemButton-root').all();
-            return items.map((_, index) => 
-                new AdminMenuItemComponent(this.page, this.menuList, index)
+            return items.map((item) => 
+                new AdminMenuItemComponent(this.page, item)
             );
         });
     }

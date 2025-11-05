@@ -7,19 +7,15 @@ export class AdminMenuItemComponent extends BaseComponent {
     text: Locator;
     expandIcon: Locator;
 
-    constructor(page: Page, menuList: Locator, identifier: string | number) {
-        const menuItem = typeof identifier === 'string'
-            ? menuList.locator(`.MuiListItemButton-root:has-text("${identifier}")`)
-            : menuList.locator('.MuiListItemButton-root').nth(identifier);
-        
-        super(page, menuItem);
+    constructor(page: Page, menuItemLocator: Locator) {
+        super(page, menuItemLocator);
         this.icon = this.parent.locator('.MuiListItemIcon-root img');
         this.text = this.parent.locator('.MuiListItemText-primary');
         this.expandIcon = this.parent.locator('.MuiBox-root img[alt="close list"]');
     }
 
     async click(): Promise<void> {
-        await step(`Click menu item`, async () => {
+        await step('Click menu item', async () => {
             await this.parent.click();
         });
     }
