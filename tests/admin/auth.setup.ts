@@ -6,11 +6,11 @@ const authFile = 'playwright/.auth/admin.json';
 
 setup('authenticate as admin', async ({ page }) => {
   const loginPage = new AdminLoginPage(page);
-  await loginPage.goto("/login");
+  await loginPage.navigate();
   await page.waitForLoadState('networkidle');
-  
-  await loginPage.loginForm.login(ADMIN_EMAIL, ADMIN_PASSWORD);
-  
+
+  await loginPage.login(ADMIN_EMAIL, ADMIN_PASSWORD);
+
   await page.waitForURL('/');
   
   await page.context().storageState({ path: authFile });
