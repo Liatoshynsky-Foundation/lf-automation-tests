@@ -28,7 +28,7 @@ export class AdminSidebarComponent extends BaseComponent {
     }
 
     getMenuItem(menuText: string): AdminMenuItemComponent {
-        const itemLocator = this.menuList.locator(`.MuiListItemButton-root:has-text("${menuText}")`);
+        const itemLocator = this.menuList.locator('.MuiListItemButton-root').filter({ hasText: menuText });
         return new AdminMenuItemComponent(this.page, itemLocator);
     }
 
@@ -42,6 +42,6 @@ export class AdminSidebarComponent extends BaseComponent {
     }
 
     getSectionHeader(headerText: string): Locator {
-        return this.menuList.locator(`li.MuiListSubheader-root:has-text("${headerText}")`);
+        return this.menuList.locator('li.MuiListSubheader-root').filter({ hasText: headerText });
     }
 }
