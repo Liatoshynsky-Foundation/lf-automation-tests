@@ -169,6 +169,7 @@ test.describe('UI - Footer', () => {
         })
 
         allure.step('Veriyf footer menu items and navigation in English', async () => {
+            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
             const menuItems = await aboutUsPage.footer.pageMenu.getAllMenuItems();
             const names = menuItems.map(i => i.name);
             const urls = menuItems.map(i => i.href.replace('/', ''));

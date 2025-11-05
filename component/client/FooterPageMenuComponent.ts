@@ -37,8 +37,7 @@ export class FooterPageMenuComponent {
     await allure.step(`Found ${countSect} footer sections`, async () => {
         for (let s = 0; s < countSect; s++) {
             const section = this.menuSection.nth(s);
-            const links = section.locator('ul li a');
-            const countLink = await links.count();
+            const countLink = await section.locator('ul li a').count();
             
             await allure.step(`Section #${s + 1} has ${countLink} link(s)`, async () => {
                 if (countLink === 0) {
@@ -46,13 +45,12 @@ export class FooterPageMenuComponent {
                     return;
                 }
             
-                await links.first().waitFor({ state: 'visible' });
-                
+                //await this.sleep(1000);
                 for (let i = 0; i < countLink; i++) {
-                    await this.sleep(1000);
-
-                    const name = await links.nth(i).innerText();
-                    const href = await links.nth(i).getAttribute('href') || '';
+                    const link = await section.locator('ul li a').nth(i);
+                    await link.waitFor({ state: 'visible' });
+                    const name = await link.innerText();
+                    const href = await link.getAttribute('href') || '';
                     allure.parameter('Section', `${s + 1}`);
                     allure.parameter('Link Index', `${i + 1}`);
                     allure.parameter('Name', name);
@@ -66,35 +64,9 @@ export class FooterPageMenuComponent {
         }
     });
     return items;
-    
-   
-    // const links = this.menuSection.locator('ul li a');
-    // const count = await links.count();
-    // const items: { name: string; href: string }[] = [];
-
-    // for (let i = 0; i < count; i++) {
-    //   const name = await links.nth(i).innerText();
-    //   const href = await links.nth(i).getAttribute('href');
-    //   items.push({ name: name.trim(), href: href || '' });
-    // }
-    // return items;
   }
 
   async sleep(ms: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-    
-  async getMenuItemsBySection(sectionIndex: number): Promise<{ name: string; href: string }[]> {
-    const section = this.menuSection.nth(sectionIndex);
-    const links = section.locator('ul li a');
-    const count = await links.count();
-    const items: { name: string; href: string }[] = [];
-
-    for (let i = 0; i < count; i++) {
-      const name = await links.nth(i).innerText();
-      const href = await links.nth(i).getAttribute('href');
-      items.push({ name: name.trim(), href: href || '' });
-    }
-    return items;
-  }
 }
