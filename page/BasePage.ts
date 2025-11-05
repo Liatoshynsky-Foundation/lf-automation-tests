@@ -23,5 +23,5 @@ export abstract class BasePage {
 
     getPage(): Page {
         return this.page;
-      }
+    }
 }
