@@ -20,4 +20,8 @@ export abstract class BasePage {
     async getCurrentUrl(): Promise<string> {
         return this.page.url();
     }
+
+    getPage(): Page {
+        return this.page;
+    }
 }
