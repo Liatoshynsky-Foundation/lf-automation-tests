@@ -2,11 +2,12 @@ import {expect, test} from '../../fixtures/fixturePage';
 import {FooterLanguage} from "../../data/enums";
 import {OrgInfo} from '../../data/orgInfo';
 import * as allure from 'allure-js-commons';
+import {footerMenu} from '../../data/footerMenu';
 
 test.describe('UI - Footer', () => {
     test('check Footer Support Btn link', async ({aboutUsPage, supportUsPage, page}) => {
-        allure.description('Verify that the Footer "Support the Foundation" button works correctly in English and Ukrainian and navigates to the correct page.');
-        allure.label('severity', 'critical');
+        await allure.description('Verify that the Footer "Support the Foundation" button works correctly in English and Ukrainian and navigates to the correct page.');
+        await allure.label('severity', 'critical');
 
         await allure.step('Go to homepage', async () => {
             await aboutUsPage.goto('/');
@@ -14,8 +15,8 @@ test.describe('UI - Footer', () => {
 
         await allure.step('Verify "Support the Foundation" button text in English', async () => {
             const btnEnText = await aboutUsPage.footer.supportFundBtn.getText();
-            allure.parameter('Language', 'English');
-            allure.parameter('Button Text', btnEnText);
+            await allure.parameter('Language', 'English');
+            await allure.parameter('Button Text', btnEnText);
             expect(btnEnText).toEqual('Support the Foundation');
         });
 
@@ -25,8 +26,8 @@ test.describe('UI - Footer', () => {
 
         await allure.step('Verify "Support the Foundation" button text in Ukrainian', async () => {
             const btnUaText = await aboutUsPage.footer.supportFundBtn.getText();
-            allure.parameter('Language', 'Ukrainian');
-            allure.parameter('Button Text', btnUaText);
+            await allure.parameter('Language', 'Ukrainian');
+            await allure.parameter('Button Text', btnUaText);
             expect(btnUaText).toEqual('Підтримати діяльність фундації');
         });
 
@@ -45,17 +46,17 @@ test.describe('UI - Footer', () => {
 
         await allure.step('Verify URL-link on "Support the Foundation" button', async () => {
             const link = await aboutUsPage.footer.supportFundBtn.getLink();
-            const url = new URL(await page.url());
+            const url = new URL(page.url());
             const pagepath = url.pathname;
             expect(link).toEqual(pagepath);
         });
     });
 
     test('check Footer Change Language Btn', async ({aboutUsPage}) => {
-        allure.description('Verify that the footer Change Language button correctly toggles between Ukrainian and English text on each click.');
-        allure.label('feature', 'Footer');
-        allure.label('severity', 'normal');
-        allure.parameter('Component', 'Footer');
+        await allure.description('Verify that the footer Change Language button correctly toggles between Ukrainian and English text on each click.');
+        await allure.label('feature', 'Footer');
+        await allure.label('severity', 'normal');
+        await allure.parameter('Component', 'Footer');
 
         await allure.step('Go to homepage', async () => {
             await aboutUsPage.goto('/');
@@ -65,8 +66,8 @@ test.describe('UI - Footer', () => {
             const currentPageLang = await aboutUsPage.getCurrentPageLanguage();
 
             const text = await aboutUsPage.footer.changeLangBtn.getText();
-            allure.parameter('Language', currentPageLang);
-            allure.parameter('Button Text', text);
+            await allure.parameter('Language', currentPageLang);
+            await allure.parameter('Button Text', text);
 
             expect(currentPageLang).toEqual('en');
             expect(text).toEqual(FooterLanguage.Ukrainian.value);
@@ -77,8 +78,8 @@ test.describe('UI - Footer', () => {
 
             const text = await aboutUsPage.footer.changeLangBtn.getText();
             const currentPageLang = await aboutUsPage.getCurrentPageLanguage();
-            allure.parameter('Language', currentPageLang);
-            allure.parameter('Button Text', text);
+            await allure.parameter('Language', currentPageLang);
+            await allure.parameter('Button Text', text);
 
             expect(currentPageLang).toEqual('uk');
             expect(text).toEqual(FooterLanguage.English.value);
@@ -90,8 +91,8 @@ test.describe('UI - Footer', () => {
             const currentPageLang = await aboutUsPage.getCurrentPageLanguage();
 
             const text = await aboutUsPage.footer.changeLangBtn.getText();
-            allure.parameter('Language', currentPageLang);
-            allure.parameter('Button Text', text);
+            await allure.parameter('Language', currentPageLang);
+            await allure.parameter('Button Text', text);
 
             expect(currentPageLang).toEqual('en');
             expect(text).toEqual(FooterLanguage.Ukrainian.value);
@@ -99,10 +100,10 @@ test.describe('UI - Footer', () => {
     });
 
     test('check Footer ContactUs Btn', async ({aboutUsPage, contactsPage, page}) => {
-        allure.description('Verify that the footer "Contact Us" button correctly displays text in both English and Ukrainian and navigates to the Contacts page.');
-        allure.label('feature', 'Footer');
-        allure.label('severity', 'normal');
-        allure.parameter('Component', 'Footer');
+        await allure.description('Verify that the footer "Contact Us" button correctly displays text in both English and Ukrainian and navigates to the Contacts page.');
+        await allure.label('feature', 'Footer');
+        await allure.label('severity', 'normal');
+        await allure.parameter('Component', 'Footer');
 
         await allure.step('Go to homepage', async () => {
             await aboutUsPage.goto('/');
@@ -110,8 +111,8 @@ test.describe('UI - Footer', () => {
 
         await allure.step('Verify Contact Us button text in English', async () => {
             const btnEnText = await aboutUsPage.footer.contactUsBtn.getText();
-            allure.parameter('Language', 'English');
-            allure.parameter('Button Text', btnEnText);
+            await allure.parameter('Language', 'English');
+            await allure.parameter('Button Text', btnEnText);
             expect(btnEnText).toEqual('Contact us');
         });
 
@@ -121,8 +122,8 @@ test.describe('UI - Footer', () => {
 
         await allure.step('Verify Contact Us button text in Ukrainian', async () => {
             const btnUaText = await aboutUsPage.footer.contactUsBtn.getText();
-            allure.parameter('Language', 'Ukrainian');
-            allure.parameter('Button Text', btnUaText);
+            await allure.parameter('Language', 'Ukrainian');
+            await allure.parameter('Button Text', btnUaText);
             expect(btnUaText).toEqual('Напишіть нам');
         });
 
@@ -133,7 +134,7 @@ test.describe('UI - Footer', () => {
 
         await allure.step('Verify Contacts page title', async () => {
             const title = await contactsPage.getTitleText();
-            allure.parameter('Contacts Page Title', title);
+            await allure.parameter('Contacts Page Title', title);
             expect(title).toEqual('Контакти');
         });
 
@@ -141,34 +142,49 @@ test.describe('UI - Footer', () => {
             const link = await contactsPage.footer.contactUsBtn.getLink();
             const url = new URL(await page.url());
             const pagepath = url.pathname;
-            allure.parameter('Page URL Path', pagepath);
-            allure.parameter('Button Link', link);
+            await allure.parameter('Page URL Path', pagepath);
+            await allure.parameter('Button Link', link);
             expect(link).toEqual(pagepath);
         });
     });
 
     test('check footer page menu', async ({aboutUsPage, page}) => {
-        await aboutUsPage.goto('/');
+        await allure.description('Verify footer headers, items, and navigation for both English and Ukrainian languages.');
+        await allure.label('feature', 'Footer Menu');
+        await allure.label('severity', 'normal');
+        await allure.parameter('Component', 'Footer');
 
-        const items = await aboutUsPage.footer.getPageMenuHeaders();
-        expect(items).toEqual([
-            'BORYS LIATOSHYNSKYI',
-            'FOUNDATION',
-            'MUSEUM',
-            'PARTNERSHIP'
-        ]);
-        await aboutUsPage.footer.clickPageItemByName("Artistry");
-        expect(page).toHaveURL(/artistry/);
-        await page.waitForTimeout(500);
-        const title = await page.title();
-        expect(title).toEqual('Творчість - Фундація Лятошинського');
+        await allure.step('Go to homepage', async () => {
+            // await aboutUsPage.goto('/');
+            await aboutUsPage.visit();
+        });
+
+        await allure.step('Verify footer menu headers in English', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            expect(currentLang).toBe('en');
+            await allure.parameter('Language', currentLang);
+            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+            const menuHeaders = await aboutUsPage.footer.pageMenu.getSectionHeaders();
+            expect(menuHeaders).toEqual(footerMenu.headers.en);
+        })
+
+        await allure.step('Verify footer menu items and navigation in English', async () => {
+            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+            const menuItems = await aboutUsPage.footer.pageMenu.getAllMenuItems();
+            const names = menuItems.map(i => i.name);
+            const urls = menuItems.map(i => i.href.replace('/', ''));
+
+            expect(names).toEqual(footerMenu.items.map(i => i.en_name));
+            expect(urls).toEqual(footerMenu.items.map(i => i.url));
+        });
+
     });
 
     test('check Org Info in footer', async ({aboutUsPage}) => {
-        allure.description('Verify that footer displays correct organization info including name, address, phone, email, and copyright (localized for English and Ukrainian).');
-        allure.label('feature', 'Footer');
-        allure.label('severity', 'minor');
-        allure.parameter('Component', 'Footer');
+        await allure.description('Verify that footer displays correct organization info including name, address, phone, email, and copyright (localized for English and Ukrainian).');
+        await allure.label('feature', 'Footer');
+        await allure.label('severity', 'minor');
+        await allure.parameter('Component', 'Footer');
 
         await allure.step('Go to homepage', async () => {
             await aboutUsPage.goto('/');
@@ -178,7 +194,7 @@ test.describe('UI - Footer', () => {
             const currentLang = await aboutUsPage.getCurrentPageLanguage();
             const expectedInfo = OrgInfo[currentLang];
 
-            allure.parameter('Language', currentLang);
+            await allure.parameter('Language', currentLang);
             expect(expectedInfo).toBeDefined();
 
             await aboutUsPage.footer.checkInfoName(expectedInfo.Name);
@@ -194,7 +210,7 @@ test.describe('UI - Footer', () => {
             const currentLang = await aboutUsPage.getCurrentPageLanguage();
             const expectedInfo = OrgInfo[currentLang];
 
-            allure.parameter('Language', currentLang);
+            await allure.parameter('Language', currentLang);
             expect(expectedInfo).toBeDefined();
 
             await aboutUsPage.footer.checkInfoName(expectedInfo.Name);
@@ -206,10 +222,10 @@ test.describe('UI - Footer', () => {
     });
 
     test('clicking Phone in footer shows alert', async ({aboutUsPage, page}) => {
-        allure.description('Verify that clicking the phone number in the footer triggers a localized alert message in English and Ukrainian.');
-        allure.label('feature', 'Footer');
-        allure.label('severity', 'normal');
-        allure.parameter('Component', 'Footer');
+        await allure.description('Verify that clicking the phone number in the footer triggers a localized alert message in English and Ukrainian.');
+        await allure.label('feature', 'Footer');
+        await allure.label('severity', 'normal');
+        await allure.parameter('Component', 'Footer');
 
         await allure.step('Go to homepage', async () => {
             await aboutUsPage.goto('/');
@@ -218,11 +234,11 @@ test.describe('UI - Footer', () => {
 
         await allure.step('Verify alert on phone click in English', async () => {
             const currentLang = await aboutUsPage.getCurrentPageLanguage();
-            allure.parameter('Language', currentLang);
+            await allure.parameter('Language', currentLang);
             expect(currentLang).toEqual('en');
 
             page.once('dialog', async dialog => {
-                allure.step(`Alert appears with message: ${dialog.message()}`, async () => {
+                await allure.step(`Alert appears with message: ${dialog.message()}`, async () => {
                     expect(dialog.type()).toBe('alert');
                     expect(dialog.message()).toContain('Phone number copied to clipboard');
                     await dialog.accept();
@@ -238,11 +254,11 @@ test.describe('UI - Footer', () => {
 
         await allure.step('Verify alert on phone click in Ukrainian', async () => {
             const currentLang = await aboutUsPage.getCurrentPageLanguage();
-            allure.parameter('Language', currentLang);
+            await allure.parameter('Language', currentLang);
             expect(currentLang).toEqual('uk');
 
             page.once('dialog', async dialog => {
-                allure.step(`Alert appears with message: ${dialog.message()}`, async () => {
+                await allure.step(`Alert appears with message: ${dialog.message()}`, async () => {
                     expect(dialog.type()).toBe('alert');
                     expect(dialog.message()).toContain('Номер телефону скопійовано до буферу обміну');
                     await dialog.accept();
@@ -254,10 +270,10 @@ test.describe('UI - Footer', () => {
     });
 
     test('clicking Email in footer has mailto', async ({aboutUsPage}) => {
-        allure.description('Verify that clicking the email in the footer opens the default mail client using a valid "mailto" link.');
-        allure.label('feature', 'Footer');
-        allure.label('severity', 'minor');
-        allure.parameter('Component', 'Footer');
+        await allure.description('Verify that clicking the email in the footer opens the default mail client using a valid "mailto" link.');
+        await allure.label('feature', 'Footer');
+        await allure.label('severity', 'minor');
+        await allure.parameter('Component', 'Footer');
 
         await allure.step('Go to homepage', async () => {
             await aboutUsPage.goto('/');

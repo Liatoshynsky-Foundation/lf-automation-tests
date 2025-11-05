@@ -21,5 +21,8 @@ export class BaseComponent {
             await expect(locator, {message: ("Locator is not visible")}).toBeVisible({timeout});
         });
     }
+    async sleep(ms: number): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
 }

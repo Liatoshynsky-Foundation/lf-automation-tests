@@ -1,11 +1,13 @@
-import {Locator} from "@playwright/test";
+import {Locator, Page} from "@playwright/test";
+import {BaseComponent} from "./BaseComponent";
 
-export class PageItemComponent {
+export class PageItemComponent extends BaseComponent{
     private name: Locator;
     private link: Locator;
 
 
-    constructor(parent: Locator) {
+    constructor(page: Page, parent: Locator) {
+        super(page, parent);
         this.name = parent;
         this.link = parent.locator('..');
     }
@@ -24,9 +26,20 @@ export class PageItemComponent {
     }
 
     async footerclick(): Promise<void> {
-        await Promise.all([
-            this.name.click(),
-            this.name.page().waitForLoadState('networkidle'),
-        ]);
+        // await this.name.waitFor({state: 'visible'});
+        // await this.name.scrollIntoViewIfNeeded();
+
+        // await this.name.isVisible();
+        await this.name.click();
+        await this.sleep(1000);
+        //  await Promise.all([
+        //     this.name.click(),
+        //     this.name.page().waitForLoadState('networkidle'),
+        // ]);
+        // const page = this.name.page();
+        // const oldUrl = page.url();
+        // await this.name.click();
+        // await expect.poll(() => page.url()).not.toBe(oldUrl);
+        // await expect(page.locator('main')).toBeVisible({timeout: 10000});
     }
 }

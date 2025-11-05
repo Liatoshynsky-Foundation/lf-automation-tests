@@ -11,7 +11,7 @@ export class AboutUsPage extends ClientBasePage {
     }
 
     async visit(): Promise<void> {
-        await this.goto('/about');
+        await this.goto('/about-us');
     }
 
     async waitForAboutFoundationLabelVisible(timeout = 5000): Promise<void> {

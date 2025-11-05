@@ -9,8 +9,10 @@ export const BASE_ADMIN_URL = process.env.BASE_ADMIN_URL ?? `https://lf-admin-qa
 export const BASE_API_URL = process.env.BASE_API_URL ?? 'https://jsonplaceholder.typicode.com';
 export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || '';
 export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
-export const HEADLESS = process.env.HEADLESS === undefined ? true :process.env.HEADLESS === 'true';
+export const HEADLESS = process.env.HEADLESS === undefined ? false :process.env.HEADLESS === 'true';
 export const WORKERS = process.env.CI ? +process.env.CI  : 1;
+export const RETRY_FAILED_TESTS = process.env.RETRY_FAILED_TESTS || 0;
+
 export default {
     BASE_CLIENT_URL,
     BASE_ADMIN_URL,
@@ -18,6 +20,7 @@ export default {
     ADMIN_EMAIL,
     ADMIN_PASSWORD,
     HEADLESS,
-    WORKERS
+    WORKERS,
+    RETRY_FAILED_TESTS
 };
 
