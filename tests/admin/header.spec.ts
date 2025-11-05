@@ -1,14 +1,9 @@
 import { test, expect } from '../../fixtures/fixturePage';
-import { ADMIN_EMAIL, ADMIN_PASSWORD } from '../../config/env';
 
 test.describe('Admin Header Component', () => {
-    test.beforeEach(async ({ adminLoginPage, page }) => {
-        await adminLoginPage.navigate();
+    test.beforeEach(async ({ adminDashboardPage, page }) => {
+        await adminDashboardPage.navigate();
         await page.waitForLoadState('networkidle');
-        await adminLoginPage.fillEmail(ADMIN_EMAIL);
-        await adminLoginPage.fillPassword(ADMIN_PASSWORD);
-        await adminLoginPage.clickLoginButton();
-        await page.waitForURL('/');
     });
 
     test('should display header title and description', async ({ adminDashboardPage }) => {
