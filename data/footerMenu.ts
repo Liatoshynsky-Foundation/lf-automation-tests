@@ -23,7 +23,7 @@ export const footerMenu = {
     // FOUNDATION / ФУНДАЦІЯ
     { en_name: 'About Us', uk_name: 'Про нас', url: 'about-us', title: 'Фундація Лятошинського' },
     { en_name: 'News', uk_name: 'Новини', url: 'news', title: 'Create Next App' },
-    { en_name: 'Media About Us', uk_name: 'ЗМІ про нас', url: 'media', title: 'Create Next App' },
+    { en_name: 'Media About Us', uk_name: 'ЗМІ про нас', url: 'media-about-us', title: 'Create Next App' },
     { en_name: 'Contacts', uk_name: 'Контакти', url: 'contacts', title: 'Контакти' },
 
     // MUSEUM / МУЗЕЙ

@@ -47,12 +47,20 @@ export default defineConfig({
   },
   projects: [
     {
+      name: 'admin-setup',
+      testMatch: /auth\.setup\.ts/,
+      use: {
+        baseURL: BASE_ADMIN_URL,
+      },
+    },
+    {
       name: 'admin',
       testMatch: /tests\/admin\/.*\.spec\.ts/,
       use: {
-         /* Base URL to use in actions like `await page.goto('')`. */
         baseURL: BASE_ADMIN_URL,
+        storageState: 'playwright/.auth/admin.json',
       },
+      dependencies: ['admin-setup'],
     },
     {
       name: 'client',

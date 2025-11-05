@@ -11,6 +11,7 @@ export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || '';
 export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 export const HEADLESS = process.env.HEADLESS === undefined ? false :process.env.HEADLESS === 'true';
 export const WORKERS = process.env.CI ? +process.env.CI  : 1;
+export const RETRY_FAILED_TESTS = process.env.RETRY_FAILED_TESTS || 0;
 
 export default {
     BASE_CLIENT_URL,
@@ -19,6 +20,7 @@ export default {
     ADMIN_EMAIL,
     ADMIN_PASSWORD,
     HEADLESS,
-    WORKERS
+    WORKERS,
+    RETRY_FAILED_TESTS
 };
 

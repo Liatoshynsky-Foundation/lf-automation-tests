@@ -4,10 +4,9 @@ import {SupportFoundationBtn} from './SupportFundationBtn';
 import {FooterChangeLangBtn} from './FooterChangeLangBtn';
 import {ContactUsBtn} from './ContactUsBtn';
 import {MediaMenuBtn} from './MediaMenuBtn';
-//import {PageItemComponent} from './PageItemComponent';
 import * as allure from "allure-js-commons";
-import { ClientBasePage } from '../../page/client/ClientBasePage';
-import { FooterPageMenuComponent } from './FooterPageMenuComponent';
+import {ClientBasePage} from '../../page/client/ClientBasePage';
+import {FooterPageMenuComponent} from './FooterPageMenuComponent';
 
 export class FooterComponent extends BaseComponent {
     logo: Locator;
@@ -43,56 +42,6 @@ export class FooterComponent extends BaseComponent {
         this.bigFooterImage = this.parent.locator('img[alt="Lyatoshynsky Foundation"]');
     }
 
-    // async getPageMenuHeaders(): Promise<string[]> {
-    //     const headers: string[] = [];
-    //     await allure.step('Get Headers of Page menu', async () => {
-    //         await this.waitIsVisible(this.pageMenu, 50000);
-    //         const locators = await this.pageMenu.locator('div > p');
-    //         const count = await locators.count();
-
-    //         for (let i = 0; i < count; i++) {
-    //             headers.push(await locators.nth(i).innerText());
-    //         }
-    //     })
-    //     return headers;
-    // }
-
-    // async getMenuItems(): Promise<PageItemComponent[]> {
-    //     let items: PageItemComponent[] = [];
-    //     await allure.step('Get Items of Page menu', async () => {
-    //         const locators = await this.menuItems.locator('li > a').all();
-    //         items = locators.map(item => new PageItemComponent(this.page, item));
-    //     })
-    //     return items;
-    // }
-
-    // async getPageItemByName(str: string): Promise<PageItemComponent> {
-    //     let elementFound: PageItemComponent;
-    //     await test.step(`Check if pageItem is visible`, async () => {
-    //         const elements = await this.getMenuItems()
-
-    //         for (const element of elements) {
-    //             const itemName: string = (await element.get_Name()).trim();
-    //             if (itemName === str.trim()) {
-    //                 elementFound = element;
-    //                 break
-    //             }
-    //         }
-    //         expect(elementFound, {message: (`Menu item not found: ${str}`)}).not.toBeNull();
-    //     });
-    //     return elementFound!;
-    // }
-
-    // async clickPageItemByName(name: string) {
-    //     await allure.step(`Click on page item: ${name}`, async () => {
-    //         const menuItem = await this.getPageItemByName(name);
-
-    //         if (menuItem) {
-    //             await menuItem.footerclick();
-    //         }
-    //     })
-    // }
-
     async checkInfoName(str: string): Promise<void> {
         await allure.step(`Check OrgName to be ${str}`, async () => {
             await this.infoName.waitFor({state: 'visible'});
@@ -116,7 +65,7 @@ export class FooterComponent extends BaseComponent {
 
             const currentLang = await clientPage.getCurrentPageLanguage();
             const expectedLabel = currentLang === 'uk' ? 'Телефон:' : 'Phone:';
-            
+
             const actualLabel = await this.infoPhone.locator('p').innerText();
             const actualPhone = await this.infoPhone.locator('a').innerText();
 
@@ -144,8 +93,8 @@ export class FooterComponent extends BaseComponent {
         await allure.step(`Check Email to be ${str}`, async () => {
             await this.infoEmail.waitFor({state: 'visible'});
             await this.infoEmail.scrollIntoViewIfNeeded();
-            expect(this.infoEmail.locator('p')).toHaveText("Email:");
-            expect(this.infoEmail.locator('a')).toHaveText(str);
+            await expect(this.infoEmail.locator('p')).toHaveText("Email:");
+            await expect(this.infoEmail.locator('a')).toHaveText(str);
         })
     }
 
@@ -163,7 +112,7 @@ export class FooterComponent extends BaseComponent {
         await allure.step(`Check copyright text to be ${str}`, async () => {
             await this.copyrightText.waitFor({state: 'visible'});
             await this.copyrightText.scrollIntoViewIfNeeded();
-            expect(this.copyrightText).toHaveText(str);
+            await expect(this.copyrightText).toHaveText(str);
         })
     }
 }

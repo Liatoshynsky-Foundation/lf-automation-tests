@@ -23,4 +23,8 @@ export abstract class BasePage {
     async sleep(ms: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
+
+    getPage(): Page {
+        return this.page;
+    }
 }
