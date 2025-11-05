@@ -34,6 +34,7 @@ export class TermsPage extends ClientBasePage {
 
   async clickEmailLink(): Promise<void> {
     await expect(this.emailLink).toHaveAttribute('href', 'mailto:liatoshynsky@gmail.com');
+    await this.emailLink.click();
   }
 
   async clickPrivacyPolicyLink(): Promise<void> {
