@@ -182,7 +182,7 @@ test.describe('UI - Footer with Rate Limiting', () => {
             await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
             const menuHeaders = await aboutUsPage.footer.pageMenu.getSectionHeaders();
             expect(menuHeaders).toEqual(footerMenu.headers.en);
-        })
+        });
 
         await allure.step('Verify footer menu items and navigation in English', async () => {
             await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
