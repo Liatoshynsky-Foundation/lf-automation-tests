@@ -21,7 +21,7 @@ export class QuickDonationComponent {
         this.currencyDropdown = this.root.locator('div.MuiFormControl-root')
         this.presetAmountButtons = this.root.locator('div.css-y82565')
         this.makeDonationButton = this.root.locator('button')
-        this.ibanField = this.root.locator(`text=${this.EXPECTED_IBAN_UAH}`); 
+        this.ibanField = this.root.locator(`text=${this.EXPECTED_IBAN_UAH}`);
         this.copyIBANButton = this.page.locator('button:has(img[alt="content copy"])'); // Якщо це не спрацює, спробуйте: this.copyIBANButton = this.root.locator('[aria-label="copy"]'); this.copyIBANButton = this.ibanField.locator('..').locator('button').last();
     }
 
