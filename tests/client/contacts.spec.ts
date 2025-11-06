@@ -55,11 +55,9 @@ test.describe('Contacts Page Tests (Контакти)', () => {
 
         await test.step('2. Filling in form fields with valid data', async () => {
            await contactForm.nameField.fill(POSITIVE_FORM_DATA.name);
-            await contactForm.emailField.fill(POSITIVE_FORM_DATA.email);
-            if (POSITIVE_FORM_DATA.phoneNumber) {
-                 await contactForm.phoneField.fill(POSITIVE_FORM_DATA.phoneNumber);
-            }
-            await contactForm.messageField.fill(POSITIVE_FORM_DATA.message);
+           await contactForm.emailField.fill(POSITIVE_FORM_DATA.email);
+           await contactForm.phoneField.fill(POSITIVE_FORM_DATA.phoneNumber!);
+           await contactForm.messageField.fill(POSITIVE_FORM_DATA.message);
         });
         
         await test.step('3. Activation of the consent checkbox', async () => {
