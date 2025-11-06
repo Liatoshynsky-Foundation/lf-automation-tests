@@ -155,7 +155,6 @@ test.describe('UI - Footer', () => {
         await allure.parameter('Component', 'Footer');
 
         await allure.step('Go to homepage', async () => {
-            // await aboutUsPage.goto('/');
             await aboutUsPage.visit();
         });
 
@@ -168,13 +167,36 @@ test.describe('UI - Footer', () => {
             expect(menuHeaders).toEqual(footerMenu.headers.en);
         })
 
-        await allure.step('Verify footer menu items and navigation in English', async () => {
+        await allure.step('Verify footer menu items and links in English', async () => {
             await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
             const menuItems = await aboutUsPage.footer.pageMenu.getAllMenuItems();
             const names = menuItems.map(i => i.name);
             const urls = menuItems.map(i => i.href.replace('/', ''));
 
             expect(names).toEqual(footerMenu.items.map(i => i.en_name));
+            expect(urls).toEqual(footerMenu.items.map(i => i.url));
+        });
+
+        await allure.step('Change language to Ukrainian', async () => {
+            await aboutUsPage.footer.changeLangBtn.click();
+        });
+
+        await allure.step('Verify footer menu headers in Ukrainian', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            expect(currentLang).toBe('uk');
+            await allure.parameter('Language', currentLang);
+            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+            const menuHeaders = await aboutUsPage.footer.pageMenu.getSectionHeaders();
+            expect(menuHeaders).toEqual(footerMenu.headers.uk);
+        })
+
+        await allure.step('Verify footer menu items and links in Ukrainian', async () => {
+            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+            const menuItems = await aboutUsPage.footer.pageMenu.getAllMenuItems();
+            const names = menuItems.map(i => i.name);
+            const urls = menuItems.map(i => i.href.replace('/', ''));
+
+            expect(names).toEqual(footerMenu.items.map(i => i.uk_name));
             expect(urls).toEqual(footerMenu.items.map(i => i.url));
         });
 
