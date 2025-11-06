@@ -5,7 +5,7 @@ import * as allure from 'allure-js-commons';
 import {footerMenu} from '../../data/footerMenu';
 import {rateLimited} from '../../utils/rate-limiter';
 
-test.describe('UI - Footer', () => {
+test.describe('UI - Footer with Rate Limiting', () => {
     test('check Footer Support Btn link', async ({aboutUsPage, supportUsPage, page}) => {
         await allure.description('Verify that the Footer "Support the Foundation" button works correctly in English and Ukrainian and navigates to the correct page.');
         await allure.label('severity', 'critical');

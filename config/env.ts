@@ -13,8 +13,8 @@ export const HEADLESS = process.env.HEADLESS === undefined ? false :process.env.
 export const WORKERS = process.env.CI ? +process.env.CI  : 1;
 export const RETRY_FAILED_TESTS = process.env.RETRY_FAILED_TESTS || 0;
 
-export const RATE_LIMIT_MAX_CONCURRENT = parseInt(process.env.RATE_LIMIT_MAX_CONCURRENT || '2');
-export const RATE_LIMIT_MIN_DELAY_MS = parseInt(process.env.RATE_LIMIT_MIN_DELAY_MS || '1000');
+export const RATE_LIMIT_MAX_CONCURRENT = parseInt(process.env.RATE_LIMIT_MAX_CONCURRENT || '3');
+export const RATE_LIMIT_MIN_DELAY_MS = parseInt(process.env.RATE_LIMIT_MIN_DELAY_MS || '500');
 
 export default {
     BASE_CLIENT_URL,
