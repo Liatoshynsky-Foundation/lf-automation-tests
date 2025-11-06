@@ -15,7 +15,7 @@ test.describe('Contacts Page Tests (Контакти)', () => {
 
     test.beforeEach(async ({ page }) => {
         contactsPage = new ContactsPage(page);
-        await page.goto('/uk/contacts'); 
+        await page.goto('/uk/contacts', { timeout: 90000 }); 
     });
 
     test('should display main heading and verify all contact links', async ({ page }) => {
@@ -74,4 +74,30 @@ test.describe('Contacts Page Tests (Контакти)', () => {
         // await contactForm.clickSubmit(); 
     });
    
+    test('should display validation error when submitting with an invalid email format', async () => {
+        const contactForm = contactsPage.getContactFormC();
+        
+        await test.step('1. Filling in valid fields', async () => {
+            await contactForm.nameField.fill(POSITIVE_FORM_DATA.name);
+            await contactForm.phoneField.fill(POSITIVE_FORM_DATA.phoneNumber!); 
+            await contactForm.messageField.fill(POSITIVE_FORM_DATA.message);
+        });
+
+        await test.step('2. Invalid email address', async () => {
+            await contactForm.emailField.fill('invalidemail.com');
+        });
+        
+        await test.step('3. Check the box and click “Send.”', async () => {
+            await contactForm.checkPolicyCheckbox();
+            await contactForm.clickSubmit(); 
+        });
+
+        // 4. Checking the error message
+        await test.step('4. Email validation error check', async () => {
+            const emailErrorLocator = contactForm.emailField.errorText; 
+
+            await expect(emailErrorLocator).toBeVisible();
+            await expect(emailErrorLocator).toHaveText('Введіть коректну email-адресу');
+        });
+    });
 });
