@@ -1,5 +1,12 @@
 import {expect, test} from '../../fixtures/fixturePage';
 
+const POSITIVE_FORM_DATA = {
+    name: 'Automation Tester',
+    email: 'test@liatoshynsky.org',
+    phoneNumber: '380671234567',
+    message: 'Це тестове повідомлення для перевірки форми контакту.',
+};
+
 test.describe('Contacts Page Tests (Контакти)', () => {
 
     test.beforeEach(async ({contactsPage}) => {
@@ -32,7 +39,7 @@ test.describe('Contacts Page Tests (Контакти)', () => {
         await expect(youtubeLink).toHaveAttribute('target', '_blank');
     });
 
-    test('should fill all required fields and enable the submit button', async () => {
+    test('should fill all required fields and enable the submit button', async ({contactsPage}) => {
         const contactForm = contactsPage.getContactFormC();
         const submitButton = contactForm.submitButton; 
 
@@ -59,7 +66,7 @@ test.describe('Contacts Page Tests (Контакти)', () => {
         // await contactForm.clickSubmit(); 
     });
    
-    test('should display validation error when submitting with an invalid email format', async () => {
+    test('should display validation error when submitting with an invalid email format', async ({contactsPage}) => {
         const contactForm = contactsPage.getContactFormC();
         
         await test.step('1. Filling in valid fields', async () => {
