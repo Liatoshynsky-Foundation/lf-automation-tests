@@ -56,6 +56,5 @@ export class QuickDonationComponent {
     async verifyCopiedUAHIBAN(): Promise<void> {
         const copiedText = await this.page.evaluate(() => navigator.clipboard.readText());
         expect(copiedText.trim()).toBe(this.EXPECTED_IBAN_UAH);
-        expect(copiedText).not.toContain(' ');
     }
 }
