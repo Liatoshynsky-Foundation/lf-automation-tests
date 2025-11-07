@@ -12,10 +12,9 @@ export class ArtistryPage extends ClientBasePage {
         this.filterButton = new FilterButtonComponent(page, this.page.locator('body'));
     }
 
-    async visit(lang: 'uk' | 'en' = 'uk'): Promise<void> {
-        return await step(`Visit Artistry page in ${lang.toUpperCase()} language`, async () => {
-            const path = await this.getPathCurrentLanguage(`${lang}/artistry`);
-            await this.goto(path);
+    async visit(): Promise<void> {
+        return await step(`Visit Artistry page.`, async () => {
+            await this.goto(await this.getPathCurrentLanguage('artistry'));
         });
     }
 }

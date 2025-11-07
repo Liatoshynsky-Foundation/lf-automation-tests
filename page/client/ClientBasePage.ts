@@ -36,7 +36,7 @@ export class ClientBasePage extends BasePage {
 
     async goto(path: string): Promise<void> {
         await this.page.goto(path, {waitUntil: 'domcontentloaded'});
-        await this.cookiesModal.acceptAll(10000);
+        await this.cookiesModal.acceptAll(20000);
     }
 
     async getTitleText(): Promise<string> {

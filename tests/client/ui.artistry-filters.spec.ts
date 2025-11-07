@@ -1,17 +1,19 @@
-import { test, expect } from '../../fixtures/fixturePage';
+import {expect, test} from '../../fixtures/fixturePage';
 import * as allure from 'allure-js-commons';
+import {Language} from "../../data/enums";
 
 test.describe('UI – Artistry Page Filters', () => {
 
-    test.beforeEach(async ({ artistryPage }) => {
+    test.beforeEach(async ({artistryPage}) => {
         await artistryPage.visit();
+        await artistryPage.header.changeLangBtn.selectLanguage(Language.UKRAINIAN);
     });
 
-    test('TC001 – Open and close Filters menu', async ({ artistryPage }) => {
-        allure.description('Verify that the Filters menu can be opened and closed.');
-        allure.label('feature', 'Filters');
-        allure.label('severity', 'normal');
-        allure.parameter('Component', 'Filters Menu');
+    test('TC001 – Open and close Filters menu', async ({artistryPage}) => {
+        await allure.description('Verify that the Filters menu can be opened and closed.');
+        await allure.label('feature', 'Filters');
+        await allure.label('severity', 'normal');
+        await allure.parameter('Component', 'Filters Menu');
 
         await allure.step('Open Filters menu', async () => {
             const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
@@ -24,11 +26,11 @@ test.describe('UI – Artistry Page Filters', () => {
         });
     });
 
-    test('TC002 – Select one filter option', async ({ artistryPage }) => {
-        allure.description('Verify selecting a single filter option updates chip and badge count.');
-        allure.label('feature', 'Filters');
-        allure.label('severity', 'normal');
-        allure.parameter('Component', 'Genre Filter');
+    test('TC002 – Select one filter option', async ({artistryPage}) => {
+        await allure.description('Verify selecting a single filter option updates chip and badge count.');
+        await allure.label('feature', 'Filters');
+        await allure.label('severity', 'normal');
+        await allure.parameter('Component', 'Genre Filter');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
         expect(await filtersMenu.isVisible()).toBe(true);
@@ -47,10 +49,10 @@ test.describe('UI – Artistry Page Filters', () => {
         expect(badgeCount).toBe(1);
     });
 
-    test('TC003 – Select multiple filter options', async ({ artistryPage }) => {
-        allure.description('Verify multiple filters update the badge count correctly.');
-        allure.label('feature', 'Filters');
-        allure.parameter('Component', 'Genre + Year Filters');
+    test('TC003 – Select multiple filter options', async ({artistryPage}) => {
+        await allure.description('Verify multiple filters update the badge count correctly.');
+        await allure.label('feature', 'Filters');
+        await allure.parameter('Component', 'Genre + Year Filters');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
 
@@ -73,10 +75,10 @@ test.describe('UI – Artistry Page Filters', () => {
         expect(await artistryPage.filterButton.getBadgeCount()).toBe(2);
     });
 
-    test('TC004 – Clear one selected filter', async ({ artistryPage }) => {
-        allure.description('Verify clearing a single selected filter resets state.');
-        allure.label('feature', 'Filters');
-        allure.parameter('Component', 'Genre Filter');
+    test('TC004 – Clear one selected filter', async ({artistryPage}) => {
+        await allure.description('Verify clearing a single selected filter resets state.');
+        await allure.label('feature', 'Filters');
+        await allure.parameter('Component', 'Genre Filter');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
         const genreFilter = filtersMenu.getListFilter('Жанр');
@@ -92,10 +94,10 @@ test.describe('UI – Artistry Page Filters', () => {
         expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
     });
 
-    test('TC005 – Clear all selected filters', async ({ artistryPage }) => {
-        allure.description('Verify clearing all filters resets all active states.');
-        allure.label('feature', 'Filters');
-        allure.parameter('Component', 'Filters Menu');
+    test('TC005 – Clear all selected filters', async ({artistryPage}) => {
+        await allure.description('Verify clearing all filters resets all active states.');
+        await allure.label('feature', 'Filters');
+        await allure.parameter('Component', 'Filters Menu');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
         const genreFilter = filtersMenu.getListFilter('Жанр');
@@ -120,18 +122,18 @@ test.describe('UI – Artistry Page Filters', () => {
         expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
     });
 
-    test('TC006 – Verify no active filters by default', async ({ artistryPage }) => {
-        allure.description('Ensure that the filters badge is hidden by default.');
-        allure.label('feature', 'Filters');
-        allure.parameter('Component', 'Filter Button');
+    test('TC006 – Verify no active filters by default', async ({artistryPage}) => {
+        await allure.description('Ensure that the filters badge is hidden by default.');
+        await allure.label('feature', 'Filters');
+        await allure.parameter('Component', 'Filter Button');
 
         expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
     });
 
-    test('TC007 – Verify badge count updates dynamically', async ({ artistryPage }) => {
-        allure.description('Validate dynamic badge updates as filters are selected and deselected.');
-        allure.label('feature', 'Filters');
-        allure.parameter('Component', 'Badge Count');
+    test('TC007 – Verify badge count updates dynamically', async ({artistryPage}) => {
+        await allure.description('Validate dynamic badge updates as filters are selected and deselected.');
+        await allure.label('feature', 'Filters');
+        await allure.parameter('Component', 'Badge Count');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
         const genreFilter = filtersMenu.getListFilter('Жанр');
@@ -143,27 +145,27 @@ test.describe('UI – Artistry Page Filters', () => {
 
         const yearFilter = filtersMenu.getYearFilter('Рік');
         await yearFilter.setYearRange('1950', '1975');
-        await filtersMenu.closeOpenDropdown();
+        await filtersMenu.closeOpenedDropdown();
 
         expect(await artistryPage.filterButton.getBadgeCount()).toBe(2);
 
         await genreFilter.openDropdown();
         await romanceOption.deselect();
-        await filtersMenu.closeOpenDropdown();
+        await filtersMenu.closeOpenedDropdown();
         expect(await artistryPage.filterButton.getBadgeCount()).toBe(1);
 
         await yearFilter.openDropdown();
         await yearFilter.clear();
-        await filtersMenu.closeOpenDropdown();
+        await filtersMenu.closeOpenedDropdown();
         await filtersMenu.page.waitForTimeout(500);
 
         expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
     });
 
-    test('TC008 – Validate chip count updates correctly', async ({ artistryPage }) => {
-        allure.description('Ensure that the chip label reflects correct number of selected options.');
-        allure.label('feature', 'Filters');
-        allure.parameter('Component', 'Chip');
+    test('TC008 – Validate chip count updates correctly', async ({artistryPage}) => {
+        await allure.description('Ensure that the chip label reflects correct number of selected options.');
+        await allure.label('feature', 'Filters');
+        await allure.parameter('Component', 'Chip');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
         const genreFilter = filtersMenu.getListFilter('Жанр');
@@ -189,10 +191,10 @@ test.describe('UI – Artistry Page Filters', () => {
         expect(await chip.isVisible()).toBe(false);
     });
 
-    test('TC009 – Year range valid', async ({ artistryPage }) => {
-        allure.description('Verify valid year range values are accepted.');
-        allure.label('feature', 'Filters');
-        allure.parameter('Component', 'Year Filter');
+    test('TC009 – Year range valid', async ({artistryPage}) => {
+        await allure.description('Verify valid year range values are accepted.');
+        await allure.label('feature', 'Filters');
+        await allure.parameter('Component', 'Year Filter');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
         const yearFilter = filtersMenu.getYearFilter('Рік');
@@ -202,10 +204,10 @@ test.describe('UI – Artistry Page Filters', () => {
         expect(await artistryPage.filterButton.getBadgeCount()).toBe(1);
     });
 
-    test('TC010 – Year range invalid', async ({ artistryPage }) => {
-        allure.description('Verify validation messages for invalid year ranges.');
-        allure.label('feature', 'Filters');
-        allure.parameter('Component', 'Year Filter');
+    test('TC010 – Year range invalid', async ({artistryPage}) => {
+        await allure.description('Verify validation messages for invalid year ranges.');
+        await allure.label('feature', 'Filters');
+        await allure.parameter('Component', 'Year Filter');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
         const yearFilter = filtersMenu.getYearFilter('Рік');
@@ -227,10 +229,10 @@ test.describe('UI – Artistry Page Filters', () => {
         expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
     });
 
-    test('TC011 – Validation: Year range accepts only numeric values', async ({ artistryPage }) => {
-        allure.description('Verify year filter fields only accept numeric values.');
-        allure.label('feature', 'Filters');
-        allure.parameter('Component', 'Year Filter');
+    test('TC011 – Validation: Year range accepts only numeric values', async ({artistryPage}) => {
+        await allure.description('Verify year filter fields only accept numeric values.');
+        await allure.label('feature', 'Filters');
+        await allure.parameter('Component', 'Year Filter');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
         const yearFilter = filtersMenu.getYearFilter('Рік');
@@ -247,10 +249,10 @@ test.describe('UI – Artistry Page Filters', () => {
         expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
     });
 
-    test('TC012 – Dropdown visibility toggle', async ({ artistryPage }) => {
-        allure.description('Check that dropdown opens and closes correctly.');
-        allure.label('feature', 'Filters');
-        allure.parameter('Component', 'Dropdown');
+    test('TC012 – Dropdown visibility toggle', async ({artistryPage}) => {
+        await allure.description('Check that dropdown opens and closes correctly.');
+        await allure.label('feature', 'Filters');
+        await allure.parameter('Component', 'Dropdown');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
         const genreFilter = filtersMenu.getListFilter('Жанр');
@@ -262,20 +264,20 @@ test.describe('UI – Artistry Page Filters', () => {
         expect(await genreFilter.isDropdownVisible()).toBe(false);
     });
 
-    test('TC013 – Trash icon hidden when no filters selected', async ({ artistryPage }) => {
-        allure.description('Ensure "Clear all filters" icon is hidden when no filters are active.');
-        allure.label('feature', 'Filters');
-        allure.parameter('Component', 'Clear All Button');
+    test('TC013 – Trash icon hidden when no filters selected', async ({artistryPage}) => {
+        await allure.description('Ensure "Clear all filters" icon is hidden when no filters are active.');
+        await allure.label('feature', 'Filters');
+        await allure.parameter('Component', 'Clear All Button');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
         expect(await filtersMenu.isClearAllButtonVisible()).toBe(false);
     });
 
-    test('TC014 – Combined interaction flow', async ({ artistryPage }) => {
-        allure.description('Verify full user interaction flow across multiple filters.');
-        allure.label('feature', 'Filters');
-        allure.label('severity', 'critical');
-        allure.parameter('Component', 'Combined Filters Flow');
+    test('TC014 – Combined interaction flow', async ({artistryPage}) => {
+        await allure.description('Verify full user interaction flow across multiple filters.');
+        await allure.label('feature', 'Filters');
+        await allure.label('severity', 'critical');
+        await allure.parameter('Component', 'Combined Filters Flow');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
         const genreFilter = filtersMenu.getListFilter('Жанр');

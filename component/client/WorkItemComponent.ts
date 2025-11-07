@@ -27,6 +27,18 @@ export class WorkItemComponent extends BaseComponent{
         return await this.year.textContent() || '';
     }
 
+    async getYearNormalized(): Promise<number> {
+        const yearText = await this.year.textContent();
+        if (!yearText) return 0;
+
+        if (yearText.includes('-')) {
+            const parts = yearText.split('-').map(p => p.trim());
+            return Number(parts[1]);
+        }
+
+        return Number(yearText);
+    }
+
     async clickGoToButton(): Promise<void> {
         await this.goToButton.click();
     }
