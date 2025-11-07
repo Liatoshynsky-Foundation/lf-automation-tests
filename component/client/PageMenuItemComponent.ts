@@ -49,7 +49,7 @@ export class PageMenuItemComponent {
 
         for (let i = 0; i < count; i++) {
             const li = this.menuLocator.locator('li').nth(i);
-            pages.push(new PageItemComponent(li));
+            pages.push(new PageItemComponent(this.name.page(), li));
         }
 
         this.pages = pages;

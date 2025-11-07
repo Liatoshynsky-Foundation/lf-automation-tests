@@ -1,37 +1,24 @@
-import { test, expect } from '@playwright/test';
-import { ContactsPage } from '../../page/client/ContactsPage';
-import { FormData } from '../../component/client/ContactFormC';
-
-
-const POSITIVE_FORM_DATA: FormData = {
-    name: 'Automation Tester',
-    email: 'test@liatoshynsky.org',
-    phoneNumber: '380671234567',
-    message: 'Це тестове повідомлення для перевірки форми контакту.',
-};
+import {expect, test} from '../../fixtures/fixturePage';
 
 test.describe('Contacts Page Tests (Контакти)', () => {
-    let contactsPage: ContactsPage;
 
-    test.beforeEach(async ({ page }) => {
-        contactsPage = new ContactsPage(page);
-        await page.goto('/uk/contacts', { timeout: 90000 }); 
+    test.beforeEach(async ({contactsPage}) => {
+        await contactsPage.visit();
     });
 
-    test('should display main heading and verify all contact links', async ({ page }) => {
+    test('should display main heading and verify all contact links', async ({contactsPage}) => {
         const contactsInfo = contactsPage.getContactsInfoComponent();
-      
+
         await expect(contactsPage.pageHeading).toBeVisible();
         await expect(contactsPage.pageHeading).toHaveText('КонТактИ');
 
         await expect(contactsInfo.phoneNumberLink).toHaveText('067 963 8366');
-       // await expect(contactsInfo.phoneNumberLink).toHaveAttribute('href', 'tel:0679638366'); 
+        // await expect(contactsInfo.phoneNumberLink).toHaveAttribute('href', 'tel:0679638366');
 
         await expect(contactsInfo.emailLink).toHaveText('liatoshynsky@gmail.com');
         //await expect(contactsInfo.emailLink).toHaveAttribute('href', 'mailto:liatoshynsky@gmail.com');
 
- 
-        
+
         const instagramLink = contactsInfo.getSocialLink('instagram');
         await expect(instagramLink).toHaveAttribute('href', 'https://www.instagram.com/liatoshynsky_foundation/');
         await expect(instagramLink).toHaveAttribute('target', '_blank');

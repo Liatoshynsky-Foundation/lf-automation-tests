@@ -1,5 +1,5 @@
 import { defineConfig } from '@playwright/test';
-import { BASE_CLIENT_URL, BASE_ADMIN_URL } from './config/env';
+import {BASE_CLIENT_URL, BASE_ADMIN_URL, HEADLESS, WORKERS} from './config/env';
 
 /**
  * Read environment variables from file.
@@ -19,9 +19,9 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: WORKERS,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['html'],
@@ -36,7 +36,7 @@ export default defineConfig({
   use: {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    headless: false,
+    headless: HEADLESS,
     viewport: null,
     launchOptions: {
       args: ['--start-maximized'],
@@ -47,12 +47,20 @@ export default defineConfig({
   },
   projects: [
     {
+      name: 'admin-setup',
+      testMatch: /auth\.setup\.ts/,
+      use: {
+        baseURL: BASE_ADMIN_URL,
+      },
+    },
+    {
       name: 'admin',
       testMatch: /tests\/admin\/.*\.spec\.ts/,
       use: {
-         /* Base URL to use in actions like `await page.goto('')`. */
         baseURL: BASE_ADMIN_URL,
+        storageState: 'playwright/.auth/admin.json',
       },
+      dependencies: ['admin-setup'],
     },
     {
       name: 'client',
