@@ -1,7 +1,7 @@
-import {Page} from '@playwright/test';
-
-import {FilterButtonComponent} from "../../component/client/filters/FilterButtonComponent";
-import {ClientBasePage} from "./ClientBasePage";
+import { Page } from '@playwright/test';
+import { step } from 'allure-js-commons';
+import { FilterButtonComponent } from "../../component/client/filters/FilterButtonComponent";
+import { ClientBasePage } from "./ClientBasePage";
 
 export class ArtistryPage extends ClientBasePage {
 
@@ -12,8 +12,10 @@ export class ArtistryPage extends ClientBasePage {
         this.filterButton = new FilterButtonComponent(page, this.page.locator('body'));
     }
 
-    async visit(): Promise<void> {
-        await this.goto(await this.getPathCurrentLanguage('artistry'));
+    async visit(lang: 'uk' | 'en' = 'uk'): Promise<void> {
+        return await step(`Visit Artistry page in ${lang.toUpperCase()} language`, async () => {
+            const path = await this.getPathCurrentLanguage(`${lang}/artistry`);
+            await this.goto(path);
+        });
     }
 }
-
