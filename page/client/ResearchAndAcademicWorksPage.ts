@@ -5,15 +5,20 @@ import {WorkItemComponent} from "../../component/client/WorkItemComponent";
 
 export class ResearchAndAcademicWorksPage extends ClientBasePage {
 
+    // Table column indices
+    private static readonly NAME_COLUMN_INDEX = 0;
+    private static readonly AUTHOR_COLUMN_INDEX = 1;
+    private static readonly YEAR_COLUMN_INDEX = 2;
+
     nameSortButton : SortButton;
     authorSortButton : SortButton;
     yearSortButton : SortButton;
 
     constructor(page: Page) {
         super(page);
-        this.nameSortButton = new SortButton(this.page, this.page.locator("th > div").nth(0));
-        this.authorSortButton = new SortButton(this.page, this.page.locator("th > div").nth(1));
-        this.yearSortButton = new SortButton(this.page, this.page.locator("th > div").nth(2));
+        this.nameSortButton = new SortButton(this.page, this.page.locator("th > div").nth(ResearchAndAcademicWorksPage.NAME_COLUMN_INDEX));
+        this.authorSortButton = new SortButton(this.page, this.page.locator("th > div").nth(ResearchAndAcademicWorksPage.AUTHOR_COLUMN_INDEX));
+        this.yearSortButton = new SortButton(this.page, this.page.locator("th > div").nth(ResearchAndAcademicWorksPage.YEAR_COLUMN_INDEX));
     }
 
     async visit(): Promise<void> {
