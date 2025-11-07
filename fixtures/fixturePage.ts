@@ -17,7 +17,7 @@ type MyFixturesPage = {
     contactsPage: ContactsPage;
     adminLoginPage: AdminLoginPage;
     adminDashboardPage: AdminDashboardPage;
-    researchAndAcademicWorksPage : ResearchAndAcademicWorksPage
+    researchAndAcademicWorksPage: ResearchAndAcademicWorksPage
 };
 
 export const test = baseTest.extend<MyFixturesPage>({
