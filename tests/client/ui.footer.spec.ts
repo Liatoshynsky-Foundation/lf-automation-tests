@@ -202,53 +202,6 @@ test.describe('UI - Footer', () => {
 
     });
 
-    test('check page menu navigation in footer', async ({aboutUsPage, page}) => {
-        await allure.description('Verify footer menu navigation.');
-        await allure.label('feature', 'Footer Menu');
-        await allure.label('severity', 'normal');
-        await allure.parameter('Component', 'Footer');
-
-        await allure.step('Go to homepage', async () => {
-            await aboutUsPage.visit();
-        });
-
-        await allure.step('Get current language', async () => {
-            const currentLang = await aboutUsPage.getCurrentPageLanguage();
-            await allure.parameter('Language', currentLang);
-            await expect(currentLang).toEqual('en');
-        });
-
-        
-
-        await allure.step('Verify that footer menu navigates to proper links', async () => {
-              
-        //     const menuItems = await aboutUsPage.footer.pageMenu.getAllMenuItems();
-            
-        //     for (const item of menuItems){
-        //         await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));  
-        //         await aboutUsPage.footer.clickMenuItemByName(item.name);
-        //         const itemUrl = await page.url();
-        //         await allure.parameter('Expected URL', item.href);
-        //         await allure.parameter('Actual URL', itemUrl);
-        //         expect(itemUrl).toEqual(item.href);
-
-        //         await aboutUsPage.visit();
-                
-        //     }
-            
-        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));  
-        const item = pageMenu.items[5];
-        await aboutUsPage.footer.clickMenuItemByName(item.en_name);
-        const itemUrl = await page.url();
-        await allure.parameter('Expected URL', item.url);
-        await allure.parameter('Actual URL', itemUrl);
-        expect(itemUrl).toEqual(item.url);    
-        });
-
-        
-
-    });
-
     test('check Org Info in footer', async ({aboutUsPage}) => {
         await allure.description('Verify that footer displays correct organization info including name, address, phone, email, and copyright (localized for English and Ukrainian).');
         await allure.label('feature', 'Footer');

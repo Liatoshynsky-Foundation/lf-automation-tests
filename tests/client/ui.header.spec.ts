@@ -3,7 +3,6 @@ import {expect, test} from '../../fixtures/fixturePage';
 import {Language} from "../../data/enums";
 import * as allure from 'allure-js-commons';
 import {pageMenu} from '../../data/pageMenu';
-import { SupportedLang } from '../../data/orgInfo';
 
 test.describe('UI - Header', () => {
     test('check goto Artistry page by menu and return to Home by logo', async ({aboutUsPage, artistryPage, page}) => {
