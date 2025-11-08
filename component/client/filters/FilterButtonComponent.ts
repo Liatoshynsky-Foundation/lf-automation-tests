@@ -8,6 +8,7 @@ import { step } from 'allure-js-commons';
  * Represents the "Filters" button that opens the filters panel.
  */
 export class FilterButtonComponent extends BaseComponent {
+    private container: Locator;
     private button: Locator;
     private menuContainer: Locator;
     private badgeLocator: Locator;
@@ -15,9 +16,10 @@ export class FilterButtonComponent extends BaseComponent {
 
     constructor(page: Page, parent: Locator) {
         super(page, parent);
-        this.button = this.parent.locator('button:has-text("Фільтри")');
-        this.menuContainer = this.page.locator('.MuiBox-root.css-yd8sa2');
-        this.badgeLocator = this.page.locator('.MuiBadge-badge');
+        this.container = this.page.locator('[data-testid="ControlPanel"]');
+        this.button = this.container.locator('button:has(span.filtersLabel)');
+        this.menuContainer = this.page.locator('[data-testid="ControlPanel-controlsColumn"]');
+        this.badgeLocator = this.container.locator('.MuiBadge-root .MuiBadge-badge');
         this.badge = new FilterBadgeComponent(page, this.button);
     }
 
