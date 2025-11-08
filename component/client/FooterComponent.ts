@@ -115,5 +115,24 @@ export class FooterComponent extends BaseComponent {
             await expect(this.copyrightText).toHaveText(str);
         })
     }
+
+    async clickMenuItemByName(name: string): Promise<void> {
+        await allure.step(`Click footer menu item bu name: ${name}`, async () => {
+            const menuItems = await this.pageMenu.getAllMenuItems();
+            const targetItem = menuItems.find(
+                (item) => item.name.toLowerCase() === name.toLowerCase()
+            );
+            await allure.parameter('Target name', name);
+            if (!targetItem){
+                await allure.logStep(`Target item not found`);
+                return;
+            }
+            const locator = this.parent.locator(`footer a:has-text("${targetItem.name}")`);
+            await locator.scrollIntoViewIfNeeded({timeout: 10000});
+            await locator.click();
+        });
+        
+        
+    };
 }
 

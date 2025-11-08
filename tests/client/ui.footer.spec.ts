@@ -2,7 +2,7 @@ import {expect, test} from '../../fixtures/fixturePage';
 import {FooterLanguage} from "../../data/enums";
 import {OrgInfo} from '../../data/orgInfo';
 import * as allure from 'allure-js-commons';
-import {footerMenu} from '../../data/footerMenu';
+import {pageMenu} from '../../data/pageMenu';
 
 test.describe('UI - Footer', () => {
     test('check Footer Support Btn link', async ({aboutUsPage, supportUsPage, page}) => {
@@ -164,7 +164,7 @@ test.describe('UI - Footer', () => {
             await allure.parameter('Language', currentLang);
             await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
             const menuHeaders = await aboutUsPage.footer.pageMenu.getSectionHeaders();
-            expect(menuHeaders).toEqual(footerMenu.headers.en);
+            expect(menuHeaders).toEqual(pageMenu.footerHeaders.en);
         })
 
         await allure.step('Verify footer menu items and links in English', async () => {
@@ -173,8 +173,8 @@ test.describe('UI - Footer', () => {
             const names = menuItems.map(i => i.name);
             const urls = menuItems.map(i => i.href.replace('/', ''));
 
-            expect(names).toEqual(footerMenu.items.map(i => i.en_name));
-            expect(urls).toEqual(footerMenu.items.map(i => i.url));
+            expect(names).toEqual(pageMenu.items.map(i => i.en_name));
+            expect(urls).toEqual(pageMenu.items.map(i => i.url));
         });
 
         await allure.step('Change language to Ukrainian', async () => {
@@ -187,7 +187,7 @@ test.describe('UI - Footer', () => {
             await allure.parameter('Language', currentLang);
             await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
             const menuHeaders = await aboutUsPage.footer.pageMenu.getSectionHeaders();
-            expect(menuHeaders).toEqual(footerMenu.headers.uk);
+            expect(menuHeaders).toEqual(pageMenu.footerHeaders.uk);
         })
 
         await allure.step('Verify footer menu items and links in Ukrainian', async () => {
@@ -196,9 +196,56 @@ test.describe('UI - Footer', () => {
             const names = menuItems.map(i => i.name);
             const urls = menuItems.map(i => i.href.replace('/', ''));
 
-            expect(names).toEqual(footerMenu.items.map(i => i.uk_name));
-            expect(urls).toEqual(footerMenu.items.map(i => i.url));
+            expect(names).toEqual(pageMenu.items.map(i => i.uk_name));
+            expect(urls).toEqual(pageMenu.items.map(i => i.url));
         });
+
+    });
+
+    test('check page menu navigation in footer', async ({aboutUsPage, page}) => {
+        await allure.description('Verify footer menu navigation.');
+        await allure.label('feature', 'Footer Menu');
+        await allure.label('severity', 'normal');
+        await allure.parameter('Component', 'Footer');
+
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.visit();
+        });
+
+        await allure.step('Get current language', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            await allure.parameter('Language', currentLang);
+            await expect(currentLang).toEqual('en');
+        });
+
+        
+
+        await allure.step('Verify that footer menu navigates to proper links', async () => {
+              
+        //     const menuItems = await aboutUsPage.footer.pageMenu.getAllMenuItems();
+            
+        //     for (const item of menuItems){
+        //         await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));  
+        //         await aboutUsPage.footer.clickMenuItemByName(item.name);
+        //         const itemUrl = await page.url();
+        //         await allure.parameter('Expected URL', item.href);
+        //         await allure.parameter('Actual URL', itemUrl);
+        //         expect(itemUrl).toEqual(item.href);
+
+        //         await aboutUsPage.visit();
+                
+        //     }
+            
+        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));  
+        const item = pageMenu.items[5];
+        await aboutUsPage.footer.clickMenuItemByName(item.en_name);
+        const itemUrl = await page.url();
+        await allure.parameter('Expected URL', item.url);
+        await allure.parameter('Actual URL', itemUrl);
+        expect(itemUrl).toEqual(item.url);    
+        });
+
+        
 
     });
 

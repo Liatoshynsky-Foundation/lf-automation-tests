@@ -2,25 +2,10 @@ import {PageItemComponent} from '../../component/client/PageItemComponent';
 import {expect, test} from '../../fixtures/fixturePage';
 import {Language} from "../../data/enums";
 import * as allure from 'allure-js-commons';
+import {pageMenu} from '../../data/pageMenu';
+import { SupportedLang } from '../../data/orgInfo';
 
 test.describe('UI - Header', () => {
-    test('check header page menu', async ({aboutUsPage}) => {
-        await aboutUsPage.goto('/');
-        const items = await aboutUsPage.header.getMenuItems();
-
-        const itemNames: string[] = [];
-        for (let i = 0; i < 4; i++) {
-            itemNames.push(await items[i].getName());
-        }
-
-        expect(itemNames).toEqual([
-            'Borys Liatoshynskyi',
-            'Foundation',
-            'Archive Cabinet',
-            'Cooperation'
-        ]);
-    });
-
     test('check goto Artistry page by menu and return to Home by logo', async ({aboutUsPage, artistryPage, page}) => {
         await aboutUsPage.goto('/');
         const menuItems = await aboutUsPage.header.getMenuItems();
@@ -144,5 +129,136 @@ test.describe('UI - Header', () => {
         });
     });
 
+    test('check Header Page Menu', async ({aboutUsPage, page}) => {
+        await allure.description('Verify header menu button names, submenu items, and navigation links for both English and Ukrainian languages.');
+        await allure.label('feature', 'Header Menu');
+        await allure.label('severity', 'normal');
+        await allure.parameter('Component', 'Header');
 
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.visit();
+        });
+
+        await allure.step('Verify header menu button names in English', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            expect(currentLang).toBe('en');
+            await allure.parameter('Language', currentLang);
+
+            const menuButtons = await aboutUsPage.header.getMenuItems();
+            const menuNames = [];
+
+            for (const item of menuButtons) {
+                menuNames.push(await item.getName());
+            }               
+            expect(menuNames).toEqual(pageMenu.headerButtons.en);
+        });
+
+        await allure.step('Verify header submenu items and links in English', async () => {
+            const menuHeaders = await aboutUsPage.header.getMenuItems();
+            const names: string[] = [];
+            const urls: string[] = [];
+
+            for (const button of menuHeaders){
+                const buttonName = await button.getName();
+                await allure.parameter('Header button:', buttonName);
+                
+                await allure.step(`Check header button: ${buttonName}`, async () => {
+                    const hasLink = await button.getLink();
+
+                    if (!hasLink) {
+                        await allure.step(`Open dropdown for ${buttonName}`, async () => {
+                            await button.clickDropdown();
+                            await page.waitForTimeout(1000);
+                        });
+
+                        if (await button.subMenuIsVisible()) {
+                            const subMenu = await button.getSubPages();
+                            
+                            for (const item of subMenu){
+                                const name = await item.get_Name();
+                                const url = await item.getLink();
+                                names.push(name);
+                                urls.push(url.replace(/^\//, ''));
+                            }
+                            await button.clickDropdown();
+                        }
+                    }
+                    else {
+                        await allure.step(`Header button has direct link: ${buttonName}`, async () => {
+                            const name = await button.getName();
+                            const url = await button.getLink();
+                            names.push(name);
+                            urls.push(url.replace(/^\/en\//, ''));
+                        });
+                    }
+                });
+            }
+            expect(names).toEqual(pageMenu.items.map(i => i.en_name));
+            expect(urls).toEqual(pageMenu.items.map(i => i.url));
+        });
+        
+        await allure.step('Change language to Ukrainian', async () => {
+            const button = aboutUsPage.header.changeLangBtn;
+            await button.click();
+            await button.selectLanguage(Language.Ukrainian);
+        });
+
+        await allure.step('Verify header menu button names in Ukrainian', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            expect(currentLang).toBe('uk');
+            await allure.parameter('Language', currentLang);
+
+            const menuButtons = await aboutUsPage.header.getMenuItems();
+            const menuNames = [];
+
+            for (const item of menuButtons) {
+                menuNames.push(await item.getName());
+            }               
+            expect(menuNames).toEqual(pageMenu.headerButtons.uk);
+        });
+
+        await allure.step('Verify header submenu items and links in Ukrainian', async () => {
+            const menuHeaders = await aboutUsPage.header.getMenuItems();
+            const names: string[] = [];
+            const urls: string[] = [];
+
+            for (const button of menuHeaders){
+                const buttonName = await button.getName();
+                await allure.parameter('Header button:', buttonName);
+                
+                await allure.step(`Check header button: ${buttonName}`, async () => {
+                    const hasLink = await button.getLink();
+
+                    if (!hasLink) {
+                        await allure.step(`Open dropdown for ${buttonName}`, async () => {
+                            await button.clickDropdown();
+                            await page.waitForTimeout(1000);
+                        });
+
+                        if (await button.subMenuIsVisible()) {
+                            const subMenu = await button.getSubPages();
+                            
+                            for (const item of subMenu){
+                                const name = await item.get_Name();
+                                const url = await item.getLink();
+                                names.push(name);
+                                urls.push(url.replace(/^\//, ''));
+                            }
+                            await button.clickDropdown();
+                        }
+                    }
+                    else {
+                        await allure.step(`Header button has direct link: ${buttonName}`, async () => {
+                            const name = await button.getName();
+                            const url = await button.getLink();
+                            names.push(name);
+                            urls.push(url.replace(/^\/uk\//, ''));
+                        });
+                    }
+                });
+            }
+            expect(names).toEqual(pageMenu.items.map(i => i.uk_name));
+            expect(urls).toEqual(pageMenu.items.map(i => i.url));
+        });
+    });
 });   

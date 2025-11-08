@@ -9,7 +9,7 @@ export class PageItemComponent extends BaseComponent{
     constructor(page: Page, parent: Locator) {
         super(page, parent);
         this.name = parent;
-        this.link = parent.locator('..');
+        this.link = parent.locator('xpath=ancestor::a[1]');
     }
 
     async get_Name(): Promise<string> {
