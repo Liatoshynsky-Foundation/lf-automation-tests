@@ -4,6 +4,7 @@ import {ArchiveCabinetPage} from "../page/client/ArchiveCabinetPage";
 import {ArtistryPage} from '../page/client/ArtistryPage';
 import {SupportUsPage} from '../page/client/SupportUsPage';
 import {ContactsPage} from '../page/client/ContactsPage';
+import {PrivacyPolicyPage} from '../page/client/PrivacyPolicyPage';
 import {AdminLoginPage} from '../page/admin/AdminLoginPage';
 import {AdminDashboardPage} from '../page/admin/AdminDashboardPage';
 
@@ -16,6 +17,7 @@ type MyFixturesPage = {
     contactsPage: ContactsPage;
     adminLoginPage: AdminLoginPage;
     adminDashboardPage: AdminDashboardPage;
+    privacyPolicyPage: PrivacyPolicyPage;
 };
 
 export const test = baseTest.extend<MyFixturesPage>({
@@ -38,6 +40,10 @@ export const test = baseTest.extend<MyFixturesPage>({
     contactsPage: async ({page}, use) => {
         const contactsPage = new ContactsPage(page);
         await use(contactsPage);
+    },
+    privacyPolicyPage: async ({page}, use) => {
+        const privacyPolicyPage = new PrivacyPolicyPage(page);
+        await use(privacyPolicyPage);
     },
     adminLoginPage: async ({page}, use) => {
         const adminLoginPage = new AdminLoginPage(page);
