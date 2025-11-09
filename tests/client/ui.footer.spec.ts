@@ -311,7 +311,7 @@ test.describe('UI - Footer', () => {
 
             expect(names).toEqual(legalMenu.en.map(i => i.name));
             expect(urls).toEqual(legalMenu.en.map(i => i.url));
-        })
+        });
 
         await allure.step('Verify footer legal menu navigation in English', async () => {
 
@@ -322,11 +322,39 @@ test.describe('UI - Footer', () => {
                 await expect(page).toHaveURL(new RegExp(`${item.url}$`));
                 await expect(await page.title()).toEqual(item.title);
 
-                await aboutUsPage.goto('/');
+                await page.goto('/about-us');
             }
+        });
+
+        await allure.step('Switch language to Ukrainian', async () => {
+            await aboutUsPage.footer.changeLangBtn.click();
+        });
+
+        await allure.step('Verify footer legal menu item names and links in Ukrainian', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            expect(currentLang).toBe('uk');
+            await allure.parameter('Language', currentLang);
+            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+            const menuItems = await aboutUsPage.footer.legalMenu.getAllMenuItems();
+            const names = menuItems.map(i => i.name);
+            const urls = menuItems.map(i => i.href.replace('/', ''));
+
+            expect(names).toEqual(legalMenu.uk.map(i => i.name));
+            expect(urls).toEqual(legalMenu.uk.map(i => i.url));
         })
 
-        
+        await allure.step('Verify footer legal menu navigation in Ukrainian', async () => {
+
+            for (const item of legalMenu.uk){
+                await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+                await aboutUsPage.footer.legalMenu.clickItemByName(item.name);
+                
+                await expect(page).toHaveURL(new RegExp(`${item.url}$`));
+                await expect(await page.title()).toEqual(item.title);
+
+                await page.goto('/about-us');
+            }
+        })
 
     });
 });

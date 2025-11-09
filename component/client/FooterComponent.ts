@@ -37,6 +37,7 @@ export class FooterComponent extends BaseComponent {
         this.legalMenu = new LegalMenuComponent(this.parent.locator('//div[2]/div[7]/div/ul'));
         this.copyrightText = this.parent.locator('//div[2]/div[7]/div/p');
         this.changeLangBtn = new FooterChangeLangBtn(this.page, this.parent);
+        this.pageMenu = new FooterPageMenuComponent(this.parent.locator('//div[2]/div[6]/div'));
         this.mediaMenu = new MediaMenuBtn(this.parent.locator('//div[2]/div[5]/div'));
         this.developedBy = this.parent.locator('img[alt="OpenTech Academy logo"]');
         this.bigFooterImage = this.parent.locator('img[alt="Lyatoshynsky Foundation"]');
