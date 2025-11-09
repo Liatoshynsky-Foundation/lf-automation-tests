@@ -1,7 +1,7 @@
 export const legalMenu = {
   en: [
-    { name: 'Privacy Policy', url: 'privacy-policy', title: 'Privacy Policy' },
-    { name: 'Terms of Use', url: 'terms', title: 'Terms of Use' },
+    { name: 'Privacy Policy', url: 'privacy-policy', title: 'Політика Конфіденційності' },
+    { name: 'Terms of Use', url: 'terms', title: 'Умови користування сайтом' },
     { name: 'Media / Partner Info', url: 'media', title: 'Create Next App' },
   ],
   uk: [

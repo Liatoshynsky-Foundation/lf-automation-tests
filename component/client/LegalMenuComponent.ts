@@ -35,9 +35,9 @@ export class LegalMenuComponent {
             const countItems = await this.item.count();
 
             for (let i = 0; i < countItems; i++) {
-               const itemName = await this.item.innerText(); 
+               const itemName = await this.item.nth(i).innerText(); 
                if (itemName === name) {
-                await this.item.click();
+                await this.item.nth(i).click();
                }
             }
             

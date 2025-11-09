@@ -290,7 +290,7 @@ test.describe('UI - Footer', () => {
         });
     });
 
-    test('check footer legal menu', async ({aboutUsPage, privacyPolicyPage, termsPage, mediaPage, page }) => {
+    test('check footer legal menu', async ({aboutUsPage, page }) => {
         await allure.description('Verify footer Legal Menu items, and navigation for both English and Ukrainian languages.');
         await allure.label('feature', 'Footer Menu');
         await allure.label('severity', 'normal');
@@ -300,7 +300,7 @@ test.describe('UI - Footer', () => {
             await aboutUsPage.visit();
         });
 
-        await allure.step('Verify footer legal menu menu item names and links in English', async () => {
+        await allure.step('Verify footer legal menu item names and links in English', async () => {
             const currentLang = await aboutUsPage.getCurrentPageLanguage();
             expect(currentLang).toBe('en');
             await allure.parameter('Language', currentLang);
@@ -311,6 +311,19 @@ test.describe('UI - Footer', () => {
 
             expect(names).toEqual(legalMenu.en.map(i => i.name));
             expect(urls).toEqual(legalMenu.en.map(i => i.url));
+        })
+
+        await allure.step('Verify footer legal menu navigation in English', async () => {
+
+            for (const item of legalMenu.en){
+                await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+                await aboutUsPage.footer.legalMenu.clickItemByName(item.name);
+                
+                await expect(page).toHaveURL(new RegExp(`${item.url}$`));
+                await expect(await page.title()).toEqual(item.title);
+
+                await aboutUsPage.goto('/');
+            }
         })
 
         
