@@ -1,4 +1,4 @@
-import {expect, Locator, Page} from '@playwright/test';
+import { Locator, Page} from '@playwright/test';
 import {BaseComponent} from '../BaseComponent';
 
 export class FilterChipComponent extends BaseComponent {
@@ -21,11 +21,11 @@ export class FilterChipComponent extends BaseComponent {
         await this.deleteBtn.click();
     }
 
-    async expectVisible(): Promise<void> {
-        await expect(this.chip).toBeVisible();
+    async isVisible(): Promise<boolean> {
+        return await this.chip.isVisible();
     }
 
-    async expectNotVisible(): Promise<void> {
-        await expect(this.chip).toBeHidden();
+    async isHidden(): Promise<boolean> {
+        return await this.chip.isHidden();
     }
 }

@@ -1,13 +1,13 @@
-import {Locator, Page} from '@playwright/test';
-import {BaseComponent} from '../BaseComponent';
-import {FilterDropdownComponent} from './FilterDropdownComponent';
-import {FilterChipComponent} from "./FilterChipComponent";
+import { Locator, Page } from '@playwright/test';
+import { BaseComponent } from '../BaseComponent';
+import { FilterDropdownComponent } from './FilterDropdownComponent';
+import { FilterChipComponent } from './FilterChipComponent';
+import { step } from 'allure-js-commons';
 
 /**
  * Represents a single filter item in the Filters menu (e.g., Genre, Category, Author).
  * Supports opening and closing dropdowns and retrieving related components.
  */
-
 export class FilterListItemComponent extends BaseComponent {
     private filterLabel: Locator;
     private root: Locator;
@@ -17,7 +17,6 @@ export class FilterListItemComponent extends BaseComponent {
 
     constructor(page: Page, parent: Locator, filterName: string) {
         super(page, parent);
-
         this.filterLabel = this.parent.locator(`p:has-text("${filterName}")`);
         this.root = this.filterLabel.locator('xpath=ancestor::div[contains(@class, "MuiBox-root")][1]');
         this.title = this.root.locator('p');
@@ -26,19 +25,16 @@ export class FilterListItemComponent extends BaseComponent {
     }
 
     async getTitle(): Promise<string> {
-        return (await this.title.textContent())?.trim() || '';
+        return await step(`Get title of filter`, async () => {
+            return (await this.title.textContent())?.trim() || '';
+        });
     }
 
     async openDropdown(): Promise<FilterDropdownComponent> {
-        await this.dropdownIcon.click({force: true});
-        return new FilterDropdownComponent(this.page, this.popup);
-    }
-
-    async closeDropdown(): Promise<void> {
-        if (await this.popup.isVisible()) {
-            await this.page.locator('body').click({position: {x: 5, y: 5}});
-            await this.popup.waitFor({state: 'hidden', timeout: 3000});
-        }
+        return await step(`Open dropdown for filter`, async () => {
+            await this.dropdownIcon.click({ force: true });
+            return new FilterDropdownComponent(this.page, this.popup);
+        });
     }
 
     getChip(): FilterChipComponent {
@@ -46,6 +42,8 @@ export class FilterListItemComponent extends BaseComponent {
     }
 
     async isDropdownVisible(): Promise<boolean> {
-        return await this.popup.isVisible();
+        return await step(`Check if dropdown is visible`, async () => {
+            return this.popup.isVisible();
+        });
     }
 }

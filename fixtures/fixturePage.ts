@@ -7,6 +7,7 @@ import {ContactsPage} from '../page/client/ContactsPage';
 import {PrivacyPolicyPage} from '../page/client/PrivacyPolicyPage';
 import {AdminLoginPage} from '../page/admin/AdminLoginPage';
 import {AdminDashboardPage} from '../page/admin/AdminDashboardPage';
+import {ResearchAndAcademicWorksPage} from "../page/client/ResearchAndAcademicWorksPage";
 
 
 type MyFixturesPage = {
@@ -18,6 +19,7 @@ type MyFixturesPage = {
     adminLoginPage: AdminLoginPage;
     adminDashboardPage: AdminDashboardPage;
     privacyPolicyPage: PrivacyPolicyPage;
+    researchAndAcademicWorksPage: ResearchAndAcademicWorksPage
 };
 
 export const test = baseTest.extend<MyFixturesPage>({
@@ -52,6 +54,10 @@ export const test = baseTest.extend<MyFixturesPage>({
     adminDashboardPage: async ({ page }, use) => {
         const adminDashboardPage = new AdminDashboardPage(page);
         await use(adminDashboardPage);
+    },
+    researchAndAcademicWorksPage: async ({page}, use) => {
+        const researchAndAcademicWorksPage = new ResearchAndAcademicWorksPage(page);
+        await use(researchAndAcademicWorksPage);
     }
 });
 
