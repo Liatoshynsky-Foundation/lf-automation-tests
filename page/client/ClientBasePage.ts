@@ -20,7 +20,8 @@ export class ClientBasePage extends BasePage {
         this.header = new HeaderComponent(page);
         this.footer = new FooterComponent(page);
         this.cookiesModal = new CookiesModal(page);
-        this.quoteRoots = page.locator('.quote-component');
+        this.quoteRoots = page.locator("div[data-testid*='quote'] > div > svg");
+        this.quoteRoots = this.quoteRoots.locator("../..");
     }
 
     async getPathCurrentLanguage(path: string): Promise<string> {
@@ -63,37 +64,51 @@ export class ClientBasePage extends BasePage {
     }
 
     async getQuotes(): Promise<QuoteComponent[]> {
-        const count = await this.quoteRoots.count();
-        const quotes: QuoteComponent[] = [];
+        return await allure.step('Get all quotes', async () => {
+            const count = await this.quoteRoots.count();
+            const quotes: QuoteComponent[] = [];
 
-        for (let i = 0; i < count; i++) {
-            quotes.push(new QuoteComponent(this.page, this.quoteRoots.nth(i)));
-        }
+            for (let i = 0; i < count; i++) {
+                quotes.push(new QuoteComponent(this.page, this.quoteRoots.nth(i)));
+            }
 
-        return quotes;
+            return quotes;
+        });
+    }
+
+    async getQuotesCount(): Promise<number> {
+        return await allure.step('Get count of quotes', async () => {
+            return await this.quoteRoots.count();
+        });
     }
 
     async getQuotesTexts(): Promise<string[]> {
-        const quotes = await this.getQuotes();
-        const texts = [];
-        for (const quote of quotes) {
-            texts.push(await quote.getQuoteText());
-        }
-        return texts;
+        return await allure.step('Get quotes texts', async () => {
+            const quotes = await this.getQuotes();
+            const texts = [];
+            for (const quote of quotes) {
+                texts.push(await quote.getQuoteText());
+            }
+            return texts;
+        });
     }
 
     async getQuotesSourcesTexts(): Promise<string[]> {
-        const quotes = await this.getQuotes();
-        const texts = [];
-        for (const quote of quotes) {
-            texts.push(await quote.getQuoteSourceText());
-        }
-        return texts;
+        return await allure.step('Get quotes sources texts', async () => {
+            const quotes = await this.getQuotes();
+            const texts = [];
+            for (const quote of quotes) {
+                texts.push(await quote.getQuoteSourceText());
+            }
+            return texts;
+        });
     }
 
     async getQuoteByOrder(index: number): Promise<QuoteComponent | null> {
-        const quotes = await this.getQuotes();
-        return quotes[index] ?? null;
+        return await allure.step(`Get quote by order: ${index}`, async () => {
+            const quotes = await this.getQuotes();
+            return quotes[index] ?? null;
+        });
     }
 
 }
