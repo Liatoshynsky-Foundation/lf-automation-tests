@@ -2,6 +2,7 @@ import {expect, Page} from '@playwright/test';
 import {ClientBasePage} from './ClientBasePage';
 import {SortButton} from "../../component/client/SortButton";
 import {WorkItemComponent} from "../../component/client/WorkItemComponent";
+import * as allure from "allure-js-commons";
 
 export class ResearchAndAcademicWorksPage extends ClientBasePage {
 
@@ -26,9 +27,10 @@ export class ResearchAndAcademicWorksPage extends ClientBasePage {
     }
 
     async getWorkItems(): Promise<WorkItemComponent[]> {
-        await expect(this.page.locator("tbody tr td p").nth(0)).toBeVisible();
-        const items = await this.page.locator("tbody tr").all();
-        return items.map(item => new WorkItemComponent(this.page, item));
+        return await allure.step('Get Work items', async () => {
+            await expect(this.page.locator("tbody tr td p").nth(0)).toBeVisible();
+            const items = await this.page.locator("tbody tr").all();
+            return items.map(item => new WorkItemComponent(this.page, item));        });
     }
 }
 

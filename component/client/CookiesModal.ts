@@ -1,4 +1,5 @@
 import {Locator, Page} from "@playwright/test";
+import * as allure from "allure-js-commons";
 
 export class CookiesModal {
     private page: Page;
@@ -18,42 +19,62 @@ export class CookiesModal {
     }
 
     async isVisible(timeout = 5000): Promise<boolean> {
-        try {
-            await this.modalContainer.waitFor({state: 'visible', timeout: timeout});
-            return true;
-        } catch {
-            return false;
-        }
+        return await allure.step('Check visibility of cookies modal', async () => {
+            try {
+                await this.modalContainer.waitFor({state: 'visible', timeout: timeout});
+                return true;
+            } catch {
+                return false
+            }
+        });
     }
 
     async waitUntilClosed(): Promise<void> {
-        await this.modalContainer.waitFor({state: 'hidden', timeout: 5000});
+        await allure.step('Wait until modal is hidden', async () => {
+            await this.modalContainer.waitFor({state: 'hidden', timeout: 5000});
+        });
     }
 
     async closeModal(timeout = 5000): Promise<void> {
-        if (await this.isVisible(timeout)) {
-            await this.closingButton.click();
-            await this.waitUntilClosed();
-        }
+        await allure.step('Close cookies modal', async () => {
+            if (await this.isVisible(timeout)) {
+                await allure.step('Click Close button', async () => {
+                    await this.closingButton.click();
+                });
+                await this.waitUntilClosed();
+            }
+        });
     }
 
     async getPrivacyPolicy(timeout = 5000): Promise<void> {
-        if (await this.isVisible(timeout)) {
-            await this.privacyPolicy.click();
-        }
+        await allure.step('Get privacy policy', async () => {
+            if (await this.isVisible(timeout)) {
+                await allure.step('Click Privacy Policy button', async () => {
+                    await this.privacyPolicy.click();
+                });
+            }
+        });
     }
 
     async getCookieSettings(timeout = 5000): Promise<void> {
-        if (await this.isVisible(timeout)) {
-            await this.cookieSettingsButton.click();
-        }
+        await allure.step('Get Cookie Settings', async () => {
+            if (await this.isVisible(timeout)) {
+                await allure.step('Click Cookies Settings button', async () => {
+                    await this.cookieSettingsButton.click();
+                });
+            }
+        });
     }
 
     async acceptAll(timeout = 5000): Promise<void> {
-        if (await this.isVisible(timeout)) {
-            await this.acceptButton.click();
-            await this.waitUntilClosed();
-        }
+        await allure.step('Accept all cookies', async () => {
+            if (await this.isVisible(timeout)) {
+                await allure.step('Click Accept All button', async () => {
+                    await this.acceptButton.click();
+                });
+                await this.waitUntilClosed();
+            }
+        });
     }
 
 }

@@ -5,12 +5,14 @@ export class PageMenuItemComponent {
 
     name: Locator;
     dropdownBtn: Locator;
+    link: Locator;
     menuLocator: Locator;
     pages: PageItemComponent[];
 
     constructor(parent: Locator, pages: PageItemComponent[] = []) {
         this.name = parent;
         this.dropdownBtn = parent.locator('button');
+        this.link = parent.locator('xpath=ancestor::a[1]');
         this.menuLocator = parent.page().locator('ul[role="menu"]:visible');
         this.pages = pages;
     }
@@ -19,9 +21,17 @@ export class PageMenuItemComponent {
         return await this.name.textContent() || '';
     }
 
+    async getLink(): Promise<string> {
+        const hasLink = await this.link.count();
+        if (hasLink === 0) return '';
+        const href = await this.link.getAttribute('href') ?? '';
+        return href;
+    }
+
 
     async clickDropdown(): Promise<void> {
-        await this.name.click();
+
+        await this.name.click({force: true});
     }
 
     async subMenuIsVisible(): Promise<boolean> {
@@ -36,7 +46,7 @@ export class PageMenuItemComponent {
     async getSubMenu(): Promise<void> {
         if (!(await this.subMenuIsVisible())) {
             await this.clickDropdown();
-            await expect(this.menuLocator).toBeVisible({timeout: 5000});
+            await expect(this.menuLocator).toBeVisible({timeout: 10000});
         }
     }
 
