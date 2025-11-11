@@ -8,6 +8,9 @@ import {PrivacyPolicyPage} from '../page/client/PrivacyPolicyPage';
 import {AdminLoginPage} from '../page/admin/AdminLoginPage';
 import {AdminDashboardPage} from '../page/admin/AdminDashboardPage';
 import {ResearchAndAcademicWorksPage} from "../page/client/ResearchAndAcademicWorksPage";
+import { PrivacyPolicyPage } from '../page/client/PrivacyPolicyPage';
+import { MediaPage } from '../page/client/MediaPage';
+import { TermsPage } from '../page/client/TermsPage';
 
 
 type MyFixturesPage = {
@@ -18,8 +21,11 @@ type MyFixturesPage = {
     contactsPage: ContactsPage;
     adminLoginPage: AdminLoginPage;
     adminDashboardPage: AdminDashboardPage;
+    researchAndAcademicWorksPage: ResearchAndAcademicWorksPage;
     privacyPolicyPage: PrivacyPolicyPage;
-    researchAndAcademicWorksPage: ResearchAndAcademicWorksPage
+    termsPage: TermsPage;
+    mediaPage: MediaPage;
+
 };
 
 export const test = baseTest.extend<MyFixturesPage>({
@@ -58,6 +64,18 @@ export const test = baseTest.extend<MyFixturesPage>({
     researchAndAcademicWorksPage: async ({page}, use) => {
         const researchAndAcademicWorksPage = new ResearchAndAcademicWorksPage(page);
         await use(researchAndAcademicWorksPage);
+    },
+    privacyPolicyPage: async ({page}, use) => {
+        const privacyPolicyPage = new PrivacyPolicyPage(page);
+        await use(privacyPolicyPage);
+    },
+    termsPage: async ({page}, use) => {
+        const termsPage = new TermsPage(page);
+        await use(termsPage);
+    },
+    mediaPage: async ({page}, use) => {
+        const mediaPage = new MediaPage(page);
+        await use(mediaPage);
     }
 });
 

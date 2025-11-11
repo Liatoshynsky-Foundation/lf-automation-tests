@@ -3,6 +3,7 @@ import {FooterLanguage} from "../../data/enums";
 import {OrgInfo} from '../../data/orgInfo';
 import * as allure from 'allure-js-commons';
 import {footerMenu} from '../../data/footerMenu';
+import {legalMenu} from '../../data/legalMenu';
 
 test.describe('UI - Footer', () => {
     test('check Footer Support Btn link', async ({aboutUsPage, supportUsPage, page}) => {
@@ -155,7 +156,6 @@ test.describe('UI - Footer', () => {
         await allure.parameter('Component', 'Footer');
 
         await allure.step('Go to homepage', async () => {
-            // await aboutUsPage.goto('/');
             await aboutUsPage.visit();
         });
 
@@ -288,5 +288,73 @@ test.describe('UI - Footer', () => {
             await allure.parameter('Email href', href);
             expect(href).toBe('mailto:liatoshynsky@gmail.com');
         });
+    });
+
+    test('check footer legal menu', async ({aboutUsPage, page }) => {
+        await allure.description('Verify footer Legal Menu items, and navigation for both English and Ukrainian languages.');
+        await allure.label('feature', 'Footer Menu');
+        await allure.label('severity', 'normal');
+        await allure.parameter('Component', 'Footer');
+
+        await allure.step('Go to homepage', async () => {
+            await aboutUsPage.visit();
+        });
+
+        await allure.step('Verify footer legal menu item names and links in English', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            expect(currentLang).toBe('en');
+            await allure.parameter('Language', currentLang);
+            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+            const menuItems = await aboutUsPage.footer.legalMenu.getAllMenuItems();
+            const names = menuItems.map(i => i.name);
+            const urls = menuItems.map(i => i.href.replace('/', ''));
+
+            expect(names).toEqual(legalMenu.en.map(i => i.name));
+            expect(urls).toEqual(legalMenu.en.map(i => i.url));
+        });
+
+        await allure.step('Verify footer legal menu navigation in English', async () => {
+
+            for (const item of legalMenu.en){
+                await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+                await aboutUsPage.footer.legalMenu.clickItemByName(item.name);
+                
+                await expect(page).toHaveURL(new RegExp(`${item.url}$`));
+                await expect(await page.title()).toEqual(item.title);
+
+                await page.goto('/about-us');
+            }
+        });
+
+        await allure.step('Switch language to Ukrainian', async () => {
+            await aboutUsPage.footer.changeLangBtn.click();
+        });
+
+        await allure.step('Verify footer legal menu item names and links in Ukrainian', async () => {
+            const currentLang = await aboutUsPage.getCurrentPageLanguage();
+            expect(currentLang).toBe('uk');
+            await allure.parameter('Language', currentLang);
+            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+            const menuItems = await aboutUsPage.footer.legalMenu.getAllMenuItems();
+            const names = menuItems.map(i => i.name);
+            const urls = menuItems.map(i => i.href.replace('/', ''));
+
+            expect(names).toEqual(legalMenu.uk.map(i => i.name));
+            expect(urls).toEqual(legalMenu.uk.map(i => i.url));
+        })
+
+        await allure.step('Verify footer legal menu navigation in Ukrainian', async () => {
+
+            for (const item of legalMenu.uk){
+                await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+                await aboutUsPage.footer.legalMenu.clickItemByName(item.name);
+                
+                await expect(page).toHaveURL(new RegExp(`${item.url}$`));
+                await expect(await page.title()).toEqual(item.title);
+
+                await page.goto('/about-us');
+            }
+        })
+
     });
 });
