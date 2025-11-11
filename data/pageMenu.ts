@@ -1,5 +1,20 @@
-export const footerMenu = {
-  headers: {
+export const pageMenu = {
+  headerButtons: {
+    en: [
+      'Borys Liatoshynskyi',
+      'Foundation',
+      'Archive Cabinet',
+      'Cooperation'
+    ],
+    uk: [
+      'Борис Лятошинський',
+      'Фундація',
+      'Кабінет-архів',
+      'Співпраця'
+    ]
+  },
+  
+  footerHeaders: {
     en: [
       'BORYS LIATOSHYNSKYI',
       'FOUNDATION',
