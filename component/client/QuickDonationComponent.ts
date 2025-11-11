@@ -42,6 +42,9 @@ export class QuickDonationComponent {
     public get EXPECTED_IBAN_GBP(): string {
         return OrgIBAN.GBP;
     }
+    public get EXPECTED_IBAN_USD(): string {
+        return OrgIBAN.USD;
+    }
 
     async isMainTitleVisible(): Promise<boolean> {
         return this.mainTitle.isVisible();
@@ -118,5 +121,9 @@ export class QuickDonationComponent {
 
     async copyAndVerifyEURIBAN(): Promise<void> {
         await this.copyAndVerifyIBAN(this.EXPECTED_IBAN_EUR);
+    }
+
+    async copyAndVerifyUSDIBAN(): Promise<void> {
+        await this.copyAndVerifyIBAN(this.EXPECTED_IBAN_USD);
     }
 }
