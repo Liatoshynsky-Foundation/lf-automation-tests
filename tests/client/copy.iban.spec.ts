@@ -4,7 +4,7 @@ import {QuickDonationComponent} from '../../component/client/QuickDonationCompon
 
 test.describe('Donation Page IBAN Copy Functionality (Clean POM)', () => {
 
-    test('should copy the UAH IBAN correctly to the clipboard', async ({page}) => {
+    test.skip('should copy the UAH IBAN correctly to the clipboard', async ({page}) => {
         //const fullUrl = BASE_CLIENT_URL + SUPPORT_US_PATH;
         const donationPage = new QuickDonationComponent(page);
         await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);

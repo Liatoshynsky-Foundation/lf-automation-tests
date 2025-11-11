@@ -1,5 +1,6 @@
 import {Locator, Page} from "@playwright/test";
 import {BaseComponent} from "./BaseComponent";
+import * as allure from "allure-js-commons";
 
 export class WorkItemComponent extends BaseComponent{
     name: Locator;
@@ -16,31 +17,41 @@ export class WorkItemComponent extends BaseComponent{
     }
 
     async getName(): Promise<string> {
-        return await this.name.textContent() || '';
+       return await allure.step('Get Work Name', async () => {
+            return await this.name.textContent() || '';
+       });
     }
 
     async getAuthor(): Promise<string> {
-        return await this.author.textContent() || '';
+        return await allure.step('Get Work Author', async () => {
+            return await this.author.textContent() || '';
+        });
     }
 
     async getYear(): Promise<string> {
-        return await this.year.textContent() || '';
+        return await allure.step('Get Work Year', async () => {
+            return await this.year.textContent() || '';
+        });
     }
 
     async getYearNormalized(): Promise<number> {
-        const yearText = await this.year.textContent();
-        if (!yearText) return 0;
+        return await allure.step('Get normalized Year', async () => {
+            const yearText = await this.year.textContent();
+            if (!yearText) return 0;
 
-        if (yearText.includes('-')) {
-            const parts = yearText.split('-').map(p => p.trim());
-            return Number(parts[1]);
-        }
+            if (yearText.includes('-')) {
+                const parts = yearText.split('-').map(p => p.trim());
+                return Number(parts[1]);
+            }
 
-        return Number(yearText);
+            return Number(yearText);
+        });
     }
 
     async clickGoToButton(): Promise<void> {
-        await this.goToButton.click();
+        return await allure.step('Click Go To button', async () => {
+            await this.goToButton.click();
+        });
     }
 
 

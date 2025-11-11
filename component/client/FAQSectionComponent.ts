@@ -2,7 +2,7 @@ import {Locator} from "@playwright/test";
 
 export class FAQSectionComponent {
     private root: Locator;
-    private questionTitle: Locator;
+    public questionTitle: Locator;
     private answerContainer: Locator;
 
     constructor(root: Locator) {
