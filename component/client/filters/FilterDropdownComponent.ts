@@ -2,6 +2,7 @@ import { Locator, Page } from "@playwright/test";
 import { BaseComponent } from "../BaseComponent";
 import { FilterOptionItemComponent } from "./FilterOptionItemComponent";
 import { step } from "allure-js-commons";
+import {FilterOptions} from "../../../data/filter.constants";
 
 /**
  * Represents the dropdown inside each filter (e.g., Genre, Category, Author etc.)
@@ -17,7 +18,7 @@ export class FilterDropdownComponent extends BaseComponent {
         this.clearButton = this.parent.locator('[data-testid="img"]');
     }
 
-    getOption(name: string): FilterOptionItemComponent {
+    getOption(name: FilterOptions): FilterOptionItemComponent {
         return new FilterOptionItemComponent(this.page, this.menu, name);
     }
 

@@ -31,6 +31,7 @@ export class HeaderChangeLangBtn extends BaseComponent {
 
     async waitForHeaderChangeLangBtnVisible(): Promise<void> {
         await allure.step(`Check if Change Language Btn is visible`, async () => {
+            await this.image.click();
             await this.waitIsVisible(this.menuLocator);
         })
     }
