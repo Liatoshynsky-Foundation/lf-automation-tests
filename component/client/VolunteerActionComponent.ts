@@ -3,12 +3,13 @@ import {VolunteerActionCardComponent} from './VolunteerActionCardComponent';
 
 export class VolunteerActionComponent {
     private sectionCards: Locator;
-    private offerHelpButton: Locator;
+    public mainTitle: Locator;
+    public offerHelpButton: Locator;
 
     constructor(private page: Page) {
         this.sectionCards = this.page.locator('div.MuiBox-root.css-1fesufy > div.MuiBox-root');
-
-        this.offerHelpButton = this.page.locator('body > div.MuiBox-root.css-swu6uj > div > div > div.MuiBox-root.css-c1nekw > div.MuiBox-root.css-1fesufy > a > div > div.MuiBox-root.css-1vx2ffw > p');
+        this.mainTitle = page.getByTestId('ActionsHelp-titleContainer-title');
+        this.offerHelpButton = page.getByTestId('ActionsHelp-buttonCard');
     }
 
 
@@ -36,5 +37,9 @@ export class VolunteerActionComponent {
 
     async clickOfferHelpButton(): Promise<void> {
         await this.offerHelpButton.click();
+    }
+
+    async isComponentVisible(): Promise<void> {
+        await this.mainTitle.waitFor({ state: 'visible' });
     }
 }
