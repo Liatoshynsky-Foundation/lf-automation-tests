@@ -19,14 +19,14 @@ export class CookiesModal {
     }
 
     async isVisible(timeout = 5000): Promise<boolean> {
-        let isVisible = false;
-        await allure.step('Check visibility of cookies modal', async () => {
+        return await allure.step('Check visibility of cookies modal', async () => {
             try {
                 await this.modalContainer.waitFor({state: 'visible', timeout: timeout});
-                isVisible = true;
-            } catch {}
+                return true;
+            } catch {
+                return false
+            }
         });
-        return isVisible;
     }
 
     async waitUntilClosed(): Promise<void> {

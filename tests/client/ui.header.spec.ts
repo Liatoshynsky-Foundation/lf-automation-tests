@@ -144,7 +144,7 @@ test.describe('UI - Header', () => {
         });
     });
 
-    test('test header visibility', async ({aboutUsPage, page}) => {
+    test('test header visibility', async ({aboutUsPage}) => {
         await allure.description('Test header visibility when scrolling down hides the header, scrolling up shows it again.');
         await allure.label('severity', 'high');
 
