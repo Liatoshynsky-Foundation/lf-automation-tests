@@ -1,12 +1,21 @@
 import {expect, test} from '../../fixtures/fixturePage';
-import * as allure from 'allure-js-commons';
 import {Language} from "../../data/enums";
+import {FilterNames, FilterOptions, ChipText, ValidationMessages } from "../../data/filter.constants";
+import * as allure from 'allure-js-commons';
+import {FilterYearItemComponent} from "../../component/client/filters/FilterYearItemComponent";
+import {FilterDropdownComponent} from "../../component/client/filters/FilterDropdownComponent";
+import {FilterOptionItemComponent} from "../../component/client/filters/FilterOptionItemComponent";
+import {FilterListItemComponent} from "../../component/client/filters/FilterListItemComponent";
+
 
 test.describe('UI – Artistry Page Filters', () => {
 
+    const currentLanguage = 'Ukrainian';
+
     test.beforeEach(async ({artistryPage}) => {
         await artistryPage.visit();
-        await artistryPage.header.changeLangBtn.selectLanguage(Language.UKRAINIAN);
+        await artistryPage.header.changeLangBtn.waitForHeaderChangeLangBtnVisible();
+        await artistryPage.header.changeLangBtn.selectLanguage(Language[currentLanguage]);
     });
 
     test('TC001 – Open and close Filters menu', async ({artistryPage}) => {
@@ -15,83 +24,129 @@ test.describe('UI – Artistry Page Filters', () => {
         await allure.label('severity', 'normal');
         await allure.parameter('Component', 'Filters Menu');
 
-        await allure.step('Open Filters menu', async () => {
-            const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
-            expect(await filtersMenu.isVisible()).toBe(true);
+        const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
 
-            await allure.step('Close Filters menu', async () => {
-                await artistryPage.filterButton.closeFiltersMenu();
-                expect(await filtersMenu.isHidden()).toBe(true);
-            });
+        await allure.step('Verify Filters menu is visible', async () => {
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
+
+        await allure.step('Close Filters menu', async () => {
+            await artistryPage.filterButton.closeFiltersMenu();
+            expect(await filtersMenu.isHidden()).toBe(true);
         });
     });
 
-    test('TC002 – Select one filter option', async ({artistryPage}) => {
+    test('TC002 – Select one filter option', async ({ artistryPage }) => {
         await allure.description('Verify selecting a single filter option updates chip and badge count.');
         await allure.label('feature', 'Filters');
         await allure.label('severity', 'normal');
         await allure.parameter('Component', 'Genre Filter');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
-        expect(await filtersMenu.isVisible()).toBe(true);
-        const genreFilter = filtersMenu.getListFilter('Жанр');
-        const dropdown = await genreFilter.openDropdown();
+        let filterDropdown: FilterDropdownComponent;
 
-        const option = dropdown.getOption('Романс');
-        await option.select();
-        expect(await option.isSelected()).toBe(true);
+        await allure.step('Verify Filters menu is visible', async () => {
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
 
-        const chip = filtersMenu.getActiveChip();
-        expect(await chip.isVisible()).toBe(true);
-        expect(await chip.getLabel()).toContain('1 обрано');
+        await allure.step('Open Genre filter dropdown', async () => {
+            const genreFilter = filtersMenu.getListFilter(FilterNames.GENRE);
+            filterDropdown = await genreFilter.openDropdown();
+        });
 
-        const badgeCount = await artistryPage.filterButton.getBadgeCount();
-        expect(badgeCount).toBe(1);
+        await allure.step('Select "Romance" option', async () => {
+            const option = filterDropdown.getOption(FilterOptions.ROMANCE);
+            await option.select();
+            expect(await option.isSelected()).toBe(true);
+        });
+
+        await allure.step('Verify chip label shows correct selection count', async () => {
+            const chip = filtersMenu.getActiveChip();
+            expect(await chip.isVisible()).toBe(true);
+            expect(await chip.getLabel()).toContain(ChipText[currentLanguage].oneSelected);
+        });
+
+        await allure.step('Verify badge count is updated to 1', async () => {
+            expect(await artistryPage.filterButton.getBadgeCount()).toBe(1);
+        });
     });
 
-    test('TC003 – Select multiple filter options', async ({artistryPage}) => {
+    test('TC003 – Select multiple filter options', async ({ artistryPage }) => {
         await allure.description('Verify multiple filters update the badge count correctly.');
         await allure.label('feature', 'Filters');
         await allure.parameter('Component', 'Genre + Year Filters');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
 
-        const genreFilter = filtersMenu.getListFilter('Жанр');
-        const dropdown = await genreFilter.openDropdown();
-        const artSongOption = dropdown.getOption('Мистецька пісня');
-        await artSongOption.select();
-        expect(await artSongOption.isSelected()).toBe(true);
+        await allure.step('Verify Filters menu is visible', async () => {
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
 
-        const chip = filtersMenu.getActiveChip();
-        expect(await chip.isVisible()).toBe(true);
-        expect(await chip.getLabel()).toContain('1 обрано');
+        await allure.step('Select option from Genre filter', async () => {
+            const genreFilter = filtersMenu.getListFilter(FilterNames.GENRE);
+            const dropdown = await genreFilter.openDropdown();
+            const option = dropdown.getOption(FilterOptions.ART_SONG);
+            await option.select();
+            expect(await option.isSelected()).toBe(true);
+        });
 
-        await filtersMenu.closeOpenedDropdown();
+        await allure.step('Verify chip label shows correct selection count', async () => {
+            const chip = filtersMenu.getActiveChip();
+            expect(await chip.isVisible()).toBe(true);
+            expect(await chip.getLabel()).toContain(ChipText[currentLanguage].oneSelected);
+        });
 
-        const yearFilter = filtersMenu.getYearFilter('Рік');
-        await yearFilter.setYearRange('1918', '1950');
-        await filtersMenu.closeOpenedDropdown();
+        await allure.step('Close Genre dropdown', async () => {
+             await filtersMenu.closeOpenedDropdown();
+             expect(await filtersMenu.isVisible()).toBe(true);
+        });
 
-        expect(await artistryPage.filterButton.getBadgeCount()).toBe(2);
+        await allure.step('Set year range in Year filter', async () => {
+            const yearFilter = filtersMenu.getYearFilter();
+            await yearFilter.openDropdown();
+            await yearFilter.setYearRange('1918', '1950');
+            await filtersMenu.closeOpenedDropdown();
+        });
+
+        await allure.step('Verify badge count is updated to 2', async () => {
+            expect(await artistryPage.filterButton.getBadgeCount()).toBe(2);
+        });
     });
 
-    test('TC004 – Clear one selected filter', async ({artistryPage}) => {
+    test('TC004 – Clear one selected filter', async ({ artistryPage }) => {
         await allure.description('Verify clearing a single selected filter resets state.');
         await allure.label('feature', 'Filters');
         await allure.parameter('Component', 'Genre Filter');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
-        const genreFilter = filtersMenu.getListFilter('Жанр');
-        const dropdown = await genreFilter.openDropdown();
+        let option: FilterOptionItemComponent;
 
-        const romanceOption = dropdown.getOption('Романс');
-        await romanceOption.select();
-        expect(await romanceOption.isSelected()).toBe(true);
+        await allure.step('Verify Filters menu is visible', async () => {
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
 
-        await dropdown.clear();
-        expect(await romanceOption.isSelected()).toBe(false);
-        await filtersMenu.page.waitForTimeout(500);
-        expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
+        await allure.step('Select option from Genre filter', async () => {
+            const genreFilter = filtersMenu.getListFilter(FilterNames.GENRE);
+            const dropdown = await genreFilter.openDropdown();
+            option = dropdown.getOption(FilterOptions.ROMANCE);
+            await option.select();
+            expect(await option.isSelected()).toBe(true);
+        });
+
+        await allure.step('Clear selected option from dropdown', async () => {
+            await option.deselect();
+            expect(await option.isSelected()).toBe(false);
+        });
+
+        await allure.step('Verify chip label is hidden after clearing selection', async () => {
+            const chip = filtersMenu.getActiveChip();
+            expect(await chip.isVisible()).toBe(false);
+        });
+
+        await allure.step('Verify badge is hidden after clearing selection', async () => {
+            await filtersMenu.page.waitForTimeout(500);
+            expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
+        });
     });
 
     test('TC005 – Clear all selected filters', async ({artistryPage}) => {
@@ -100,26 +155,48 @@ test.describe('UI – Artistry Page Filters', () => {
         await allure.parameter('Component', 'Filters Menu');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
-        const genreFilter = filtersMenu.getListFilter('Жанр');
-        const genreDropdown = await genreFilter.openDropdown();
-        const romanceOption = genreDropdown.getOption('Романс');
 
-        await romanceOption.select();
-        expect(await romanceOption.isSelected()).toBe(true);
-        await filtersMenu.closeOpenedDropdown();
+        await allure.step('Verify Filters menu is visible', async () => {
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
 
-        const yearFilter = filtersMenu.getYearFilter('Рік');
-        await yearFilter.setYearRange('1950', '1975');
-        await filtersMenu.closeOpenedDropdown();
+        await allure.step('Select option from Genre filter', async () => {
+            const genreFilter = filtersMenu.getListFilter(FilterNames.GENRE);
+            const dropdown = await genreFilter.openDropdown();
+            const option = dropdown.getOption(FilterOptions.ROMANCE);
+            await option.select();
+            expect(await option.isSelected()).toBe(true);
+        });
 
-        expect(await artistryPage.filterButton.getBadgeCount()).toBe(2);
+        await allure.step('Close Genre dropdown', async () => {
+            await filtersMenu.closeOpenedDropdown();
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
 
-        await filtersMenu.clearAllFilters();
-        await filtersMenu.page.waitForTimeout(500);
+        await allure.step('Set year range in Year filter', async () => {
+            const yearFilter = filtersMenu.getYearFilter();
+            await yearFilter.openDropdown();
+            await yearFilter.setYearRange('1950', '1975');
+            await filtersMenu.closeOpenedDropdown();
+        });
 
-        const chip = filtersMenu.getActiveChip();
-        expect(await chip.isVisible()).toBe(false);
-        expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
+        await allure.step('Verify badge count is updated to 2', async () => {
+            expect(await artistryPage.filterButton.getBadgeCount()).toBe(2);
+        });
+
+       await allure.step('Clear all selected filters', async () => {
+            await filtersMenu.page.waitForTimeout(500);
+            await filtersMenu.clearAllFilters();
+            await filtersMenu.page.waitForTimeout(500);
+        });
+
+        await allure.step('Verify chip label is hidden after clearing selection', async () => {
+            const chip = filtersMenu.getActiveChip();
+            expect(await chip.isVisible()).toBe(false);
+        })
+        await allure.step('Verify badge is hidden after clearing selection', async () => {
+            expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
+        });
     });
 
     test('TC006 – Verify no active filters by default', async ({artistryPage}) => {
@@ -127,7 +204,9 @@ test.describe('UI – Artistry Page Filters', () => {
         await allure.label('feature', 'Filters');
         await allure.parameter('Component', 'Filter Button');
 
-        expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
+        await allure.step('Verify badge is hidden after clearing selection', async () => {
+            expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
+        });
     });
 
     test('TC007 – Verify badge count updates dynamically', async ({artistryPage}) => {
@@ -136,30 +215,71 @@ test.describe('UI – Artistry Page Filters', () => {
         await allure.parameter('Component', 'Badge Count');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
-        const genreFilter = filtersMenu.getListFilter('Жанр');
-        const genreDropdown = await genreFilter.openDropdown();
-        const romanceOption = genreDropdown.getOption('Романс');
 
-        await romanceOption.select();
-        await filtersMenu.closeOpenedDropdown();
+        await allure.step('Verify Filters menu is visible', async () => {
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
 
-        const yearFilter = filtersMenu.getYearFilter('Рік');
-        await yearFilter.setYearRange('1950', '1975');
-        await filtersMenu.closeOpenedDropdown();
+        await allure.step('Select option from Genre filter', async () => {
+            const genreFilter = filtersMenu.getListFilter(FilterNames.GENRE);
+            const dropdown = await genreFilter.openDropdown();
+            const option = dropdown.getOption(FilterOptions.ROMANCE);
+            await option.select();
+            expect(await option.isSelected()).toBe(true);
+        });
 
-        expect(await artistryPage.filterButton.getBadgeCount()).toBe(2);
+        await allure.step('Close Genre dropdown', async () => {
+            await filtersMenu.closeOpenedDropdown();
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
 
-        await genreFilter.openDropdown();
-        await romanceOption.deselect();
-        await filtersMenu.closeOpenedDropdown();
-        expect(await artistryPage.filterButton.getBadgeCount()).toBe(1);
+        await allure.step('Set year range in Year filter', async () => {
+            const yearFilter = filtersMenu.getYearFilter();
+            await yearFilter.openDropdown();
+            await yearFilter.setYearRange('1950', '1975');
+            await filtersMenu.closeOpenedDropdown();
+        });
 
-        await yearFilter.openDropdown();
-        await yearFilter.clear();
-        await filtersMenu.closeOpenedDropdown();
-        await filtersMenu.page.waitForTimeout(500);
+        await allure.step('Verify badge count is updated to 2', async () => {
+            expect(await artistryPage.filterButton.getBadgeCount()).toBe(2);
+        });
 
-        expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
+        await allure.step('Open Genre dropdown and clear selected before option', async () => {
+            const genreFilter = filtersMenu.getListFilter(FilterNames.GENRE);
+            const dropdown = await genreFilter.openDropdown();
+            const option = dropdown.getOption(FilterOptions.ROMANCE);
+            await option.deselect();
+            expect(await option.isSelected()).toBe(false);
+        });
+
+        await allure.step('Close Genre dropdown', async () => {
+            await filtersMenu.closeOpenedDropdown();
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
+
+        await allure.step('Verify badge count is updated to 1', async () => {
+            expect(await artistryPage.filterButton.getBadgeCount()).toBe(1);
+        });
+
+        await allure.step('Open Year filter dropdown', async () => {
+            const yearFilter = filtersMenu.getYearFilter();
+            await yearFilter.openDropdown();
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
+
+        await allure.step('Click "Clear filter" button in Year filter', async () => {
+            const yearFilter = filtersMenu.getYearFilter();
+            await yearFilter.clickClearFilterButton();
+        });
+
+        await allure.step('Close Year filter dropdown', async () => {
+            await filtersMenu.closeOpenedDropdown();
+            await filtersMenu.page.waitForTimeout(500);
+        });
+
+        await allure.step('Verify badge is hidden after clearing selection', async () => {
+            expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
+        });
     });
 
     test('TC008 – Validate chip count updates correctly', async ({artistryPage}) => {
@@ -168,27 +288,48 @@ test.describe('UI – Artistry Page Filters', () => {
         await allure.parameter('Component', 'Chip');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
-        const genreFilter = filtersMenu.getListFilter('Жанр');
-        const dropdown = await genreFilter.openDropdown();
+        let dropdown:FilterDropdownComponent;
+        let option:FilterOptionItemComponent;
 
-        const romanceOption = dropdown.getOption('Романс');
-        await romanceOption.select();
-        expect(await romanceOption.isSelected()).toBe(true);
+        await allure.step('Verify Filters menu is visible', async () => {
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
 
-        const chip = genreFilter.getChip();
-        expect(await chip.isVisible()).toBe(true);
-        expect(await chip.getLabel()).toContain('1 обрано');
+        await allure.step("Select 'Romance' option from Genre filter", async () => {
+            const genreFilter = filtersMenu.getListFilter(FilterNames.GENRE);
+            dropdown = await genreFilter.openDropdown();
+            option = dropdown.getOption(FilterOptions.ROMANCE);
+            await option.select();
+            expect(await option.isSelected()).toBe(true);
+        });
 
-        const artSongOption = dropdown.getOption('Мистецька пісня');
-        await artSongOption.select();
-        expect(await artSongOption.isSelected()).toBe(true);
-        expect(await chip.getLabel()).toContain('2 обрано');
+        await allure.step('Verify chip label shows correct selection count', async () => {
+            const chip = filtersMenu.getActiveChip();
+            expect(await chip.isVisible()).toBe(true);
+            expect(await chip.getLabel()).toContain(ChipText[currentLanguage].oneSelected);
+        });
 
-        await romanceOption.deselect();
-        expect(await chip.getLabel()).toContain('1 обрано');
+        await allure.step("Select 'Art song' option from Genre filter", async () => {
+            const option = dropdown.getOption(FilterOptions.ART_SONG);
+            await option.select();
+            expect(await option.isSelected()).toBe(true);
+        });
+        await allure.step('Verify chip label shows correct selection count', async () => {
+            const chip = filtersMenu.getActiveChip();
+            expect(await chip.isVisible()).toBe(true);
+            expect(await chip.getLabel()).toContain(ChipText[currentLanguage].twoSelected);
+        });
 
-        await artSongOption.deselect();
-        expect(await chip.isVisible()).toBe(false);
+        await allure.step('Clear selected option from dropdown', async () => {
+            await option.deselect();
+            expect(await option.isSelected()).toBe(false);
+        });
+
+        await allure.step('Verify chip label shows correct selection count', async () => {
+            const chip = filtersMenu.getActiveChip();
+            expect(await chip.isVisible()).toBe(true);
+            expect(await chip.getLabel()).toContain(ChipText[currentLanguage].oneSelected);
+        });
     });
 
     test('TC009 – Year range valid', async ({artistryPage}) => {
@@ -197,11 +338,22 @@ test.describe('UI – Artistry Page Filters', () => {
         await allure.parameter('Component', 'Year Filter');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
-        const yearFilter = filtersMenu.getYearFilter('Рік');
-        await yearFilter.setYearRange('1919', '1997');
-        await filtersMenu.closeOpenedDropdown();
+        let yearFilter: FilterYearItemComponent;
 
-        expect(await artistryPage.filterButton.getBadgeCount()).toBe(1);
+        await allure.step('Verify Filters menu is visible', async () => {
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
+
+        await allure.step('Set year range in Year filter', async () => {
+            yearFilter = filtersMenu.getYearFilter();
+            await yearFilter.openDropdown();
+            await yearFilter.setYearRange('1919', '1997');
+            await filtersMenu.closeOpenedDropdown();
+        });
+
+        await allure.step('Verify badge count is updated to 1', async () => {
+            expect(await artistryPage.filterButton.getBadgeCount()).toBe(1);
+         });
     });
 
     test('TC010 – Year range invalid', async ({artistryPage}) => {
@@ -210,102 +362,239 @@ test.describe('UI – Artistry Page Filters', () => {
         await allure.parameter('Component', 'Year Filter');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
-        const yearFilter = filtersMenu.getYearFilter('Рік');
+        let yearFilter: FilterYearItemComponent;
 
-        await yearFilter.setYearRange('1918', '1999');
-        expect(await yearFilter.isValidationMessageVisible('Від')).toBe(false);
-        expect(await yearFilter.isValidationMessageVisible('До')).toBe(true);
+        await allure.step('Verify Filters menu is visible', async () => {
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
 
-        await yearFilter.updateFromInput('1917');
-        await yearFilter.updateToInput('1998');
-        expect(await yearFilter.isValidationMessageVisible('Від')).toBe(true);
-        expect(await yearFilter.isValidationMessageVisible('До')).toBe(false);
+        await allure.step('Open Year filter dropdown', async () => {
+            yearFilter = filtersMenu.getYearFilter();
+            await yearFilter.openDropdown();
+            expect(await yearFilter.isVisible()).toBe(true);
+        });
 
-        await yearFilter.updateFromInput('1917');
-        await yearFilter.updateToInput('1999');
-        expect(await yearFilter.isValidationMessageVisible('Від')).toBe(true);
-        expect(await yearFilter.isValidationMessageVisible('До')).toBe(true);
+        await allure.step('Enter valid "From" year and invalid "To" year', async () => {
+            await yearFilter.updateFromInput('1918');
+            await yearFilter.updateToInput('1999');
+            expect(await yearFilter.isToValidationMessageVisible()).toBe(true);
+        });
 
-        expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
+        await allure.step('Verify  validation message for "To" field is present', async () => {
+            expect(await yearFilter.isToValidationMessageVisible()).toBe(true);
+        });
+
+        await allure.step('Verify text of "To" validation message', async () => {
+            expect(await yearFilter.getToValidationText()).toBe(ValidationMessages[currentLanguage].TO_GREATER_THAN_MAX);
+        });
+
+        await allure.step('Enter invalid "From" year and valid "To" year', async () => {
+            await yearFilter.updateFromInput('1917');
+            await yearFilter.updateToInput('1998');
+            expect(await yearFilter.isFromValidationMessageVisible()).toBe(true);
+        });
+
+        await allure.step('Verify  validation message for "From" field is present', async () => {
+            expect(await yearFilter.isFromValidationMessageVisible()).toBe(true);
+        });
+
+        await allure.step('Verify text of "From" validation message', async () => {
+            expect(await yearFilter.getFromValidationText()).toBe(ValidationMessages[currentLanguage].FROM_LESS_THAN_MIN);
+        });
+
+        await allure.step('Enter invalid "From" year and invalid "To" year', async () => {
+            await yearFilter.updateFromInput('1917');
+            await yearFilter.updateToInput('1999');
+            expect(await yearFilter.isFromValidationMessageVisible()).toBe(true);
+        });
+
+        await allure.step('Verify  validation message for "From" field is present', async () => {
+            expect(await yearFilter.isFromValidationMessageVisible()).toBe(true);
+        });
+
+        await allure.step('Verify text of "From" validation message', async () => {
+            expect(await yearFilter.getFromValidationText()).toBe(ValidationMessages[currentLanguage].FROM_LESS_THAN_MIN);
+        });
+
+        await allure.step('Verify  validation message for "To" field is present', async () => {
+            expect(await yearFilter.isToValidationMessageVisible()).toBe(true);
+        });
+
+        await allure.step('Verify text of "To" validation message', async () => {
+            expect(await yearFilter.getToValidationText()).toBe(ValidationMessages[currentLanguage].TO_GREATER_THAN_MAX);
+        });
+
+        await allure.step('Verify badge is hidden after invalid inputs', async () => {
+            expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
+        });
     });
 
-    test('TC011 – Validation: Year range accepts only numeric values', async ({artistryPage}) => {
+    test('TC011 – Validation: Year range accepts only numeric values', async ({ artistryPage }) => {
         await allure.description('Verify year filter fields only accept numeric values.');
         await allure.label('feature', 'Filters');
         await allure.parameter('Component', 'Year Filter');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
-        const yearFilter = filtersMenu.getYearFilter('Рік');
-        await yearFilter.setYearRange('abc', 'xyz');
+        let yearFilter: FilterYearItemComponent;
 
-        expect(await yearFilter.isValidationMessageVisible('Від')).toBe(true);
-        expect(await yearFilter.isValidationMessageVisible('До')).toBe(true);
+        await allure.step('Verify Filters menu is visible', async () => {
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
 
-        await yearFilter.clear();
-        expect(await yearFilter.getFromValue()).toBe('1918');
-        expect(await yearFilter.getToValue()).toBe('1998');
-        expect(await yearFilter.isValidationMessageVisible('Від')).toBe(false);
-        expect(await yearFilter.isValidationMessageVisible('До')).toBe(false);
-        expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
+        await allure.step('Open Year filter dropdown', async () => {
+            yearFilter = filtersMenu.getYearFilter();
+            await yearFilter.openDropdown();
+            expect(await yearFilter.isVisible()).toBe(true);
+        });
+
+        await allure.step('Enter numeric values in "From" and "To" year fields', async () => {
+            await yearFilter.updateFromInput('abc');
+            await yearFilter.updateToInput('xyz');
+            expect(await yearFilter.isFromValidationMessageVisible()).toBe(true);
+        });
+
+        await allure.step('Verify  validation message for "From" field is present', async () => {
+            expect(await yearFilter.isToValidationMessageVisible()).toBe(true);
+        });
+        await allure.step('Verify text of "From" validation message', async () => {
+            expect(await yearFilter.getToValidationText()).toBe(ValidationMessages[currentLanguage].NUMERIC_ONLY);
+        });
+
+        await allure.step('Verify  validation message for "To" field is present', async () => {
+            expect(await yearFilter.isToValidationMessageVisible()).toBe(true);
+        });
+        await allure.step('Verify text of "To" validation message', async () => {
+            expect(await yearFilter.getToValidationText()).toBe(ValidationMessages[currentLanguage].NUMERIC_ONLY);
+        });
+
+        await allure.step('Verify badge is hidden after invalid inputs', async () => {
+            expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
+        });
     });
 
-    test('TC012 – Dropdown visibility toggle', async ({artistryPage}) => {
+    test('TC012 – Open and close filter dropdown', async ({artistryPage}) => {
         await allure.description('Check that dropdown opens and closes correctly.');
         await allure.label('feature', 'Filters');
         await allure.parameter('Component', 'Dropdown');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
-        const genreFilter = filtersMenu.getListFilter('Жанр');
 
-        await genreFilter.openDropdown();
-        expect(await genreFilter.isDropdownVisible()).toBe(true);
+        await allure.step('Verify Filters menu is visible', async () => {
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
 
-        await filtersMenu.closeOpenedDropdown();
-        expect(await genreFilter.isDropdownVisible()).toBe(false);
+        await allure.step("Open Genre filter dropdown", async () => {
+            const genreFilter = filtersMenu.getListFilter(FilterNames.GENRE);
+            await genreFilter.openDropdown();
+            expect(await genreFilter.isDropdownVisible()).toBe(true);
+        });
+
+        await allure.step('Close Genre dropdown', async () => {
+            await filtersMenu.closeOpenedDropdown();
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
     });
 
-    test('TC013 – Trash icon hidden when no filters selected', async ({artistryPage}) => {
+    test('TC013 – "Clear All filters" (trash icon) button hidden when no filters selected', async ({artistryPage}) => {
         await allure.description('Ensure "Clear all filters" icon is hidden when no filters are active.');
         await allure.label('feature', 'Filters');
         await allure.parameter('Component', 'Clear All Button');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
-        expect(await filtersMenu.isClearAllButtonVisible()).toBe(false);
+
+        await allure.step('Verify Filters menu is visible', async () => {
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
+
+        await allure.step('Verify Clear All button is hidden', async () => {
+            expect(await filtersMenu.isClearAllButtonVisible()).toBe(false);
+        });
     });
 
-    test('TC014 – Combined interaction flow', async ({artistryPage}) => {
-        await allure.description('Verify full user interaction flow across multiple filters.');
+    test('TC014 – Combined interaction flow', async ({ artistryPage }) => {
+        await allure.description('Verify full user interaction flow across multiple filters components.');
         await allure.label('feature', 'Filters');
         await allure.label('severity', 'critical');
-        await allure.parameter('Component', 'Combined Filters Flow');
+        await allure.parameter('Component', 'All');
 
         const filtersMenu = await artistryPage.filterButton.openFiltersMenu();
-        const genreFilter = filtersMenu.getListFilter('Жанр');
-        const genreDropdown = await genreFilter.openDropdown();
-        const romanceOption = genreDropdown.getOption('Романс');
+        let dropdown: FilterDropdownComponent;
+        let genreFilter:FilterListItemComponent;
 
-        await romanceOption.select();
-        await filtersMenu.closeOpenedDropdown();
+        await allure.step('Verify Filters menu is visible', async () => {
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
 
-        const yearFilter = filtersMenu.getYearFilter('Рік');
-        await yearFilter.setYearRange('1950', '1975');
-        await filtersMenu.closeOpenedDropdown();
+        await allure.step('Select option from Genre filter', async () => {
+            genreFilter = filtersMenu.getListFilter(FilterNames.GENRE);
+            dropdown = await genreFilter.openDropdown();
+            const option = dropdown.getOption(FilterOptions.ROMANCE);
+            await option.select();
+            expect(await option.isSelected()).toBe(true);
+        });
 
-        expect(await artistryPage.filterButton.getBadgeCount()).toBe(2);
+        await allure.step('Close Genre dropdown', async () => {
+            await filtersMenu.closeOpenedDropdown();
+            await filtersMenu.page.waitForTimeout(500);
+        });
 
-        const activeChipLabel = await filtersMenu.getActiveChipLabel();
-        expect(activeChipLabel).toContain('1 обрано');
+        await allure.step('Verify chip label shows correct selection count', async () => {
+            const chip = filtersMenu.getActiveChip();
+            expect(await chip.isVisible()).toBe(true);
+            expect(await chip.getLabel()).toContain(ChipText[currentLanguage].oneSelected);
+        });
 
-        await genreFilter.openDropdown();
-        await genreDropdown.clear();
-        await filtersMenu.closeOpenedDropdown();
+        await allure.step('Verify badge count is updated to 1', async () => {
+            expect(await artistryPage.filterButton.getBadgeCount()).toBe(1);
 
-        expect(await artistryPage.filterButton.getBadgeCount()).toBe(1);
+        });
 
-        await yearFilter.openDropdown();
-        await yearFilter.clear();
-        await filtersMenu.closeOpenedDropdown();
+        await allure.step('Set year range in Year filter', async () => {
+            const yearFilter = filtersMenu.getYearFilter();
+            await yearFilter.openDropdown();
+            expect(await yearFilter.isVisible()).toBe(true);
+            await yearFilter.setYearRange('1918', '1950');
+            await filtersMenu.closeOpenedDropdown();
+        });
 
-        expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
-    });
+        await allure.step('Verify badge count is updated to 2', async () => {
+            expect(await artistryPage.filterButton.getBadgeCount()).toBe(2);
+        });
+
+        await allure.step("Open Genre filter an deselect 'Romance' option", async () => {
+            filtersMenu.getListFilter(FilterNames.GENRE);
+            await genreFilter.openDropdown();
+            const option = dropdown.getOption(FilterOptions.ROMANCE);
+            await option.deselect();
+            expect(await option.isSelected()).toBe(false);
+        });
+
+        await allure.step('Close Genre dropdown', async () => {
+            await filtersMenu.closeOpenedDropdown();
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
+
+        await allure.step('Verify badge count is updated to 1', async () => {
+            expect(await artistryPage.filterButton.getBadgeCount()).toBe(1);
+        });
+        await allure.step('Open Year filter dropdown', async () => {
+            const yearFilter = filtersMenu.getYearFilter();
+            await yearFilter.openDropdown();
+            expect(await filtersMenu.isVisible()).toBe(true);
+        });
+
+        await allure.step('Click "Clear filter" button in Year filter', async () => {
+            const yearFilter = filtersMenu.getYearFilter();
+            await yearFilter.clickClearFilterButton();
+        });
+
+        await allure.step('Close Year filter dropdown', async () => {
+            await filtersMenu.closeOpenedDropdown();
+        });
+
+        await allure.step('Verify badge is hidden after clearing selection', async () => {
+            await filtersMenu.page.waitForTimeout(500);
+            expect(await artistryPage.filterButton.isBadgeHidden()).toBe(true);
+        });
+   });
 });

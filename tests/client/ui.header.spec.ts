@@ -128,6 +128,29 @@ test.describe('UI - Header', () => {
         });
     });
 
+    test('test header visibility', async ({aboutUsPage}) => {
+        await allure.description('Test header visibility when scrolling down hides the header, scrolling up shows it again.');
+        await allure.label('severity', 'high');
+
+        await allure.step('Go to About Us page', async () => {
+            await aboutUsPage.goto('/');
+        });
+
+        await allure.step('Check header is initially visible', async () => {
+            expect((await aboutUsPage.header.isHeaderVisible())).toBeTruthy();
+        });
+
+        await allure.step('Scroll down to hide header', async () => {
+            await aboutUsPage.header.hideHeader();
+            expect(await (aboutUsPage.header.isHeaderVisible())).toBeFalsy();
+        });
+
+        await allure.step('Scroll up to show header again', async () => {
+            await aboutUsPage.header.callHeader();
+            expect((await aboutUsPage.header.isHeaderVisible())).toBeTruthy();
+        });
+    });
+
     test('check Header Page Menu', async ({aboutUsPage, page}) => {
         await allure.description('Verify header menu button names, submenu items, and navigation links for both English and Ukrainian languages.');
         await allure.label('feature', 'Header Menu');
@@ -148,7 +171,7 @@ test.describe('UI - Header', () => {
 
             for (const item of menuButtons) {
                 menuNames.push(await item.getName());
-            }               
+            }
             expect(menuNames).toEqual(pageMenu.headerButtons.en);
         });
 
@@ -160,7 +183,7 @@ test.describe('UI - Header', () => {
             for (const button of menuHeaders){
                 const buttonName = await button.getName();
                 await allure.parameter('Header button:', buttonName);
-                
+
                 await allure.step(`Check header button: ${buttonName}`, async () => {
                     const hasLink = await button.getLink();
 
@@ -172,7 +195,7 @@ test.describe('UI - Header', () => {
 
                         if (await button.subMenuIsVisible()) {
                             const subMenu = await button.getSubPages();
-                            
+
                             for (const item of subMenu){
                                 const name = await item.get_Name();
                                 const url = await item.getLink();
@@ -195,7 +218,7 @@ test.describe('UI - Header', () => {
             expect(names).toEqual(pageMenu.items.map(i => i.en_name));
             expect(urls).toEqual(pageMenu.items.map(i => i.url));
         });
-        
+
         await allure.step('Change language to Ukrainian', async () => {
             const button = aboutUsPage.header.changeLangBtn;
             await button.click();
@@ -212,7 +235,7 @@ test.describe('UI - Header', () => {
 
             for (const item of menuButtons) {
                 menuNames.push(await item.getName());
-            }               
+            }
             expect(menuNames).toEqual(pageMenu.headerButtons.uk);
         });
 
@@ -224,7 +247,7 @@ test.describe('UI - Header', () => {
             for (const button of menuHeaders){
                 const buttonName = await button.getName();
                 await allure.parameter('Header button:', buttonName);
-                
+
                 await allure.step(`Check header button: ${buttonName}`, async () => {
                     const hasLink = await button.getLink();
 
@@ -236,7 +259,7 @@ test.describe('UI - Header', () => {
 
                         if (await button.subMenuIsVisible()) {
                             const subMenu = await button.getSubPages();
-                            
+
                             for (const item of subMenu){
                                 const name = await item.get_Name();
                                 const url = await item.getLink();
@@ -260,4 +283,4 @@ test.describe('UI - Header', () => {
             expect(urls).toEqual(pageMenu.items.map(i => i.url));
         });
     });
-});   
+});

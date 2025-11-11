@@ -26,20 +26,7 @@ export class PageItemComponent extends BaseComponent{
     }
 
     async footerclick(): Promise<void> {
-        // await this.name.waitFor({state: 'visible'});
-        // await this.name.scrollIntoViewIfNeeded();
-
-        // await this.name.isVisible();
         await this.name.click();
         await this.sleep(1000);
-        //  await Promise.all([
-        //     this.name.click(),
-        //     this.name.page().waitForLoadState('networkidle'),
-        // ]);
-        // const page = this.name.page();
-        // const oldUrl = page.url();
-        // await this.name.click();
-        // await expect.poll(() => page.url()).not.toBe(oldUrl);
-        // await expect(page.locator('main')).toBeVisible({timeout: 10000});
     }
 }

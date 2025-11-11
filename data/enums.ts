@@ -13,3 +13,16 @@ export const FooterLanguage: { [key: string]: LanguageDetails } = {
     Ukrainian: {value: "Українською", shortName: "uk"},
 };
 
+export const Currency = {
+    UAH: 'UAH',
+    USD: 'USD',
+    EUR: 'EUR',
+    GBP: 'GBP',
+}
+
+export const OrgIBAN = {
+    UAH: 'UA283510050000026003879189233', 
+    USD: 'UA283510050000026003879189233USD',
+    EUR: 'UA283510050000026003879189233EUR', 
+    GBP: 'UA283510050000026003879189233GBP',
+}

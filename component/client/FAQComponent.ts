@@ -2,10 +2,12 @@ import {Locator, Page} from "@playwright/test";
 import {FAQSectionComponent} from './FAQSectionComponent';
 
 export class FAQComponent {
+    public mainTitle: Locator;
     private root: Locator;
     private sectionRoots: Locator;
 
     constructor(private page: Page) {
+        this.mainTitle = page.getByTestId('Faq-titleContainer-title');
         this.root = page.locator('div.MuiBox-root').filter({has: page.locator('h2')}).first();
         this.sectionRoots = this.root.locator('.MuiAccordion-root');
     }
@@ -34,4 +36,7 @@ export class FAQComponent {
         return new FAQSectionComponent(sectionRoot);
     }
 
+     async isComponentVisible(): Promise<void> {
+        await this.mainTitle.waitFor({ state: 'visible' });
+    }
 }

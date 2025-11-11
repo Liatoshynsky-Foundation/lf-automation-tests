@@ -11,6 +11,7 @@ export class HeaderComponent extends BaseComponent {
     playerBtn: Locator;
     changeLangBtn: HeaderChangeLangBtn;
     supportFundBtn: SupportFoundationBtn;
+    root: Locator;
 
     constructor(page: Page) {
         super(page, page.locator('header'));
@@ -19,6 +20,7 @@ export class HeaderComponent extends BaseComponent {
         this.changeLangBtn = new HeaderChangeLangBtn(this.page, this.parent);
         this.supportFundBtn = new SupportFoundationBtn(this.parent);
         this.pageMenu = this.parent.locator('div[aria-label="Button Group"]:has(button)');
+        this.root = page.locator('header');
     }
 
     async getMenuItems(): Promise<PageMenuItemComponent[]> {
@@ -57,6 +59,34 @@ export class HeaderComponent extends BaseComponent {
                 });
             }
         })
+    }
+
+    async isHeaderVisible(): Promise<boolean> {
+        const transformValue = await this.root.evaluate(el => getComputedStyle(el).transform);
+        const translateY = parseFloat(transformValue.split(',')[5]);
+        return translateY >= 0;
+    }
+
+    async callHeader(): Promise<void> {
+        if (await this.isHeaderVisible()) return;
+
+        await this.page.mouse.wheel(0, -2000);
+
+        await this.page.waitForFunction(
+            el => parseFloat(getComputedStyle(el).transform.split(',')[5]) >= 0,
+            (await this.root.elementHandle())!
+        );
+    }
+
+    async hideHeader() : Promise<void> {
+        if (!(await this.isHeaderVisible())) return;
+
+        await this.page.mouse.wheel(0, 2000);
+
+        await this.page.waitForFunction(
+            el => parseFloat(getComputedStyle(el).transform.split(',')[5]) < 0,
+            (await this.root.elementHandle())!
+        );
     }
 }
 
