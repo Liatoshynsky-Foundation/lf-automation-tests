@@ -22,8 +22,6 @@ export class QuickDonationComponent {
 
     constructor(private page: Page) {
         this.root = page.locator('h4:has-text("QUICK DONATION:")').locator('xpath=..').first();
-        //this.root = page.locator('div.MuiBox-root.css-1txbm8g').first();
-
         this.mainTitle = this.root.locator('h4');
         this.amountInput = this.root.locator('input').first();
         this.contributionTypeTabs = this.root.locator('.MuiButtonGroup-root');
@@ -116,5 +114,9 @@ export class QuickDonationComponent {
 
     private getExpectedIban(currency: AllowedCurrency): string {
         return this.ibanMap[currency];
+    }
+
+    async copyAndVerifyEURIBAN(): Promise<void> {
+        await this.copyAndVerifyIBAN(this.EXPECTED_IBAN_EUR);
     }
 }
