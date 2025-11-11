@@ -118,8 +118,8 @@ export const privacyPolicyContent = {
     },
     contactUs: {
       text: "Якщо у вас є будь-які запитання або побажання щодо цієї Політики конфіденційності, не соромтеся звертатися до нас за через електронну пошту",
-      email: "liatoshynsky@gmail.com", // Updated email
-      contactLink: "/contacts", // UK link
+      email: "liatoshynsky@gmail.com",
+      contactLink: "/contacts",
     },
   },
   en: {

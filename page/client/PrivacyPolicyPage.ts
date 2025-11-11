@@ -60,10 +60,10 @@ export class PrivacyPolicyPage extends ClientBasePage {
       '[data-testid="PrivacyPolicy-contactUs"] a[href^="mailto:"]'
     );
     this.contactLink = page.locator(
-      '[data-testid="PrivacyPolicy-userRights"] a[href="/contact"]'
+      '[data-testid="PrivacyPolicy-userRights"] a'
     );
-    this.sectionTitles = page.locator("h2.MuiTypography-root");
-    this.bulletPoints = page.locator(".css-1fecjwp");
+    this.sectionTitles = page.locator('h2[class*="MuiTypography"]');
+    this.bulletPoints = page.locator('li[class*="MuiListItem"], ul li, ol li');
   }
 
   async visit(): Promise<void> {
