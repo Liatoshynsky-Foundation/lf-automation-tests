@@ -24,7 +24,7 @@ export class InputFieldC {
         }
 
 
-        this.errorText = this.fieldLocator.locator('.Mui-error');
+        this.errorText = this.fieldLocator.locator('.MuiFormHelperText-root.Mui-error');
     }
 
 

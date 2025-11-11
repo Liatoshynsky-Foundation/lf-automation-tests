@@ -1,67 +1,110 @@
-import {Locator, Page} from '@playwright/test';
-import {BaseComponent} from '../BaseComponent';
-
+import { Locator, Page } from '@playwright/test';
+import { BaseComponent } from '../BaseComponent';
+import { YearInputIndex } from "../../../data/filter.constants";
+import { step } from 'allure-js-commons';
 /**
  * Represents the "Year" filter item with range inputs ("From" / "To").
  * Allows opening, setting, clearing, and closing the dropdown.
  */
-
 export class FilterYearItemComponent extends BaseComponent {
+    private container: Locator;
     private dropdownPanel: Locator;
-    private root: Locator;
-    private title: Locator;
-    private dropdownIcon: Locator;
+    private clearFilterButton: Locator;
     private fromInput: Locator;
     private toInput: Locator;
-    private clearButton: Locator;
 
-    constructor(page: Page, parent: Locator, filterName: string) {
+    constructor(page: Page, parent: Locator) {
         super(page, parent);
-
-        const filterLabel = this.parent.locator(`p:has-text("${filterName}")`);
-        this.root = filterLabel.locator('xpath=ancestor::div[contains(@class, "MuiBox-root")][1]');
-        this.title = this.root.locator('p');
-
-        this.dropdownIcon = this.root.locator('img[alt="dropdown"], svg[width="16"]').first();
-
+        this.container = this.page.locator('[data-testid="MusicTableFilters-year"]');
         this.dropdownPanel = this.page.locator('.MuiPaper-root.MuiPopover-paper');
+        this.clearFilterButton = this.page.locator('div[aria-label="clear"]');
+        this.fromInput = this.dropdownPanel.locator('.MuiTextField-root input').nth(YearInputIndex.FROM);
+        this.toInput = this.dropdownPanel.locator('.MuiTextField-root input').nth(YearInputIndex.TO);
+    }
 
-        const inputs = this.dropdownPanel.locator('.MuiTextField-root input');
-        this.fromInput = inputs.nth(0);
-        this.toInput = inputs.nth(1);
+    private async getHelperByInput(input: Locator): Promise<Locator> {
+        const id = await input.getAttribute('aria-describedby');
+        return this.page.locator(`#${id}`);
+    }
 
-        this.clearButton = this.page.locator('[data-testid="img"]');
+    private async getFromHelper(): Promise<Locator> {
+        return this.getHelperByInput(this.fromInput);
+    }
+
+    private async getToHelper(): Promise<Locator> {
+        return this.getHelperByInput(this.toInput);
     }
 
     async openDropdown(): Promise<void> {
-        await this.dropdownIcon.click();
+        return await step('Open Year dropdown', async () => {
+            await this.container.click();
+        });
     }
 
-    async closeDropdown(): Promise<void> {
-        await this.dropdownIcon.click();
-    }
-
-    async isDropdownVisible(): Promise<boolean> {
-        return await this.dropdownPanel.isVisible();
-    }
-
-    async setRange(from: string, to: string): Promise<void> {
-        if (!(await this.isDropdownVisible())) {
-            await this.openDropdown();
-        }
-        await this.fromInput.fill(from);
-        await this.toInput.fill(to);
+    async isVisible(): Promise<boolean> {
+        return await step('Check if Year dropdown is visible', async () => {
+            return this.dropdownPanel.isVisible();
+        });
     }
 
     async getFromValue(): Promise<string> {
-        return await this.fromInput.inputValue();
+        return await step('Get value from "From" input', async () => {
+            return this.fromInput.inputValue();
+        });
     }
 
     async getToValue(): Promise<string> {
-        return await this.toInput.inputValue();
+        return await step('Get value from "To" input', async () => {
+            return this.toInput.inputValue();
+        });
     }
 
-    async clear(): Promise<void> {
-        await this.clearButton.click();
+    async updateFromInput(value: string): Promise<void> {
+        await step(`Update "From" input with value "${value}"`, async () => {
+            await this.fromInput.click();
+            await this.fromInput.press('Backspace');
+            await this.fromInput.fill(value);
+        });
+    }
+
+    async updateToInput(value: string): Promise<void> {
+        await step(`Update "To" input with value "${value}"`, async () => {
+            await this.toInput.click();
+            await this.toInput.press('Backspace');
+            await this.toInput.fill(value);
+        });
+    }
+
+    async setYearRange(from: string, to: string): Promise<void> {
+        return await step(`Set Year range directly: ${from} - ${to}`, async () => {
+            await this.fromInput.fill(from);
+            await this.toInput.fill(to);
+        });
+    }
+
+    async clickClearFilterButton(): Promise<void> {
+        return await step('Click "Clear filter" button', async () => {
+            await this.clearFilterButton.click();
+        });
+    }
+
+    async isFromValidationMessageVisible(): Promise<boolean> {
+        const helper = await this.getFromHelper();
+        return await helper.isVisible();
+    }
+
+    async getFromValidationText(): Promise<string> {
+        const helper = await this.getFromHelper();
+        return (await helper.textContent())?.trim() || '';
+    }
+
+    async isToValidationMessageVisible(): Promise<boolean> {
+        const helper = await this.getToHelper();
+        return await helper.isVisible();
+    }
+
+    async getToValidationText(): Promise<string> {
+        const helper = await this.getToHelper();
+        return (await helper.textContent())?.trim() || '';
     }
 }

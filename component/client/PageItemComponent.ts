@@ -9,7 +9,7 @@ export class PageItemComponent extends BaseComponent{
     constructor(page: Page, parent: Locator) {
         super(page, parent);
         this.name = parent;
-        this.link = parent.locator('..');
+        this.link = parent.locator('xpath=ancestor::a[1]');
     }
 
     async get_Name(): Promise<string> {
@@ -26,20 +26,7 @@ export class PageItemComponent extends BaseComponent{
     }
 
     async footerclick(): Promise<void> {
-        // await this.name.waitFor({state: 'visible'});
-        // await this.name.scrollIntoViewIfNeeded();
-
-        // await this.name.isVisible();
         await this.name.click();
         await this.sleep(1000);
-        //  await Promise.all([
-        //     this.name.click(),
-        //     this.name.page().waitForLoadState('networkidle'),
-        // ]);
-        // const page = this.name.page();
-        // const oldUrl = page.url();
-        // await this.name.click();
-        // await expect.poll(() => page.url()).not.toBe(oldUrl);
-        // await expect(page.locator('main')).toBeVisible({timeout: 10000});
     }
 }

@@ -7,6 +7,7 @@ import {MediaMenuBtn} from './MediaMenuBtn';
 import * as allure from "allure-js-commons";
 import {ClientBasePage} from '../../page/client/ClientBasePage';
 import {FooterPageMenuComponent} from './FooterPageMenuComponent';
+import { LegalMenuComponent } from './LegalMenuComponent';
 
 export class FooterComponent extends BaseComponent {
     logo: Locator;
@@ -16,7 +17,7 @@ export class FooterComponent extends BaseComponent {
     infoEmail: Locator;
     contactUsBtn: ContactUsBtn;
     supportFundBtn: SupportFoundationBtn;
-    legalMenu: Locator;
+    legalMenu: LegalMenuComponent;
     copyrightText: Locator;
     changeLangBtn: FooterChangeLangBtn;
     pageMenu: FooterPageMenuComponent;
@@ -33,11 +34,11 @@ export class FooterComponent extends BaseComponent {
         this.infoEmail = this.parent.locator('//div[2]/div[3]/div/div[2]/div[2]');
         this.contactUsBtn = new ContactUsBtn(this.parent);
         this.supportFundBtn = new SupportFoundationBtn(this.parent);
-        this.legalMenu = this.parent.locator('div[2]/div[7]/div/ul');
+        this.legalMenu = new LegalMenuComponent(this.parent.locator('//div[2]/div[7]/div/ul'));
         this.copyrightText = this.parent.locator('//div[2]/div[7]/div/p');
         this.changeLangBtn = new FooterChangeLangBtn(this.page, this.parent);
         this.pageMenu = new FooterPageMenuComponent(this.parent.locator('//div[2]/div[6]/div'));
-        this.mediaMenu = new MediaMenuBtn(this.parent.locator('div[2]/div[5]/div'));
+        this.mediaMenu = new MediaMenuBtn(this.parent.locator('//div[2]/div[5]/div'));
         this.developedBy = this.parent.locator('img[alt="OpenTech Academy logo"]');
         this.bigFooterImage = this.parent.locator('img[alt="Lyatoshynsky Foundation"]');
     }
@@ -115,5 +116,24 @@ export class FooterComponent extends BaseComponent {
             await expect(this.copyrightText).toHaveText(str);
         })
     }
+
+    async clickMenuItemByName(name: string): Promise<void> {
+        await allure.step(`Click footer menu item bu name: ${name}`, async () => {
+            const menuItems = await this.pageMenu.getAllMenuItems();
+            const targetItem = menuItems.find(
+                (item) => item.name.toLowerCase() === name.toLowerCase()
+            );
+            await allure.parameter('Target name', name);
+            if (!targetItem){
+                await allure.logStep(`Target item not found`);
+                return;
+            }
+            const locator = this.parent.locator(`footer a:has-text("${targetItem.name}")`);
+            await locator.scrollIntoViewIfNeeded({timeout: 10000});
+            await locator.click();
+        });
+
+
+    };
 }
 
