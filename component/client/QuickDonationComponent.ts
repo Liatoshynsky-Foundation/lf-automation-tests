@@ -82,7 +82,7 @@ export class QuickDonationComponent {
 
     async selectCurrencyTab(currency: AllowedCurrency): Promise<void> {
         await this.page.getByRole('button', {name: currency, exact: true}).click({force: true});
-        await expect(this.ibanFieldContainer).toContainText(currency, {timeout: 5000});
+        await this.expectIBANText(currency);
     }
 
     async copyAndVerifyIBAN(expectedIban: string): Promise<void> {
@@ -94,6 +94,8 @@ export class QuickDonationComponent {
 
         await expect(dynamicCopyButton).toBeVisible();
         await dynamicCopyButton.click();
+    
+        await this.page.waitForTimeout(100);
 
         const copiedText = await this.page.evaluate(() => {
             return navigator.clipboard.readText();
@@ -125,5 +127,9 @@ export class QuickDonationComponent {
 
     async copyAndVerifyUSDIBAN(): Promise<void> {
         await this.copyAndVerifyIBAN(this.EXPECTED_IBAN_USD);
+    }
+
+    async copyAndVerifyUAHIBAN(): Promise<void> {
+        await this.copyAndVerifyIBAN(this.EXPECTED_IBAN_UAH);
     }
 }

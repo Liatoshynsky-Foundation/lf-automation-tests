@@ -20,7 +20,7 @@ test.describe('Donation Page IBAN Copy Functionality', () => {
 
     });
 
-    test('should copy the EUR IBAN correctly to the clipboard', async ({page}) => {
+    test('should copy the GBP IBAN correctly to the clipboard', async ({page}) => {
         const donationPage = new QuickDonationComponent(page);
         await page.goto('https://lf-client-qa-stage-atbchmhfgtaxfdas.polandcentral-01.azurewebsites.net/en/support-us');
         await expect(donationPage.ibanFieldContainer).toBeVisible();
@@ -36,6 +36,14 @@ test.describe('Donation Page IBAN Copy Functionality', () => {
         await donationPage.selectCurrencyTab(Currency.USD);
         await donationPage.copyAndVerifyUSDIBAN();
 
+    });
+
+    test('should copy the UAH IBAN correctly to the clipboard', async ({page}) => {
+        const donationPage = new QuickDonationComponent(page);
+        await page.goto('https://lf-client-qa-stage-atbchmhfgtaxfdas.polandcentral-01.azurewebsites.net/en/support-us');
+        await expect(donationPage.ibanFieldContainer).toBeVisible();
+        await donationPage.selectCurrencyTab(Currency.UAH);
+        await donationPage.copyAndVerifyUAHIBAN();
     });
 
 
