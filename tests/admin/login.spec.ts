@@ -46,6 +46,5 @@ test.describe("Admin Login Page", () => {
     await adminLoginPage.pressEnterOnKeyboard();
 
     await page.waitForURL("/");
-    expect(page.url()).toBe("/");
   });
 });
