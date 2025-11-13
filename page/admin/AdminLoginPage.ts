@@ -45,6 +45,7 @@ export class AdminLoginPage extends AdminBasePage {
   }
 
   async pressEnterOnKeyboard(): Promise<void> {
+    await this.loginForm.passwordField.input.focus();
     await this.page.keyboard.press("Enter");
   }
 
