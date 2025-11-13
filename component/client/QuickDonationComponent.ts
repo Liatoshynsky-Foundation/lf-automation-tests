@@ -94,7 +94,6 @@ export class QuickDonationComponent {
 
         await expect(dynamicCopyButton).toBeVisible();
         await dynamicCopyButton.click();
-    
         await this.page.waitForTimeout(100);
 
         const copiedText = await this.page.evaluate(() => {
