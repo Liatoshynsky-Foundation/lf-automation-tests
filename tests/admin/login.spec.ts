@@ -47,4 +47,68 @@ test.describe("Admin Login Page", () => {
 
     await page.waitForURL("/");
   });
+
+  test("should trim leading space from email and login successfully", async ({
+    adminLoginPage,
+    page,
+  }) => {
+    const emailWithLeadingSpace = ` ${ADMIN_EMAIL}`;
+
+    await adminLoginPage.navigate();
+    await page.waitForLoadState("networkidle");
+    await adminLoginPage.fillEmail(emailWithLeadingSpace);
+    await adminLoginPage.fillPassword(ADMIN_PASSWORD);
+    await adminLoginPage.clickLoginButton();
+
+    await page.waitForURL("/");
+    expect(page.url()).not.toContain("/login");
+  });
+
+  test("should trim trailing space from email and login successfully", async ({
+    adminLoginPage,
+    page,
+  }) => {
+    const emailWithTrailingSpace = `${ADMIN_EMAIL} `;
+
+    await adminLoginPage.navigate();
+    await page.waitForLoadState("networkidle");
+    await adminLoginPage.fillEmail(emailWithTrailingSpace);
+    await adminLoginPage.fillPassword(ADMIN_PASSWORD);
+    await adminLoginPage.clickLoginButton();
+
+    await page.waitForURL("/");
+    expect(page.url()).not.toContain("/login");
+  });
+
+  test("should trim both leading and trailing spaces from email and login successfully", async ({
+    adminLoginPage,
+    page,
+  }) => {
+    const emailWithBothSpaces = ` ${ADMIN_EMAIL} `;
+
+    await adminLoginPage.navigate();
+    await page.waitForLoadState("networkidle");
+    await adminLoginPage.fillEmail(emailWithBothSpaces);
+    await adminLoginPage.fillPassword(ADMIN_PASSWORD);
+    await adminLoginPage.clickLoginButton();
+
+    await page.waitForURL("/");
+    expect(page.url()).not.toContain("/login");
+  });
+
+  test("should trim email with multiple leading/trailing spaces", async ({
+    adminLoginPage,
+    page,
+  }) => {
+    const emailWithMultipleSpaces = `   ${ADMIN_EMAIL}   `;
+
+    await adminLoginPage.navigate();
+    await page.waitForLoadState("networkidle");
+    await adminLoginPage.fillEmail(emailWithMultipleSpaces);
+    await adminLoginPage.fillPassword(ADMIN_PASSWORD);
+    await adminLoginPage.clickLoginButton();
+
+    await page.waitForURL("/");
+    expect(page.url()).not.toContain("/login");
+  });
 });
