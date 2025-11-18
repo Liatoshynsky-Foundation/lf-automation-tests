@@ -4,7 +4,6 @@ import { Currency } from '../../data/enums';
 
 const VALID_DONATION_AMOUNT = 1000;
 const EXPECTED_CURRENCY = Currency.UAH;
-    
 test.beforeEach(async ({page}) => {
         await page.goto('https://lf-client-qa-stage-atbchmhfgtaxfdas.polandcentral-01.azurewebsites.net/en/support-us');
     });
