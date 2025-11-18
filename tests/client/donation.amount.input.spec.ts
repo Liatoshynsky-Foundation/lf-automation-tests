@@ -1,4 +1,4 @@
-import {expect, test} from '../../fixtures/fixturePage'
+import {test} from '../../fixtures/fixturePage'
 import {QuickDonationComponent} from '../../component/client/QuickDonationComponent';
 import { Currency } from '../../data/enums';
 
