@@ -8,7 +8,7 @@ test.beforeEach(async ({page}) => {
         await page.goto('https://lf-client-qa-stage-atbchmhfgtaxfdas.polandcentral-01.azurewebsites.net/en/support-us');
     });
 
-test.describe('Supoort Us Page donation amount input functionality', () => {
+test.describe('Support Us Page donation amount input functionality', () => {
 
     test('Check valid donation amount input', async ({ page }) => {
     const donationComponent = new QuickDonationComponent(page);
