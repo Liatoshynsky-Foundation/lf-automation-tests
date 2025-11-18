@@ -26,7 +26,7 @@ export class QuickDonationComponent {
         this.amountInput = this.root.locator('input').first();
         this.contributionTypeTabs = this.root.locator('.MuiButtonGroup-root');
         this.currencyDropdown = this.root.locator('div.MuiFormControl-root');
-        this.presetAmountButtons = this.root.locator('div.css-y82565')
+        this.presetAmountButtons = this.root.locator('div.css-y82565');
         this.makeDonationButton = page.getByTestId('DonationForm-donateButton');
         this.ibanFieldContainer = this.page.locator('p:has-text("UA28351005")').first();
     }
