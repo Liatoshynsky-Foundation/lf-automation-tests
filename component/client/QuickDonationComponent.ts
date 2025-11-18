@@ -7,7 +7,7 @@ export class QuickDonationComponent {
     public root: Locator;
     public mainTitle: Locator;
     public amountInput: Locator;
-    public currencyDropdown: Locator;
+    public currencyDropdown: Locator; 
     public contributionTypeTabs: Locator;
     public presetAmountButtons: Locator;
     public makeDonationButton: Locator;
@@ -25,9 +25,9 @@ export class QuickDonationComponent {
         this.mainTitle = this.root.locator('h4');
         this.amountInput = this.root.locator('input').first();
         this.contributionTypeTabs = this.root.locator('.MuiButtonGroup-root');
-        this.currencyDropdown = this.root.locator('div.MuiFormControl-root')
-        this.presetAmountButtons = this.root.locator('div.css-y82565')
-        this.makeDonationButton = this.root.locator('button')
+        this.currencyDropdown = this.root.locator('div.MuiFormControl-root');
+        this.presetAmountButtons = this.root.locator('div.css-y82565');
+        this.makeDonationButton = page.getByTestId('DonationForm-donateButton');
         this.ibanFieldContainer = this.page.locator('p:has-text("UA28351005")').first();
     }
 
@@ -128,6 +128,19 @@ export class QuickDonationComponent {
         await this.copyAndVerifyIBAN(this.EXPECTED_IBAN_USD);
     }
 
+    async verifyAmountInputDisplays(expectedValue: string) {
+        const actualValue = await this.amountInput.inputValue(); 
+        expect(actualValue).toBe(expectedValue);
+    }
+
+    async verifyDonateButtonIsDisabled() {
+        await expect(this.makeDonationButton).toBeDisabled();
+    }
+
+    async verifyDonateButtonIsActive() {
+        await expect(this.makeDonationButton).toBeEnabled();
+    }
+  
     async copyAndVerifyUAHIBAN(): Promise<void> {
         await this.copyAndVerifyIBAN(this.EXPECTED_IBAN_UAH);
     }
