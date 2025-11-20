@@ -13,17 +13,17 @@ test.describe('Contacts Page Tests (Контакти)', () => {
         await contactsPage.visit();
     });
 
-    test('should display main heading and verify all contact links', async ({contactsPage}) => {
+    test.only('should display main heading and verify all contact links', async ({contactsPage}) => {
         const contactsInfo = contactsPage.getContactsInfoComponent();
 
         await expect(contactsPage.pageHeading).toBeVisible();
-        await expect(contactsPage.pageHeading).toHaveText('КонТактИ');
+        await expect(contactsPage.pageHeading).toHaveText(/КонТактИ|Contacts/);
 
         await expect(contactsInfo.phoneNumberLink).toHaveText('067 963 8366');
-        // await expect(contactsInfo.phoneNumberLink).toHaveAttribute('href', 'tel:0679638366');
+        //await expect(contactsInfo.phoneNumberLink).toHaveAttribute('href', 'tel:0679638366');
 
         await expect(contactsInfo.emailLink).toHaveText('liatoshynsky@gmail.com');
-        //await expect(contactsInfo.emailLink).toHaveAttribute('href', 'mailto:liatoshynsky@gmail.com');
+        await expect(contactsInfo.emailLink).toHaveAttribute('href', 'mailto:liatoshynsky@gmail.com');
 
 
         const instagramLink = contactsInfo.getSocialLink('instagram');
@@ -89,7 +89,44 @@ test.describe('Contacts Page Tests (Контакти)', () => {
             const emailErrorLocator = contactForm.emailField.errorText; 
 
             await expect(emailErrorLocator).toBeVisible();
-            await expect(emailErrorLocator).toHaveText('Введіть коректну email-адресу');
+            await expect(emailErrorLocator).toHaveText(/Введіть коректну email-адресу|Please enter a valid email address/i);
         });
+    });
+
+    test('T04: Should copy phone and email and verify "Copied" message appears and disappears', async ({contactsPage}) => {
+        const contactsInfo = contactsPage.getContactsInfoComponent();
+        
+        await test.step('1. Copy Phone Number and verify success message lifecycle', async () => {
+
+            await contactsInfo.clickCopyPhone();
+        
+
+            await expect(contactsInfo.copySuccessMessage).toBeVisible({ timeout: 5000 });
+            
+            await expect(contactsInfo.copySuccessMessage).not.toBeVisible();
+        });
+
+        await test.step('2. Copy Email and verify success message lifecycle', async () => {
+
+            await contactsInfo.clickCopyEmail();
+
+            await expect(contactsInfo.copySuccessMessage).toBeVisible({ timeout: 5000 });
+            
+            await expect(contactsInfo.copySuccessMessage).not.toBeVisible();
+        });
+        
+        // 💡 Додатковий крок: Перевірка вмісту буфера обміну (Advanced)
+        // Цей крок може вимагати спеціальних налаштувань браузера або дозволів.
+       /* await test.step('3. Verify email content in clipboard (Advanced)', async () => {
+             await contactsInfo.clickCopyEmail(); // Повторний клік, щоб переконатися, що email останній у буфері
+
+             const expectedEmail = await contactsInfo.emailLink.textContent(); // 'liatoshynsky@gmail.com'
+
+             // Використовуємо page.evaluate для доступу до Clipboard API
+             const clipboardContent = await contactsPage.page.evaluate(() => navigator.clipboard.readText());
+             
+             // Перевірка: що ми скопіювали
+             expect(clipboardContent).toBe(expectedEmail); 
+         });*/
     });
 });

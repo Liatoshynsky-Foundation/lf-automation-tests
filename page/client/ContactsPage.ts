@@ -13,7 +13,7 @@ export class ContactsPage extends ClientBasePage {
 
     constructor(page: Page) {
         super(page);
-        this.pageHeading = page.locator('h2');
+        this.pageHeading = page.getByTestId('ContactsInfo-title');
         this.contactsInfoComponent = new ContactsInfoComponent(page);
         this.contactFormC = new ContactFormC(page);
     }
