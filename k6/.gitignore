@@ -39,6 +39,6 @@ reports/
 *.swp
 *.swo
 *.tmp
-*.old   
+*.old
 *.log
 *.out

@@ -36,7 +36,7 @@ Important: Run these tests only against environments you own or are authorized t
    # - Database: k6
    # Import official k6 dashboard (Grafana dashboard ID: 2587) or use a custom one.
 
-CI integration
+## CI integration
 
 - `.github/workflows/k6.yml` included will:
   - install k6 on the GitHub runner
@@ -47,7 +47,7 @@ Set the following repository secret before running CI:
 
 - BASE_URL — target base URL (e.g. https://staging.example.com)
 
-Best practices
+## Best practices
 
 - Use `scenarios` and `thresholds` in scripts to express load shapes and pass/fail criteria.
 - Do not log per-VU data at high loads (console logs slow tests).
