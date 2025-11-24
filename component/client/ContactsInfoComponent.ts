@@ -25,7 +25,6 @@ export class ContactsInfoComponent {
         this.copySuccessMessage = page.getByText(/Copied|Скопійовано/i);
 
         this.socialMediaBlock = page.getByTestId('ContactsInfo-socialMediaSection');
-        const titleLocator = page.getByTestId('ContactsInfo-title');
     }
 
     async getPhoneNumber(): Promise<string> {
