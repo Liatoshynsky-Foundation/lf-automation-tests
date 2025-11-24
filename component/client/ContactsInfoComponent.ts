@@ -22,10 +22,9 @@ export class ContactsInfoComponent {
         this.copyPhoneButton = page.getByTestId('ContactsInfo-phoneSection').locator('button[aria-label="Copy content"]');
         this.copyEmailButton = page.getByTestId('ContactsInfo-emailSection').locator('button[aria-label="Copy content"]');
 
-        this.copySuccessMessage = page.getByText('Copied');
+        this.copySuccessMessage = page.getByText(/Copied|Скопійовано/i);
 
         this.socialMediaBlock = page.getByTestId('ContactsInfo-socialMediaSection');
-        const titleLocator = page.getByTestId('ContactsInfo-title');
     }
 
     async getPhoneNumber(): Promise<string> {
