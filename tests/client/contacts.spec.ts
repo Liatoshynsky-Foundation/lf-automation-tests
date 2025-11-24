@@ -13,7 +13,7 @@ test.describe('Contacts Page Tests (Контакти)', () => {
         await contactsPage.visit();
     });
 
-    test.only('should display main heading and verify all contact links', async ({contactsPage}) => {
+    test('should display main heading and verify all contact links', async ({contactsPage}) => {
         const contactsInfo = contactsPage.getContactsInfoComponent();
 
         await expect(contactsPage.pageHeading).toBeVisible();
@@ -103,7 +103,7 @@ test.describe('Contacts Page Tests (Контакти)', () => {
 
             await expect(contactsInfo.copySuccessMessage).toBeVisible({ timeout: 5000 });
             
-            await expect(contactsInfo.copySuccessMessage).not.toBeVisible();
+            await expect(contactsInfo.copySuccessMessage).not.toBeVisible({ timeout: 5000 });
         });
 
         await test.step('2. Copy Email and verify success message lifecycle', async () => {
@@ -112,21 +112,8 @@ test.describe('Contacts Page Tests (Контакти)', () => {
 
             await expect(contactsInfo.copySuccessMessage).toBeVisible({ timeout: 5000 });
             
-            await expect(contactsInfo.copySuccessMessage).not.toBeVisible();
+            await expect(contactsInfo.copySuccessMessage).not.toBeVisible({ timeout: 5000 });
         });
         
-        // 💡 Додатковий крок: Перевірка вмісту буфера обміну (Advanced)
-        // Цей крок може вимагати спеціальних налаштувань браузера або дозволів.
-       /* await test.step('3. Verify email content in clipboard (Advanced)', async () => {
-             await contactsInfo.clickCopyEmail(); // Повторний клік, щоб переконатися, що email останній у буфері
-
-             const expectedEmail = await contactsInfo.emailLink.textContent(); // 'liatoshynsky@gmail.com'
-
-             // Використовуємо page.evaluate для доступу до Clipboard API
-             const clipboardContent = await contactsPage.page.evaluate(() => navigator.clipboard.readText());
-             
-             // Перевірка: що ми скопіювали
-             expect(clipboardContent).toBe(expectedEmail); 
-         });*/
     });
 });
