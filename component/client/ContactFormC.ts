@@ -21,7 +21,9 @@ export class ContactFormC {
 
     constructor(page: Page) {
         this.page = page;
-        this.formContainer = page.locator('form:has(button:has-text("Надіслати запит"))');
+        this.formContainer = page.locator('form', { 
+            has: page.locator('button', { hasText: /Надіслати запит|Send request/i })
+       });
 
         this.nameField = new InputFieldC(page, 'name');
         this.emailField = new InputFieldC(page, 'email');
