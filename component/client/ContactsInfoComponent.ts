@@ -8,15 +8,23 @@ export class ContactsInfoComponent {
     public emailLink: Locator;
     private page: Page;
     private socialMediaBlock: Locator;
+    public copyPhoneButton: Locator;
+    public copyEmailButton: Locator;
+    public copySuccessMessage: Locator;
 
     constructor(page: Page) {
         this.page = page;
-        this.mainContainer = page.locator('.MuiBox-root:has(h2:has-text("КонТактИ"))').first();
+        this.mainContainer = page.locator('.MuiBox-root').filter({ has: page.getByTestId('ContactsInfo-title') }).first();
 
-        this.phoneNumberLink = this.mainContainer.locator('h6:has-text("Телефон:") + a');
-        this.emailLink = this.mainContainer.locator('h6:has-text("Email:") + a');
+        this.phoneNumberLink = page.getByTestId('ContactsInfo-phoneSection').locator('a').first();
+        this.emailLink = page.getByTestId('ContactsInfo-emailSection').locator('a').first();
 
-        this.socialMediaBlock = this.mainContainer.locator('h6:has-text("Ми в соцмережах:") + div');
+        this.copyPhoneButton = page.getByTestId('ContactsInfo-phoneSection').locator('button[aria-label="Copy content"]');
+        this.copyEmailButton = page.getByTestId('ContactsInfo-emailSection').locator('button[aria-label="Copy content"]');
+
+        this.copySuccessMessage = page.getByText(/Copied|Скопійовано/i);
+
+        this.socialMediaBlock = page.getByTestId('ContactsInfo-socialMediaSection');
     }
 
     async getPhoneNumber(): Promise<string> {
@@ -37,5 +45,12 @@ export class ContactsInfoComponent {
 
     getSocialLink(platform: Platform): Locator {
         return this.socialMediaBlock.locator(`a[href*="${platform}"]`);
+    }
+    async clickCopyPhone(): Promise<void> {
+        await this.copyPhoneButton.click();
+    }
+
+    async clickCopyEmail(): Promise<void> {
+        await this.copyEmailButton.click();
     }
 }
