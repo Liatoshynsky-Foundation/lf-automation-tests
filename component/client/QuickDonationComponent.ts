@@ -7,7 +7,7 @@ export class QuickDonationComponent {
     public root: Locator;
     public mainTitle: Locator;
     public amountInput: Locator;
-    public currencyDropdown: Locator;
+    public currencyDropdown: Locator; 
     public contributionTypeTabs: Locator;
     public presetAmountButtons: Locator;
     public makeDonationButton: Locator;
@@ -25,9 +25,9 @@ export class QuickDonationComponent {
         this.mainTitle = this.root.locator('h4');
         this.amountInput = this.root.locator('input').first();
         this.contributionTypeTabs = this.root.locator('.MuiButtonGroup-root');
-        this.currencyDropdown = this.root.locator('div.MuiFormControl-root')
-        this.presetAmountButtons = this.root.locator('div.css-y82565')
-        this.makeDonationButton = this.root.locator('button')
+        this.currencyDropdown = this.root.locator('div.MuiFormControl-root');
+        this.presetAmountButtons = this.root.locator('div.css-y82565');
+        this.makeDonationButton = page.getByTestId('DonationForm-donateButton');
         this.ibanFieldContainer = this.page.locator('p:has-text("UA28351005")').first();
     }
 
@@ -82,7 +82,7 @@ export class QuickDonationComponent {
 
     async selectCurrencyTab(currency: AllowedCurrency): Promise<void> {
         await this.page.getByRole('button', {name: currency, exact: true}).click({force: true});
-        await expect(this.ibanFieldContainer).toContainText(currency, {timeout: 5000});
+        await this.expectIBANText(currency);
     }
 
     async copyAndVerifyIBAN(expectedIban: string): Promise<void> {
@@ -94,6 +94,7 @@ export class QuickDonationComponent {
 
         await expect(dynamicCopyButton).toBeVisible();
         await dynamicCopyButton.click();
+        await this.page.waitForTimeout(100);
 
         const copiedText = await this.page.evaluate(() => {
             return navigator.clipboard.readText();
@@ -125,5 +126,22 @@ export class QuickDonationComponent {
 
     async copyAndVerifyUSDIBAN(): Promise<void> {
         await this.copyAndVerifyIBAN(this.EXPECTED_IBAN_USD);
+    }
+
+    async verifyAmountInputDisplays(expectedValue: string) {
+        const actualValue = await this.amountInput.inputValue(); 
+        expect(actualValue).toBe(expectedValue);
+    }
+
+    async verifyDonateButtonIsDisabled() {
+        await expect(this.makeDonationButton).toBeDisabled();
+    }
+
+    async verifyDonateButtonIsActive() {
+        await expect(this.makeDonationButton).toBeEnabled();
+    }
+  
+    async copyAndVerifyUAHIBAN(): Promise<void> {
+        await this.copyAndVerifyIBAN(this.EXPECTED_IBAN_UAH);
     }
 }
