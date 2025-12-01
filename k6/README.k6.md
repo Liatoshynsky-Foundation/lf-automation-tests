@@ -65,8 +65,8 @@ This will:
 
 Access:
 
-- Grafana: http://localhost:3001 (admin/admin123)
-- InfluxDB: http://localhost:8086 (admin/admin123)
+- Grafana: http://localhost:3001 (log/pass)
+- InfluxDB: http://localhost:8086 (log/pass)
 
 ### 3. Import Grafana Dashboard
 
