@@ -21,7 +21,7 @@ services:
     image: grafana/grafana:latest
     container_name: k6-grafana
     ports:
-      - "${GRAFANA_PORT}:3001"
+      - "${GRAFANA_PORT}:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
