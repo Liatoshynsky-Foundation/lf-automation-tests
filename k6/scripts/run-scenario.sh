@@ -15,12 +15,17 @@ if [ -z "$SCENARIO" ]; then
   exit 1
 fi
 
+if [ -z "$INFLUXDB_USER" ] || [ -z "$INFLUXDB_PASSWORD" ]; then
+  echo "Error: INFLUXDB_USER and INFLUXDB_PASSWORD must be set in .env file"
+  exit 1
+fi
+
 mkdir -p $RESULTS_DIR
 
 echo "Running $SCENARIO test..."
 
 k6 run \
-  --out influxdb=http://admin:admin123@localhost:8086/k6 \
+  --out influxdb=http://${INFLUXDB_USER}:${INFLUXDB_PASSWORD}@${INFLUXDB_HOST}:${INFLUXDB_PORT}/${INFLUXDB_DB} \
   --out json=$RESULTS_DIR/${SCENARIO}_${TIMESTAMP}.json \
   --summary-export=$RESULTS_DIR/${SCENARIO}_summary_${TIMESTAMP}.json \
   scripts/scenarios/${SCENARIO}-test.js

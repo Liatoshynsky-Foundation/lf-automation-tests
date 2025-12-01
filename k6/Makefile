@@ -1,11 +1,14 @@
 include .env
 export
 
-.PHONY: help start stop restart logs status clean run-smoke run-load run-stress run-spike view-grafana
+.PHONY: help validate start stop restart logs status clean run-smoke run-load run-stress run-spike view-grafana
 
 help:
 	@echo "K6 Performance Testing Commands"
 	@echo "================================"
+	@echo "Setup:"
+	@echo "  make validate       - Validate .env configuration"
+	@echo ""
 	@echo "Infrastructure:"
 	@echo "  make start          - Start monitoring stack (Grafana + InfluxDB)"
 	@echo "  make stop           - Stop monitoring stack"
@@ -20,20 +23,29 @@ help:
 	@echo "  make run-spike      - Run spike test (10-100 VUs, 8 min)"
 	@echo "  make run-qa         - Run QA staging test"
 	@echo ""
+	@echo "Test with Dashboard:"
+	@echo "  make run-smoke-dash - Run smoke test with live dashboard"
+	@echo "  make run-load-dash  - Run load test with live dashboard"
+	@echo ""
 	@echo "Monitoring:"
 	@echo "  make view-grafana   - Open Grafana dashboard"
 	@echo "  make view-influx    - Open InfluxDB"
+	@echo "  make view-dashboard - Open k6 live dashboard"
 	@echo ""
 	@echo "Maintenance:"
 	@echo "  make clean          - Remove old results"
 	@echo "  make clean-all      - Remove all data and volumes"
 
-start:
+validate:
+	@chmod +x scripts/validate-env.sh
+	@./scripts/validate-env.sh
+
+start: validate
 	@echo "Starting monitoring stack..."
 	@mkdir -p grafana/provisioning/datasources grafana/provisioning/dashboards grafana/dashboards
 	@docker-compose up -d
-	@echo "✓ Grafana: http://localhost:3001 (admin/admin123)"
-	@echo "✓ InfluxDB: http://localhost:8086 (admin/admin123)"
+	@echo "✓ Grafana: http://localhost:${GRAFANA_PORT} (${GRAFANA_USER}/${GRAFANA_PASSWORD})"
+	@echo "✓ InfluxDB: http://localhost:${INFLUXDB_PORT} (${INFLUXDB_USER}/${INFLUXDB_PASSWORD})"
 
 stop:
 	@docker-compose down
@@ -47,23 +59,33 @@ logs:
 status:
 	@docker-compose ps
 
-run-smoke:
+run-smoke: validate
 	@chmod +x scripts/run-scenario.sh
 	@./scripts/run-scenario.sh smoke
 
-run-load:
+run-load: validate
 	@chmod +x scripts/run-scenario.sh
 	@./scripts/run-scenario.sh load
 
-run-stress:
+run-stress: validate
 	@chmod +x scripts/run-scenario.sh
 	@./scripts/run-scenario.sh stress
 
-run-spike:
+run-spike: validate
 	@chmod +x scripts/run-scenario.sh
 	@./scripts/run-scenario.sh spike
 
-run-qa:
+run-smoke-dash: validate
+	@echo "Starting smoke test with live dashboard..."
+	@echo "Dashboard: http://localhost:5665"
+	@k6 run --out web-dashboard scripts/scenarios/smoke-test.js
+
+run-load-dash: validate
+	@echo "Starting load test with live dashboard..."
+	@echo "Dashboard: http://localhost:5665"
+	@k6 run --out web-dashboard scripts/scenarios/load-test.js
+
+run-qa: validate
 	@chmod +x run-test.sh
 	@./run-test.sh
 
@@ -72,10 +94,13 @@ run-qa-monitoring:
 	@./scripts/run-with-monitoring.sh qa-client-stage
 
 view-grafana:
-	@open http://localhost:3001
+	@open http://localhost:${GRAFANA_PORT}
 
 view-influx:
-	@open http://localhost:8086
+	@open http://localhost:${INFLUXDB_PORT}
+
+view-dashboard:
+	@open http://localhost:5665
 
 clean:
 	@find results -type f -name "*.json" -mtime +7 -delete
